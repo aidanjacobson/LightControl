@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <style>
+            #frame {
+                transform: scale(1);
+                -ms-transform-origin: 0 0;
+                -moz-transform-origin: 0 0;
+                -o-transform-origin: 0 0;
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+            }
+
+            #container {
+                height: 100%;
+                overflow: hidden;
+                width: 100%;
+            }
+
+            #backbutton {
+                position: absolute;
+                top: 10;
+                right: 10;
+                width: 200px;
+                height: 50px;
+                background-color: blue;
+                color: white;
+                border-radius: 25px;
+            }
+        </style>
+        <script>
+            window.onload = window.onresize = function() {
+                var scaleFactor = window.innerHeight/1875;
+                frame.style.transform = `scale(${scaleFactor})`;
+            }
+
+            function backbtnclick() {
+                location.href = "/#noredirect";
+            }
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <iframe src="index.html?noredirect" width="1080" height="1875" id="frame"></iframe>
+        </div>
+        <button onclick="backbtnclick()" id="backbutton">Back to original</button>
+    </body>
+</html>

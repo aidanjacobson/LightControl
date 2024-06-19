@@ -1,0 +1,169 @@
+/*
+    Gradient: [
+        GradientStop: {
+            color: Color,
+            percent: Number range[0, 1]
+        }
+    ]
+*/
+
+var Color = require("./color");
+var fp = require("./lightcommand/floorplan"), floorplan = {};
+var utils = require("./utils");
+
+var Gradient = function(stops=[], angle=0) {
+    function sortGradient(gradient) {
+        return gradient.sort((a, b)=>a.percent-b.percent);
+    }
+    var convertColors = function() {
+        _this.stops = _this.stops.map(stop=>{
+            stop.color = Color.from(stop.color);
+            return stop;
+        })
+    }
+
+    var _this = this;
+    _this.stops = sortGradient(stops);
+    _this.angle = angle;
+
+    _this.addStop = function(stop) {
+        _this.stops.push(stop);
+        _this.stops = sortGradient(_this.stops);
+        convertColors();
+        converted = true;
+    }
+
+    var converted = false;
+    _this.getColorAtPercent = function(percent) {
+        if (!converted) {
+            converted = true;
+            convertColors();
+        }
+        if (percent <= _this.stops[0].percent) return _this.stops[0].color;
+        if (percent >= _this.stops[_this.stops.length-1].percent) return _this.stops[_this.stops.length-1].color;
+        for (var i = 0; i < _this.stops.length-1; i++) {
+            var stop = _this.stops[i];
+            var nextStop = _this.stops[i+1];
+            if (percent >= stop.percent && percent <= nextStop.percent) {
+                return utils.scaleBetweenColors(percent, stop.percent, nextStop.percent, stop.color, nextStop.color);
+            }
+        }
+    }
+
+    _this.withAngle = function(newAngle) {
+        if (typeof newAngle == "undefined") {
+            return new Gradient(_this.stops.slice(), _this.angle);
+        }
+        return new Gradient(_this.stops.slice(), newAngle);
+    }
+
+    _this.convertToCSSGradient = function() {
+        convertColors();
+        var components = [];
+        components.push(`${_this.angle+90}deg`);
+        _this.stops.forEach(function(stop) {
+            components.push(`rgba(${stop.color.r}, ${stop.color.g}, ${stop.color.b}, 1) ${stop.percent*100}%`);
+        })
+        return `linear-gradient(${components.join(", ")})`;
+    }
+
+    _this.addPadding = function(amount) {
+        var scaleFactor = 1-amount*2;
+        var newStops = _this.stops.map(stop=>({percent: amount+stop.percent*scaleFactor, color: stop.color}));
+        return new Gradient(newStops, _this.angle);
+    }
+
+    _this.reflect = function(right=true) {
+        var newStops = [];
+        for (var i = 0; i < _this.stops.length; i++) {
+            var currentStop = _this.stops[i];
+            if (right) {
+                var leftPercent = currentStop.percent/2;
+                var rightPercent = 1-leftPercent;
+                newStops.push({color: currentStop.color, percent: leftPercent}, {color: currentStop.color, percent: rightPercent});
+            } else {
+                var rightPercent = currentStop.percent/2+0.5;
+                var leftPercent = 1-rightPercent;
+                newStops.push({color: currentStop.color, percent: leftPercent}, {color: currentStop.color, percent: rightPercent});
+            }
+        }
+        return new Gradient(newStops).withAngle(_this.angle);
+    }
+
+    _this.reverse = function() {
+        var newStops = [];
+        for (var i = 0; i < _this.stops.length; i++) {
+            newStops[i] = {color: _this.stops[i].color, percent: 1 - _this.stops[i].percent};
+        }
+        return new Gradient(newStops, _this.angle);
+    }
+
+    _this.rotate = function(angle) {
+        return _this.withAngle((_this.angle+angle)%360);
+    }
+
+    _this.toColorList = function() {
+        return _this.stops.map(stop=>stop.color);
+    }
+
+    _this.convertToColorCommandFunction = function() {
+        floorplan = fp.getFloorplan();
+        return function(light) {
+            var [x, _] = utils.rotateFloorplanCoords(light, _this.angle);
+            x = applyScaleFactorFromCenter(x, getScaleFactorFromAngle(_this.angle));
+            var percent = utils.scale(x, 0, floorplan.width, 0, 1);
+            return _this.getColorAtPercent(percent);
+        }
+    }
+}
+
+
+function getScaleFactorFromAngle(angle) {
+    var x = (utils.cosDeg(2*angle)+1)/2;
+    var sf = utils.scale(x, 0, 1, floorplan.width/floorplan.height, 1);
+    return sf;
+}
+
+function applyScaleFactorFromCenter(x, sf) {
+    var center = floorplan.width/2;
+    return center + (x-center)*sf;
+}
+
+Gradient.rainbow = new Gradient([
+    {percent: .1, color: "#ff0000"},
+    {percent: .15, color: "#ff8c00"},
+    {percent: .4, color: "#ffff00"},
+    {percent: .45, color: "#00ff00"},
+    {percent: .8, color: "#0000ff"},
+    {percent: .9, color: "#aa00ff"}
+]);
+
+Gradient.quickGradient = function(color1, color2, angle=0) {
+    return new Gradient([{percent: 0.1, color: color1}, {percent: 0.9, color: color2}], angle);
+}
+
+Gradient.evenlySpaced = function(colorList, padding=0.1) {
+    var gradientArray = [];
+    var workingSpace = 1 - 2*padding;
+    var separation = workingSpace/(colorList.length-1);
+    for (var i = 0; i < colorList.length; i++) {
+        gradientArray.push({color: colorList[i], percent: padding+separation*i});
+    }
+    return new Gradient(gradientArray);
+}
+
+Gradient.areEqual = function(g1, g2) {
+    if (g1.angle != g2.angle) return false;
+    if (g1.stops.length != g2.stops.length) return false;
+    for (var i = 0; i < g1.stops.length; i++) {
+        if (g1.stops[i].percent != g2.stops[i].percent) return false;
+        if (!utils.colorsAreEqual(g1.stops[i].color, g2.stops[i].color)) return false;
+    }
+    return true;
+}
+
+Gradient.construct = function(...args) {
+    return new Gradient(...args);
+}
+
+module.exports = Gradient;

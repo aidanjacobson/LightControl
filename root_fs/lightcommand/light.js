@@ -1,0 +1,167 @@
+var fp = require("./floorplan"), floorplan = {};
+const Color = require("../color");
+const {def, ndef} = require("../def_ndef")
+const imageURL = require("../imageurl");
+const ha = require("./homeassistant");
+const segment = require("./segmentedled");
+
+// Keep track of what each light was last set to
+var entityCachedColors = {};
+
+// keep track of the lights set in the last call in order to turn off the unused segments of segmented_ledstrips
+var lastLightsSet = [];
+
+/**
+ * Set a home assistant light to an rgb color.
+ * @param {LightInfo} light lightinfo from floorplan
+ * @param {Color} color color to set. Must be of type rgb
+ * @param {boolean} [noscene=false] whether to use Home Assistant Scenes or a sequence of service calls. Defaults to scene=true
+ */
+function setLight(light, color, noscene=false) {
+    if (segment.isSegment(light.entity)) {
+        segment.setSegmentLight(light, color);
+    }
+    if (light.entity.indexOf("light.") != 0) {
+        light.entity = `light.${light.entity}`;
+    }
+    // console.log(`setlight ${light.entity}`);
+    if (noscene) {
+        var service = "light.turn_off"
+        var data = {
+            entity_id: light.entity
+        }
+        if (color.r != 0 || color.g != 0 || color.b != 0) {
+            service = "light.turn_on"
+            data.rgbw_color = [color.r, color.g, color.b, 0]
+        }
+        ha.serviceCall(service, data);
+    }
+    entityCachedColors[light.entity] = color;
+}
+
+/**
+ * Set all lights to a Color.
+ * Functions, gradients, urls, mappings, etc. will be resolved to rgb colors at this stage based on reduction (e.g. gradient -> function -> rgb value)
+ * @param {*} colorInput 
+ * @param {*} noscene 
+ * @returns 
+ */
+async function setAll(colorInput, noscene=false) {
+    var color = Color.from(colorInput);
+    if (color.type == "gradient") {
+        return await setAll(color.gradient.convertToColorCommandFunction())
+    }
+    if (color.type == "colorspace") {
+        return await setAll(color.colorSpace.convertToColorCommandFunction());
+    }
+    if (color.type == "url") {
+        return await setAll(await imageURL.fromURL(color));
+    }
+    if (color.type == "buffer") {
+        return await setAll(await imageURL.fromBuffer(color));
+    }
+    if (color.type == "radial") {
+        return await setAll(color.radial.convertToColorCommandFunction());
+    }
+    if (color.type == "colorMapping") {
+        var previousModes = segment.getAllSegmentedModes();
+        segment.setModesFromDeviceList(color.mapping.getLightNames());
+        var outValue = await setAll(color.mapping.createRenderFunction());
+        segment.setAllSegmentedModes(previousModes);
+        return outValue;
+    }
+
+    await fp.updateFloorplan();
+    floorplan = fp.getFloorplan();
+
+    // console.log(color);
+    lastLightsSet = [];
+
+    // let segment.js expand segmented lights from the floorplan into individual lights
+    var lights = segment.expandLightList(floorplan);
+    for (var i = 0; i < lights.length; i++) {
+        var light = lights[i];
+        var colorToSet = Color.from(color);
+        if (color.type == "function") {
+            // if (light.entity == "lamp") debugger;
+            var result = color.func(light, floorplan);
+            //if (typeof result == "undefined") debugger;
+            colorToSet = Color.from(result);
+        }
+        setLight(light, colorToSet, noscene);
+        lastLightsSet.push(light.entity);
+        entityCachedColors[light.entity] = colorToSet;
+    }
+
+    if (!noscene) applyHomeAssistantScene();
+
+    await segment.turnOffUnusedSegments(lastLightsSet);
+}
+
+async function applyHomeAssistantScene() {
+    floorplan = fp.getFloorplan();
+    var data = {entities:{}};
+    for (var i = 0; i < floorplan.lights.length; i++) {
+        var entityName = floorplan.lights[i].entity;
+        var color = entityCachedColors[entityName];
+        if (!color) {
+            continue;
+        }
+        var rgbw_color = [color.r, color.g, color.b, 0];
+        var entityState = {state:"on",rgbw_color};
+        if (rgbw_color[0] == 0 && rgbw_color[1] == 0 && rgbw_color[2] == 0) {
+            entityState.state = "off";
+        }
+        data.entities[entityName] = entityState;
+    }
+    await ha.serviceCall("scene.apply", data);
+}
+
+async function generateSaveColorsString(nocache=false) {
+    if (nocache) {
+        await pullCurrentColors();
+    }
+    var colorMap = {};
+    lastLightsSet.forEach(function(light) {
+        colorMap[light] = entityCachedColors[light];
+    });
+    return JSON.stringify(colorMap);
+}
+
+function getLightColor(entity) {
+    // if (segment.isSegment(entity)) {
+    //     if (entityCachedColors[entity]) return entityCachedColors[entity];
+    //     if (segment.)
+    // }
+    if (entity.indexOf("light.") != 0 && entity.indexOf("segment.") != 0) entity = `light.${entity}`;
+    return entityCachedColors[entity];
+}
+
+async function pullCurrentColors() {
+    floorplan = fp.getFloorplan();
+    var promises = floorplan.lights.map(function(light) {
+        return pullColor(light.entity);
+    });
+    var colors = await Promise.allSettled(promises);
+    for (var i = 0; i < floorplan.lights.length; i++) {
+        var entity = floorplan.lights[i].entity;
+        var [r, g, b] = colors[i].value;
+        entityCachedColors[entity] = new Color({r, g, b});
+    }
+}
+
+async function pullColor(light) {
+    lightEntity = light;
+    if (light.indexOf("light.") == -1) {
+        lightEntity = "light." + lightEntity;
+    }
+    var response = await ha.get(`/states/${lightEntity}`);
+    if (ndef(response.attributes) || ndef(response.attributes.rgb_color)) debugger;
+    rgb_color = response.attributes.rgb_color;
+    if (rgb_color == null) {
+        rgb_color = [0,0,0];
+    }
+    return rgb_color;
+}
+
+module.exports = {setLight, setAll, getLightColor, generateSaveColorsString, pullColor, pullCurrentColors};

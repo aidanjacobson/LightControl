@@ -1,0 +1,35 @@
+floorplan.json
+{
+    lights: Array<LightInfo> [{
+        x: Number
+        y: Number
+        entity: String
+    }]
+    width: Number
+    height: Number
+    groups: Array<GroupInfo> [{
+        $group_name: Array<String> (of entity names - used in Recur)
+    }]
+    segmented_led: {
+        $segmented_entityname: {
+            model: String (supported model name e.g. "Govee H619Z")
+            identifiers: {} (e.g. sku and device for H619Z)
+            segments: Number (number of segments)
+            groups: Array<SegmentGroupInfo> [{
+                name: String (group id e.g. second_quarter)
+                segments: Array<Number> (segments in group)
+                offset: Array<Number>[2] (x offset, y offset for group)
+            }]
+            breakdowns: Array<Breakdown> [{
+                name: String (id of breakdown e.g. quarters)
+                groups: Array<String|Number> (id of groups in this breakdown or individual segment number)
+            }]
+        }
+    }
+}
+
+LightInfo {
+    x: Number (x position in house)
+    y: Number (y position in house)
+    entity: String (home assistant light entity name - e.g. if wanting to reference light.lamp_2, enter "lamp_2")
+}

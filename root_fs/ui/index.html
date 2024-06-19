@@ -1,0 +1,176 @@
+<html>
+    <head>
+        <title id="pageTitle">LightControl</title>
+        <!-- <meta name="viewport" content="width=1080, height=1875, initial-scale=1" /> -->
+        <link href="style.css" rel="stylesheet" />
+        <link rel="icon" href="https://www.pngfind.com/pngs/m/170-1700251_lightbulb-icon-png-light-favicon-transparent-png.png" />
+        <link rel="manifest" href="/getmanifest" />
+        <script src="settings.js"></script>
+        <script src="menus.js"></script>
+        <script src="mainmenu.js"></script>
+        <script src="input/colorselect.js"></script>
+        <script src="serverfunctions.js"></script>
+        <script src="gradient/gradient.js"></script>
+        <script src="input/numberinput.js"></script>
+        <script src="gradient/quickgradient.js"></script>
+        <script src="gradient/evenlyspaced.js"></script>
+        <script src="gradient/colorspace.js"></script>
+        <script src="choosebetween.js"></script>
+        <script src="input/colorlist.js"></script>
+        <script src="colortheme.js"></script>
+        <script src="swregister.js"></script>
+        <script src="common_functions.js"></script>
+    </head>
+    <body>
+        <div class="menu" id="main">
+            <button class="buttonOption" onclick="mainmenu_colorselect()">Color</button>
+            <button class="buttonOption half" onclick="mainmenu_gradientselect()">Gradient</button>
+            <button class="buttonOption half" onclick="mainmenu_colorspaceselect()">Color Space</button>
+            <button class="buttonOption half" onclick="mainmenu_quickgradient()">QuickGradient</button>
+            <button class="buttonOption half" onclick="mainmenu_evenlyspaced()">Evenly Spaced</button>
+            <button class="buttonOption half" onclick="mainmenu_choosebetween()">Choose Between</button>
+            <button class="buttonOption half" onclick="mainmenu_colortheme()">Color Theme</button>
+            <button class="buttonOption" id="colorOutput" onclick="mainmenu_preview()">(Preview)</button>
+            <button class="buttonOption" onclick="mainmenu_savecolor()">Save Current Command</button>
+            <button class="buttonOption half" onclick="mainmenu_savecolorscene()">Save Current Scene</button>
+            <button class="buttonOption half" onclick="mainmenu_savecolorscenenocache()">Pull Colors & Save Current Scene</button>
+            <button class="buttonOption" onclick="attemptSetAll(lastColor)">Repeat Last Color</button>
+            <div class="advert">
+                <img id="advert" width="830" height="628" src="https://aidanjacobson.duckdns.org:7777/advertisement/random" onclick="advert.src='https://aidanjacobson.duckdns.org:7777/advertisement/random?' + Math.random()" />
+            </div>
+
+            <div id="settingsBtnContainer">
+                <img width="150" height="150" src="https://cdn-icons-png.flaticon.com/512/6704/6704985.png" onclick="settingsClick()" />
+            </div>
+        </div>
+        <div class="menu" id="colorselectmenu">
+            <h1 class="header">Use the color picker or manually type a color</h1>
+            <p class="header2">Color selector: <input type="color" id="inputcolor" /></p>
+            <button class="buttonOption" onclick="colorSubmit()">Submit color input</button>
+            <div class="spacer"></div>
+            <!--<button class="buttonOption" onclick="colorType()">Manually type a color</button>-->
+            <button class="buttonOption" onclick="colorBrowse()">Browse a list of colors</button>
+
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="colortypemenu">
+            <h1 class="header">Type a color</h1>
+            <input type="text" id="colornameinput" placeholder="Start typing to search..." autocomplete="off" />
+            <div id="searchResults"></div>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="gradientmenu">
+            <h1 class="header" onclick="loadGradientStopsFromColor(prompt('Enter color to load from'))">Gradient Maker</h1>
+            <p class="header2" id="angleDisplay" onclick="changeAngle()">Angle: 0 (click to change)</p>
+            <button class="buttonOption smaller" onclick="addNewStop()">Add new stop</button>
+            <div id="stops">
+                <div>
+                    <p>Color: red</p>
+                    <p>Percent: 100</p>
+                </div>
+            </div>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="stopeditor">
+            <h1 class="header">Edit Gradient Stop</h1>
+            <div class="spacer"></div>
+            <div class="stopeditorblock" onclick="editColor()" id="gradientColorBox">
+                <p class="header" id="stopEditColor">Color: test</p>
+                <p class="header2">(Click to change)</p>
+            </div>
+            <div class="stopeditorblock" onclick="editPercent()">
+                <p class="header" id="stopEditPercent">Percent: test</p>
+                <p class="header2">(Click to change)</p>
+            </div>
+            <div class="stopeditorblock" onclick="deleteStop()">
+                <p class="header">Delete Stop</p>
+            </div>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="colorspacemenu">
+            <h1 class="header">Color space</h1>
+            <p class="header2">Click any field to edit it.</p>
+            <p class="header underline" id="angleDisplaySpace" onclick="changeAngleColorSpace()">Angle: 0</p>
+            <p class="header underline" id="colorspaceTL" onclick="changeColorSpaceTL()">Top Left: red</p>
+            <p class="header underline" id="colorspaceTR" onclick="changeColorSpaceTR()">Top Right: blue</p>
+            <p class="header underline" id="colorspaceBR" onclick="changeColorSpaceBR()">Bottom Right: red</p>
+            <p class="header underline" id="colorspaceBL" onclick="changeColorSpaceBL()">Bottom Left: blue</p>
+            <button class="buttonOption" onclick="spaceDone()">Click here to submit</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="numberinput">
+            <h1 class="header" id="numberInputPrompt"></h1>
+            <input type="number" id="numberinputelement" placeholder="Enter a number" autocomplete="off" />
+        </div>
+        <div class="menu" id="quickgradientmenu">
+            <h1 class="header">Quick Gradient</h1>
+            <div class="spacer"></div>
+            <p class="header2">Click any field to edit it.</p>
+            <p class="header underline" id="angleDisplayQuickGrad" onclick="changeAngleQuickGrad()">Angle: 0</p>
+            <p class="header underline" id="quickColorElement1" onclick="changeQuickColor1()">Color 1: red</p>
+            <p class="header underline" id="quickColorElement2" onclick="changeQuickColor2()">Color 2: blue</p>
+            <button class="buttonOption" onclick="quickDone()">Click here to submit</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="choosebetweenmenu">
+            <h1 class="header">Choose Between</h1>
+            <button class="buttonOption smaller" onclick="choosebetween_editcolor()">Edit Color List</button>
+            <p class="header2" id="choosebetweendisplay">Color List: </p>
+            <button class="backbtn l2" onclick="cb_submit()">Submit</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="colorlistmenu">
+            <h1 class="header">Color List</h1>
+            <button class="buttonOption smaller" onclick="colorlist_add()">Add Color</button>
+            <div id="colorlistdisplay">
+                <div class="colorlistitem">
+                    <p>Color: Red</p>
+                    <span class="colorlistitemaction">Edit</span>
+                    <span class="colorlistitemaction">Delete</span>
+                </div>
+            </div>
+            <button class="backbtn l2" onclick="colorlist_done()">Done</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+
+        <div class="menu" id="evenmenu">
+            <h1 class="header">Evenly Spaced</h1>
+            <p class="header2">Click a field to edit it</p>
+            <div class="spacer"></div>
+
+            <p class="header2 bigger underline" id="es_colors" onclick="evenspace_colorclick()">Colors: None</p>
+            <p class="header2 bigger underline" id="es_angle" onclick="evenspace_angleclick()">Angle: 0</p>
+            <p class="header2 bigger underline" id="es_padding" onclick="evenspace_paddingclick()">Padding: 0.1</p>
+
+            <button class="backbtn l2" onclick="evenspace_done()">Submit</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+
+        <div id="colorthememenu" class="menu">
+            <h1 class="header">Color Theme</h1>
+            <p class="header2">Click a field to edit it</p>
+            <div class="spacer"></div>
+
+            <p class="header2 bigger underline" id="colortheme_degrees" onclick="colortheme_degreesclick()">Color: red</p>
+            <p class="header2 bigger underline" id="colortheme_variance" onclick="colortheme_varianceclick()">Variance: 5</p>
+
+            <button class="backbtn l2" onclick="colortheme_done()">Submit</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+
+        <div class="menu" id="previewmenu">
+            <button class="backbtn" onclick="back()" id="prevBack">Back</button>
+        </div>
+        
+        <div class="menu" id="settingsmenu">
+            <h1 class="header">Settings</h1>
+            <div id="settingsContainer">
+                <div class="settingsBlock">
+                    <b class="header2">Always Browse Color:</b><input type="checkbox" class="settingsCheckbox" />
+                </div>
+            </div>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="largespacer"></div>
+    </body>
+</html>

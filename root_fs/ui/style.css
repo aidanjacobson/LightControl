@@ -1,0 +1,207 @@
+body {
+    background-color: darkblue;
+    font-family:Arial, Helvetica, sans-serif
+}
+
+.buttonOption {
+    background-color: red;
+    color: white;
+    width: 100%;
+    height: 300px;
+    font-size: 100px;
+    border-radius: 25px;
+    margin-top: 10px;
+}
+
+.half {
+    width: 49.7%;
+    font-size: 60px;
+}
+
+.smaller {
+    height: 130px !important;
+    margin-bottom: 50px !important;
+    width: 65%;
+    margin: auto;
+}
+
+.header {
+    color: white;
+    font-size: 100px;
+    text-align: center;
+}
+
+#inputcolor {
+    width: 60%;
+    height: 50px;
+}
+
+.header2 {
+    color: white;
+    font-size: 50px;
+    text-align: center;
+}
+
+.backbtn {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 200px;
+    font-size: 100px;
+    background-color: red;
+    color: white;
+    border-radius: 25px;;
+}
+
+.backbtn.l2 {
+    bottom: 210px;
+}
+
+.spacer {
+    height: 75px;
+}
+
+.largespacer {
+    height: 500px;
+}
+
+#colornameinput {
+    width: 100%;
+    height: 100px;
+    background-color: darkgray;
+    text-align: center;
+    font-size: 50px;
+    color: black;
+}
+
+#searchresults {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    border: 1px solid red;
+}
+
+#searchresults > p {
+    color: white;
+    font-size: 50px;
+    text-decoration: underline;
+    user-select: none;
+}
+
+#stops {
+    width: 100%;
+    text-align: center;
+}
+
+#stops > div {
+    width: 65%;
+    height: 300px;
+    border: 1px solid white;
+    border-radius: 25px;
+    position: relative;
+    margin: auto;
+    cursor: pointer;
+}
+
+#stops > div > p {
+    color: white;
+    font-size: 50px;
+}
+
+.stopeditorblock {
+    border: 1px solid white;
+    margin: auto;
+    width: 70%;
+    border-radius: 50px;
+    margin-bottom: 40px;
+}
+
+#numberinputelement {
+    width: 100%;
+    height: 100px;
+    background-color: darkgray;
+    text-align: center;
+    font-size: 50px;
+    color: black;
+}
+
+body > div {
+    text-align: center;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+#prevback {
+    background-color: transparent;
+}
+
+.colorlistitem {
+    border: 1px solid white;
+    margin: auto;
+    width: 70%;
+    border-radius: 50px;
+    margin-bottom: 40px;
+    color: white;
+    font-size: 70px;
+    height: 300px;
+}
+
+.colorlistitem > p {
+    margin-top: 30px;
+}
+
+.colorlistitemaction {
+    margin-left: 50px;
+    margin-right: 50px;
+    text-decoration: underline;
+}
+
+.bigger {
+    font-size: 70px;
+}
+
+#settingsBtnContainer {
+    position: fixed;
+    bottom: 40px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.settingsCheckbox {
+    width: 40px;
+    height: 40px;
+    margin-left: 20px;
+}
+
+.settingsSelect {
+    width: 300px;
+    height: 50px;
+    font-size: 50px;
+    position: relative;
+    top: -60px;
+    text-align: center;
+}
+
+.settingsBlock {
+    font-size: 60px;
+    margin-bottom: 60px;
+    color: white;
+    text-align: left;
+}
+
+.settingsBlock > input, .settingsBlock > select {
+    float: right;
+}
+
+.settingsBlock > label {
+   width: 90%;
+   display: inline-block;
+   word-wrap: break-word;
+}
+
+.advert {
+    margin-top:  30px;
+}

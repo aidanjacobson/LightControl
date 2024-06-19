@@ -1,0 +1,22 @@
+{
+    "name": "LightControl - Local",
+    "start_url": "http://localhost:9168/ui",
+    "display": "standalone",
+    "share_target": {
+        "action": "/ui/upload-image",
+        "method": "POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "files": [
+                {
+                    "name": "images",
+                    "accept": ["image/*", ".png", ".jpg", ".jpeg"]
+                }
+            ]
+        }
+    },
+    "icons": [{
+        "src": "https://www.pngfind.com/pngs/m/170-1700251_lightbulb-icon-png-light-favicon-transparent-png.png",
+        "sizes": "192x192 512x512"
+    }]
+}
