@@ -167,7 +167,7 @@ async function doSetAll(value, res, noscene=false) {
     } catch(E) {
         // debugger;
     }
-    res.send(cssValue);
+    res.send({css:cssValue});
 }
 
 function doSetLight(light, value, res) {

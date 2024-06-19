@@ -29,7 +29,7 @@ async function updateGradientStopList() {
         percentP.innerText = "Percent: " + stop.percent;
         stopDiv.append(colorP, percentP);
         stopDiv.setAttribute("data-stopnum", workingGradient[i].id);
-        colorP.style.backgroundColor = await getCSS(stop.color);
+        colorP.style.backgroundColor = (await getCSS(stop.color)).css;
         stopDiv.addEventListener("click", function(e) {
             editStop(+e.currentTarget.getAttribute("data-stopnum"));
         })
