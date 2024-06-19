@@ -1,25 +1,9 @@
-function getAllColors() {
-    return new Promise(function(resolve, reject) {
-        var x = new XMLHttpRequest();
-        var url = `${baseURL}/getcolors`;
-        x.open("GET", url);
-        x.onload = function() {
-            resolve(JSON.parse(x.responseText));
-        }
-        x.send();
-    })
+async function getAllColors() {
+    return await apiGet("/getcolors");
 }
 
-function updateColors() {
-    return new Promise(function(resolve, reject) {
-        var x = new XMLHttpRequest();
-        var url = `${baseURL}/updateColors`;
-        x.open("GET", url);
-        x.onload = function() {
-            resolve(JSON.parse(x.responseText));
-        }
-        x.send();
-    })
+async function updateColors() {
+    return await apiGet("/updatecolors");
 }
 
 window.addEventListener("load", function() {
@@ -34,24 +18,15 @@ if (!localoverride && (location.href.indexOf("localhost") > -1 || location.href.
 }
 
 var color;
-function setAll(colorValue, angle) {
+async function setAll(colorValue, angle) {
     color = colorValue;
     if (typeof angle !== "undefined") {
         color += ", " + angle;
     }
     console.log(color);
-    return new Promise(function(resolve, reject) {
-        var x = new XMLHttpRequest();
-        var setPath = "setAll";
-        if (!settings.useSene) setPath = "setAllNoScene";
-        var url = `${baseURL}/${setPath}`;
-        x.open("POST", url);
-        x.setRequestHeader("Content-Type", "application/json");
-        x.onload = function() {
-            resolve(x.responseText);
-        }
-        x.send(JSON.stringify({color:color}));
-    })
+    var setPath = "/setAll";
+    if (!settings.useSene) setPath = "/setAllNoScene";
+    return (await apiPost(setPath, {color})).css;
 }
 
 function apiGet(path) {
@@ -68,37 +43,36 @@ function apiGet(path) {
     })
 }
 
-function getCSS(color) {
+function apiPost(path, data) {
     return new Promise(function(resolve, reject) {
         var x = new XMLHttpRequest();
-        var url = `${baseURL}/getcss`;
+        var url = `${baseURL}${path}`;
+        if (path[0] != "/") url = `${baseURL}/${path}`;
         x.open("POST", url);
         x.setRequestHeader("Content-Type", "application/json");
         x.onload = function() {
-            var response = x.responseText;
-            var css = JSON.parse(response).css;
-            resolve(degreeReplace(css));
+            try {
+                resolve(JSON.parse(x.responseText));
+            } catch(e) {
+                console.log(path, data, e);
+            }
         }
-        x.send(JSON.stringify({color:color}));
+        x.send(JSON.stringify(data));
     })
 }
 
-function parseColor(color, type="rgb") {
-    return new Promise(function(resolve, reject) {
-        var x = new XMLHttpRequest();
-        var url = `${baseURL}/parsecolor`;
-        x.open("POST", url);
-        x.setRequestHeader("Content-Type", "application/json");
-        x.onload = function() {
-            var response = JSON.parse(x.responseText);
-            if (response.status == "success") {
-                resolve(convertParseColorType(response.color, type))
-            } else {
-                resolve(convertParseColorType({r:0,g:0,b:0}, type));
-            }
-        }
-        x.send(JSON.stringify({color:color}));
-    })
+async function getCSS(color) {
+    var response = await apiPost("/getcss", {color});
+    return degreeReplace(response.css);
+}
+
+async function parseColor(color, type="rgb") {
+    var response = await apiPost("/parsecolor");
+    if (response.status == "success") {
+        return convertParseColorType(response.color, type);
+    } else {
+        return convertParseColorType({r:0,g:0,b:0}, type);
+    }
 }
 
 function convertParseColorType({r, g, b}, type) {
@@ -119,30 +93,12 @@ function rgbToHexCode(r, g, b) {
     return `#${rCode}${gCode}${bCode}`;
 }
 
-function saveColor(color, name) {
-    return new Promise(async function(resolve, reject) {
-        colorList = await getAllColors();
-        var x = new XMLHttpRequest();
-        var url = `${baseURL}/saveColor`;
-        x.open("POST", url);
-        x.setRequestHeader("Content-Type", "application/json");
-        x.onload = function() {
-            resolve(JSON.parse(x.responseText));
-        }
-        x.send(JSON.stringify({color,name}));
-    })
+async function saveColor(color, name) {
+    colorList = await getAllColors();
+    return await apiPost("/saveColor", {color,name});
 }
 
-function saveColorScene(name, nocache=false) {
-    return new Promise(async function(resolve, reject) {
-        colorList = await getAllColors();
-        var x = new XMLHttpRequest();
-        var url = `${baseURL}/saveColorScene`;
-        x.open("POST", url);
-        x.setRequestHeader("Content-Type", "application/json");
-        x.onload = function() {
-            resolve(JSON.parse(x.responseText));
-        }
-        x.send(JSON.stringify({name, nocache}));
-    })
+async function saveColorScene(name, nocache=false) {
+    colorList = await getAllColors();
+    return await apiPost("/saveColorScene", {name, nocache});
 }

@@ -146,6 +146,6 @@ async function lookupCSS(color) {
     if (typeof cssCodes[color] !== "undefined") {
         return cssCodes[color];
     } else {
-        return await getCSS(color);
+        return (await getCSS(color)).css;
     }
 }
