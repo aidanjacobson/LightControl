@@ -36,7 +36,11 @@ function apiGet(path) {
         if (path[0] != "/") url = `${baseURL}/${path}`;
         x.open("GET", url);
         x.setRequestHeader("Content-Type", "application/json");
+        x.setRequestHeader("Security-key", localStorage.lightcontrol_key)
         x.onload = function() {
+            if (x.status == 401) {
+                login();
+            }
             resolve(JSON.parse(x.responseText));
         }
         x.send();
@@ -50,7 +54,11 @@ function apiPost(path, data) {
         if (path[0] != "/") url = `${baseURL}/${path}`;
         x.open("POST", url);
         x.setRequestHeader("Content-Type", "application/json");
+        x.setRequestHeader("Security-key", localStorage.lightcontrol_key)
         x.onload = function() {
+            if (x.status == 401) {
+                login();
+            }
             try {
                 resolve(JSON.parse(x.responseText));
             } catch(e) {
@@ -59,6 +67,25 @@ function apiPost(path, data) {
         }
         x.send(JSON.stringify(data));
     })
+}
+
+window.addEventListener("load", function() {
+    if (typeof localStorage.lightcontrol_key !== "undefined") {
+        apiGet("/testlogin");
+    } else {
+        login();
+    }
+})
+async function login() {
+    localStorage.removeItem("lightcontrol_key");
+    var newpass = await getNumberInput("Enter Decryption Key:");
+    localStorage.setItem("lightcontrol_key", newpass);
+    location.reload();
+}
+
+async function logout() {
+    localStorage.removeItem("lightcontrol_key");
+    location.reload();
 }
 
 async function getCSS(color) {

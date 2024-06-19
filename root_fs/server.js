@@ -15,6 +15,7 @@ const getAllColorNames = require("./colornames/getallcolornames")
 const fp = require("./lightcommand/floorplan");
 const remote = require("./remote");
 const manifest = require("./manifest");
+const unless = require("./unless")
 
 const storage = multer.memoryStorage();
 const upload = multer({storage});
@@ -26,6 +27,8 @@ var app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/ui", express.static(path.join(__dirname, "ui")));
+
+require("dotenv").config();
 
 const port = 9168;
 const host = '0.0.0.0';
@@ -47,6 +50,17 @@ server.listen(port, host, ()=>{
     var url = remote.server.getInterfaceURL();
     console.log("UI available at", url);
 });
+
+function authMiddleware(req, res, next) {
+    var securityKey = req.header("Security-key");
+    if (securityKey == process.env.lightcontrol_access_token) {
+        next();
+    } else {
+        res.send(401, "missing or incorrect header Security-key");
+    }
+}
+
+app.use(unless(authMiddleware, "/ui", "/getmanifest"))
 
 app.post("/sendImage", upload.single("image"), async function(req, res) {
     await doSetAll(req.file, res);
@@ -156,6 +170,10 @@ app.post("/saveColorScene", async function(req, res) {
 app.get("/updateColors", async function(req, res) {
     await fp.updateFloorplan();
     res.json({status: "success"});
+})
+
+app.get("/testlogin", function(req, res) {
+    res.json({status:"success"});
 })
 
 
