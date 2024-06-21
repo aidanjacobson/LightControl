@@ -205,6 +205,9 @@ function setModesFromDeviceList(deviceList) {
     var floorplan = fp.getFloorplan();
     var segmentDevices = deviceList.filter(device=>device.startsWith("segment."));
     var haveGroups = {};
+    for (var device in floorplan.segmented_led) {
+        haveGroups[device] = [];
+    }
     for (var device of segmentDevices) {
         var matches = groupRegex.exec(device);
         var deviceName = matches[1];

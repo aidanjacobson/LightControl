@@ -21,7 +21,7 @@ function setLight(light, color, noscene=false) {
     if (segment.isSegment(light.entity)) {
         segment.setSegmentLight(light, color);
     }
-    if (light.entity.indexOf("light.") != 0) {
+    if (light.entity.indexOf("light.") != 0 && light.entity.indexOf("segment.") != 0) {
         light.entity = `light.${light.entity}`;
     }
     // console.log(`setlight ${light.entity}`);
