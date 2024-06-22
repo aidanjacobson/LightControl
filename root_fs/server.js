@@ -18,7 +18,7 @@ const manifest = require("./manifest");
 const unless = require("./unless")
 const accesslog = require("./accesslog")
 
-import requestIp from 'request-ip';
+var requestIp = require("request-ip");
 const storage = multer.memoryStorage();
 const upload = multer({storage});
 var allColors;
