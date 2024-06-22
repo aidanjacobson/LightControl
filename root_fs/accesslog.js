@@ -11,20 +11,26 @@ function middleware(req, res, next) {
         ip: req.clientIp
     }
     addEntryToLog(entry);
+    return next();
+}
+
+var logPath = "/data/log.json";
+
+if (!remote.isRemote()) {
+    logPath = "log.json";
 }
 
 function addEntryToLog(entry) {
-    if (!remote.isRemote()) return;
-    if (!fs.existsSync("/data/log.json")) fs.writeFileSync("/data/log.json", "[]");
+    if (!fs.existsSync(logPath)) fs.writeFileSync(logPath, "[]");
 
-    var entries = JSON.parse(fs.readFileSync("/data/log.json"));
+    var entries = JSON.parse(fs.readFileSync(logPath));
     entries.push(entry);
-    fs.writeFileSync("/data/log.json", JSON.stringify(entries));
+    fs.writeFileSync(logPath, JSON.stringify(entries));
 }
 
 function getLog() {
-    if (!fs.existsSync("/data/log.json")) return [];
-    return JSON.parse(fs.readFileSync("/data/log.json"))
+    if (!fs.existsSync(logPath)) return [];
+    return JSON.parse(fs.readFileSync(logPath))
 }
 
 module.exports = {middleware, getLog};
