@@ -1,12 +1,11 @@
 var fs = require("fs");
-require("dotenv").config();
 
 function isRemote() {
     return fs.existsSync("/data");
 }
 
 function getInterfaceURL() {
-    server.host = isRemote() ? process.env.host : "localhost";
+    server.host = isRemote() ? "aidanjacobson.duckdns.org" : "localhost";
     if (isRemote()) {
         server.http = false;
     } else {
