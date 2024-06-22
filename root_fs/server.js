@@ -16,7 +16,9 @@ const fp = require("./lightcommand/floorplan");
 const remote = require("./remote");
 const manifest = require("./manifest");
 const unless = require("./unless")
+const accesslog = require("./accesslog")
 
+import requestIp from 'request-ip';
 const storage = multer.memoryStorage();
 const upload = multer({storage});
 var allColors;
@@ -26,6 +28,7 @@ const segment = require("./lightcommand/segmentedled");
 var app = express();
 app.use(express.json());
 app.use(cors());
+app.use(requestIp.mw());
 app.use("/ui", express.static(path.join(__dirname, "ui")));
 
 require("dotenv").config();
@@ -60,7 +63,14 @@ function authMiddleware(req, res, next) {
     }
 }
 
-app.use(unless(authMiddleware, "/ui", "/getmanifest"))
+var ignorePaths = ["/ui", "/getmanifest", "/getlog"]
+
+app.use(unless(authMiddleware, "/ui", ...ignorePaths))
+app.use(unless(accesslog.middleware, "/ui", ...ignorePaths));
+
+app.get("/getlog", function(req, res) {
+    res.json(accesslog.getLog());
+})
 
 app.post("/sendImage", upload.single("image"), async function(req, res) {
     await doSetAll(req.file, res);

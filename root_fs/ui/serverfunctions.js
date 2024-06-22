@@ -36,6 +36,7 @@ function apiGet(path) {
         if (path[0] != "/") url = `${baseURL}/${path}`;
         x.open("GET", url);
         x.setRequestHeader("Content-Type", "application/json");
+        x.setRequestHeader("Origin-ID", "lightcontrol-ui")
         x.setRequestHeader("Security-key", localStorage.lightcontrol_key)
         x.onload = function() {
             if (x.status == 401) {
@@ -54,6 +55,7 @@ function apiPost(path, data) {
         if (path[0] != "/") url = `${baseURL}/${path}`;
         x.open("POST", url);
         x.setRequestHeader("Content-Type", "application/json");
+        x.setRequestHeader("Origin-ID", "lightcontrol-ui")
         x.setRequestHeader("Security-key", localStorage.lightcontrol_key)
         x.onload = function() {
             if (x.status == 401) {
