@@ -1,9 +1,11 @@
 require("dotenv").config();
 const request = require("request");
+const ha = require("./homeassistant")
 
 const strip_modes = {
     "bed_light_strip": "one_segment",
-    "corner_light_strip": "one_segment"
+    "corner_light_strip": "one_segment",
+    "desk_light_strip": "one_segment"
 }
 
 var groupRegex = /^segment\.([^\.]+)\.([^\.]+)$/;
@@ -111,9 +113,13 @@ function isSegment(lightName) {
 async function setSegmentLight(light, color) {
     var [_, lightName, groupName] = light.entity.split(".");
     if (floorplan.segmented_led[lightName].model == "Govee H619Z") return await setH619ZLight(light, color);
+    if (floorplan.segmented_led[lightName].model == "hass_group") return await setHassGroupLight(light, color);
 }
 
 function setH619ZLight(light, color) {
+    function getH619ZIdentifiers(lightName) {
+        return floorplan.segmented_led[lightName].identifiers;
+    }
     var [_, lightName, groupName] = light.entity.split(".");
     var segments = getSegmentsFromGroupName(groupName, lightName);
     var postData = {
@@ -142,12 +148,23 @@ function setH619ZLight(light, color) {
     return postAsync(options);
 }
 
-function convertColorToDecimal({r, g, b}) {
-    return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
+async function setHassGroupLight(light, color) {
+    var [_, lightName, groupName] = light.entity.split(".");
+    var segments = getSegmentsFromGroupName(groupName, lightName);
+    if (typeof segments === "undefined") {
+        debugger;
+        return;
+    }
+    // return await setRawHassLight({entity}, color);
+    return await Promise.allSettled(segments.map(segment=>setRawHassLight({entity: getHassGroupSegmentEntity(lightName, segment)}, color)));
 }
 
-function getH619ZIdentifiers(lightName) {
-    return floorplan.segmented_led[lightName].identifiers;
+function getHassGroupSegmentEntity(lightName, segment) {
+    return floorplan.segmented_led[lightName].segment_mappings[segment];
+}
+
+function convertColorToDecimal({r, g, b}) {
+    return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
 }
 
 var lastID = 0;
@@ -228,6 +245,22 @@ function setModesFromDeviceList(deviceList) {
         }
         if (!found) setSegmentedMode(deviceName, "one_segment");
     }
+}
+
+function setRawHassLight(light, color) {
+    if (light.entity.indexOf("light.") != 0 && light.entity.indexOf("segment.") != 0) {
+        light.entity = `light.${light.entity}`;
+    }
+    // console.log(`setlight ${light.entity}`);
+    var service = "light.turn_off"
+    var data = {
+        entity_id: light.entity
+    }
+    if (color.r != 0 || color.g != 0 || color.b != 0) {
+        service = "light.turn_on"
+        data.rgbw_color = [color.r, color.g, color.b, 0]
+    }
+    ha.serviceCall(service, data);
 }
 
 
