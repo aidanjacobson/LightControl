@@ -72,6 +72,8 @@ function getBreakdownGroups(entityName, breakdownName) {
         var breakdown = floorplan.segmented_led[entityName].breakdowns[i];
         if (breakdown.name == breakdownName) return breakdown.groups;
     }
+    debugger;
+    return [];
 }
 
 function lightHasModeBreakdown(name) {
