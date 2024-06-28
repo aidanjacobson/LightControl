@@ -59,7 +59,7 @@ function authMiddleware(req, res, next) {
     if (securityKey == process.env.lightcontrol_access_token) {
         next();
     } else {
-        res.send(401, "missing or incorrect header Security-key");
+        res.status(401).send("missing or incorrect header Security-key");
     }
 }
 
