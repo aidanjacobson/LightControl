@@ -51,6 +51,8 @@ function setAllFile(file) {
         if (settings.useScene) uploadURL = "/sendImage"
         x.open("POST", baseURL + uploadURL);
         // x.setRequestHeader("Content-Type","multipart/form-data");
+        x.setRequestHeader("Origin-ID", "lightcontrol-ui")
+        x.setRequestHeader("Security-key", localStorage.lightcontrol_key)
         var formData = new FormData();
         formData.append("image", file);
         x.onload = function() {
