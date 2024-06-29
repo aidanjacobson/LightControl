@@ -66,6 +66,8 @@ A ```String``` that matches the name of a saved color will be mapped to that sav
 
 ## Set All Lights To Color
 
+API Endpoint is on the root level.
+
 ```
 POST /setAll
 post body: {
