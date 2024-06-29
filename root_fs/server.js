@@ -100,21 +100,21 @@ app.get("/getAvailableStripModes/:lightName", function(req, res) {
     res.json(segment.getAvailableStripModes(req.params.lightName));
 })
 
-app.get("/getSegmentedLights", function(req, res) {
-    res.json(segment.getSegmentedLights());
+app.get("/getSegmentedLights", async function(req, res) {
+    res.json(await segment.getSegmentedLights());
 })
 
-app.get("/setSegmentedMode/:lightName/:modeName", function(req, res) {
-    segment.setSegmentedMode(req.params.lightName, req.params.modeName);
+app.get("/setSegmentedMode/:lightName/:modeName", async function(req, res) {
+    await segment.setSegmentedMode(req.params.lightName, req.params.modeName);
     res.json({status:"success"});
 })
 
-app.get("/getSegmentedMode/:lightName", function(req, res) {
-    res.json(segment.getSegmentedMode(req.params.lightName));
+app.get("/getSegmentedMode/:lightName", async function(req, res) {
+    res.json(await segment.getSegmentedMode(req.params.lightName));
 })
 
-app.get("/getAllSegmentedModes", function(req, res) {
-    res.json(segment.getAllSegmentedModes());
+app.get("/getAllSegmentedModes", async function(req, res) {
+    res.json(await segment.getAllSegmentedModes());
 })
 
 app.post("/setLight", function(req, res) {

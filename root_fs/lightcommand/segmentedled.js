@@ -1,11 +1,58 @@
 require("dotenv").config();
 const request = require("request");
 const ha = require("./homeassistant")
+const ConfigLoader = require("../node_configloader")
+const fp = require("./floorplan");
 
-const strip_modes = {
-    "bed_light_strip": "one_segment",
-    "corner_light_strip": "one_segment",
-    "desk_light_strip": "one_segment"
+const configOptions = {
+    securityKey: process.env.config_access_key,
+    store: "segment_modes"
+}
+
+var strip_modes = {};
+
+var loader = new ConfigLoader(configOptions);
+loader.downloadConfig();
+
+async function downloadStripModes() {
+    strip_modes = await loader.downloadConfig();
+    var segmented = await getSegmentedLights();
+    for (lightName of segmented) {
+        if (! (lightName in strip_modes)) strip_modes[lightName] = "one_segment";
+    }
+}
+downloadStripModes();
+
+
+async function getSegmentedLights() {
+    await fp.updateFloorplan();
+    floorplan = fp.getFloorplan();
+    return Object.keys(floorplan.segmented_led)
+}
+
+async function setSegmentedMode(lightName, mode) {
+    await downloadStripModes();
+    strip_modes[lightName] = mode;
+    await loader.uploadConfig();
+}
+
+async function getSegmentedMode(lightName) {
+    await downloadStripModes();
+    if (! (lightName in strip_modes)) return "one_segment";
+    return strip_modes[lightName];
+}
+
+async function getAllSegmentedModes() {
+    var modesOut = {};
+    await downloadStripModes();
+    Object.assign(modesOut, strip_modes);
+    return modesOut;
+}
+
+async function setAllSegmentedModes(modes) {
+    await downloadStripModes();
+    Object.assign(strip_modes, modes);
+    await loader.uploadConfig();
 }
 
 var groupRegex = /^segment\.([^\.]+)\.([^\.]+)$/;
@@ -19,8 +66,6 @@ function getAvailableStripModes(lightName) {
     if (modes.indexOf("one_segment") == -1) modes.push("one_segment");
     return modes;
 }
-
-var fp = require("./floorplan");
 
 var floorplan = fp.getFloorplan();
 function expandLightList(_floorplan) {
@@ -196,28 +241,6 @@ function postAsync(options) {
             resolve()
         });
     })
-}
-
-function getSegmentedLights() {
-    return Object.keys(strip_modes);
-}
-
-function setSegmentedMode(lightName, mode) {
-    strip_modes[lightName] = mode;
-}
-
-function getSegmentedMode(lightName) {
-    return strip_modes[lightName];
-}
-
-function getAllSegmentedModes() {
-    var modesOut = {};
-    Object.assign(modesOut, strip_modes);
-    return modesOut;
-}
-
-function setAllSegmentedModes(modes) {
-    Object.assign(strip_modes, modes);
 }
 
 function setModesFromDeviceList(deviceList) {

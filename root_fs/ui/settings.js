@@ -106,11 +106,15 @@ window.addEventListener("load", async function() {
         settingsOptions[`mode_${segmentedLights[i]}`] = settingsOption;
     }
     settings = new SavedSettings(settingsOptions);
+    
+    // segmentedLights.forEach(async function(lightName) {
+    //     // apiGet(`/setSegmentedMode/${lightName}/${settings[`mode_${lightName}`]}`);
+    
+    // })
+    for (var lightName of segmentedLights) {
+        settings[`mode_${lightName}`] = await apiGet(`/getSegmentedMode/${lightName}`);
+    }
     settings.save()
-
-    segmentedLights.forEach(function(lightName) {
-        apiGet(`/setSegmentedMode/${lightName}/${settings[`mode_${lightName}`]}`);
-    })
 })
 
 function settingsClick() {
@@ -177,6 +181,7 @@ function createSettingsSelectOnchangeFunction(element) {
         var value = element.options[element.selectedIndex].value;
         settings[name] = value;
         settings.save();
+        if (! name.startsWith("mode_")) return;
         var lightName = name.substring(5, name.length);
         apiGet(`/setSegmentedMode/${lightName}/${value}`);
     }
