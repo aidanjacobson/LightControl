@@ -64,10 +64,10 @@ async function setAll(colorInput, noscene=false) {
         return await setAll(color.radial.convertToColorCommandFunction());
     }
     if (color.type == "colorMapping") {
-        var previousModes = segment.getAllSegmentedModes();
+        var previousModes = await segment.getAllSegmentedModes();
         segment.setModesFromDeviceList(color.mapping.getLightNames());
         var outValue = await setAll(color.mapping.createRenderFunction());
-        segment.setAllSegmentedModes(previousModes);
+        await segment.setAllSegmentedModes(previousModes);
         return outValue;
     }
 
