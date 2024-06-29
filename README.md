@@ -64,7 +64,9 @@ A ```String``` that matches the name of a saved color will be mapped to that sav
 
 # API Documentation
 
-API Endpoint is on the root level.
+API Endpoint is on the root level (e.g. http://localhost:9168/)
+
+All reguests to API must include ```Security-key``` header. The header value should match the value of ```lightcontrol_access_token``` in the .env file.
 
 ## Set All Lights To Color
 ```
