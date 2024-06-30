@@ -8,6 +8,8 @@ Remote URL: https://aidanjacobson.duckdns.org:9168/ui
 
 Testing URL: http://localhost:9168/ui
 
+Addon Info: https://aidanjacobson.duckdns.org:8123/hassio/addon/local_lightcontrol/info
+
 # Color Type Documentation
 
 Initially a String argument is passed in as color name. Color() will repeatedly reduce your color into one of two final states.
