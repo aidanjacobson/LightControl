@@ -23,6 +23,7 @@ function switchToMenu(menu) {
 }
 
 function back() {
+    // console.log("back");
     if (getSelection().toString() == 'Back' && (menuChain[menuChain.length-1]==gradientmenu || menuChain[menuChain.length-1]==quickgradientmenu || menuChain[menuChain.length-1]==evenmenu)) {
         localStorage.offsetAngle = +prompt("Enter Offset Angle")
         return;
