@@ -42,7 +42,17 @@ function rotateFloorplanCoords(click, angle) {
 }
 
 function removeDuplicateColors(colorList) {
-    return colorList.filter((colorIn,i)=>colorList.indexOfFunction(e=>colorsAreEqual(e,colorIn))==i).map(Color.from);
+    const removeBlackAsWell = true;
+    return colorList.filter(function (colorIn,i) {
+        var firstTimeSeen = colorList.indexOfFunction(e=>colorsAreEqual(e,colorIn))==i;
+        var black = isBlack(colorIn);
+        return firstTimeSeen && (!removeBlackAsWell || !black)
+    }).map(Color.from);
+}
+
+function isBlack(colorIn) {
+    var color = Color.from(colorIn);
+    return color.type == "rgb" &&  color.r == 0 && color.g == 0 && color.b == 0;
 }
 
 function colorsAreEqual(c1, c2) {

@@ -2,10 +2,10 @@ var cssColors = require("./colornames/csscolornames.json");
 var configLoaderColorNames = require("./colornames/colornames"), customColors = {};
 var externalColors = require("./colornames/externalfiles");
 var fp = require("./lightcommand/floorplan"), floorplan = {};
-const fs = require("fs");
 const { ndef, def } = require("./def_ndef");
 const random = require("./random");
 const ColorMapping = require("./colormapping");
+const history = require("./history")
 
 configLoaderColorNames.loadColors();
 
@@ -76,7 +76,9 @@ class Color {
         } else if (typeof args[0] == "string") {
             var angle = 0;
             var inString = args[0];
-            if (inString.substring(0, 5) == "eval(") {
+            if (inString == "none") {
+                _this.type = "none";
+            } else if (inString.substring(0, 5) == "eval(") {
                 importUserFuncs();
                 var evalJS = inString.substring(5, inString.length - 1);
                 var evalResult = eval(decodeURIComponent(evalJS));
@@ -127,7 +129,8 @@ class Color {
             } else if (_this.type == "gradient") {
                 return _this.gradient.convertToCSSGradient();
             } else if (_this.type == "function") {
-                var colors = require("./utils").removeDuplicateColors(floorplan.lights.map(light=>Color.from(_this.func(light))));
+                var colorList = floorplan.lights.map(light=>Color.from(_this.func(light)));
+                var colors = require("./utils").removeDuplicateColors(colorList);
                 var gradient = Gradient.evenlySpaced(colors, 0);
                 return gradient.convertToCSSGradient();
             }

@@ -68,11 +68,11 @@ function isHexCode(code) {
 async function populateSearchList(e) {
     var typed = colornameinput.value.toLowerCase().replace(/ /g, "").replace(/_/g, "");
     if (e.keyCode == 13) {
-        if (typed == "back") {
-            //back();
-            switchToMenu(colorselectmenu);
-            return;
-        }
+        // if (typed == "back") {
+        //     //back();
+        //     switchToMenu(colorselectmenu);
+        //     return;
+        // }
         setColorInput(colornameinput.value);
         selectColorResolveFunc(colornameinput.value);
         back();

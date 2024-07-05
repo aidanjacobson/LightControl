@@ -7,7 +7,8 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 
-const {setAll, setLight} = require("./lightcommand/light");
+const light = require("./lightcommand/light");
+const history = require("./history");
 const Color = require("./color");
 const colorsaveutils = require("./colorsaveutils");
 const {def, ndef} = require("./def_ndef");
@@ -188,18 +189,21 @@ app.get("/testlogin", function(req, res) {
 
 
 async function doSetAll(value, res, noscene=false) {
-    await setAll(value, noscene);
+    cResponse = await light.setAll(value, noscene);
     try {
-        var cResponse = Color.from(value);
+        // var cResponse = Color.from(value);
         var cssValue = cResponse.toCSS();
     } catch(E) {
         // debugger;
+    }
+    if (value.indexOf("back") == -1 && value.indexOf("forward") == -1) {
+        history.addToHistory(await light.generateSaveColorsString());
     }
     res.send({css:cssValue});
 }
 
 function doSetLight(light, value, res) {
     var color = Color.from(value);
-    setLight({entity:light}, color);
+    light.setLight({entity:light}, color);
     res.send(color.toCSS());
 }
