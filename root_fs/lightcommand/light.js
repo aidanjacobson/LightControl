@@ -70,6 +70,9 @@ async function setAll(colorInput, noscene=false) {
         await segment.setAllSegmentedModes(previousModes);
         return outValue;
     }
+    if (color.type == "none") {
+        return color;
+    }
 
     await fp.updateFloorplan();
     floorplan = fp.getFloorplan();
@@ -96,6 +99,8 @@ async function setAll(colorInput, noscene=false) {
     if (!noscene) applyHomeAssistantScene();
 
     await segment.turnOffUnusedSegments(lastLightsSet);
+
+    return color;
 }
 
 async function applyHomeAssistantScene() {
