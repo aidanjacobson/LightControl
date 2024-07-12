@@ -64,4 +64,52 @@ function hslCircle(angle=0) {
     }
 }
 
-module.exports = {shuffle, themerize, HSLInvert, hslSpectrum, hslCircle};
+function randomDark(lightObj) {
+    var darkWeight = 2;
+    var lightWeight = 1;
+
+    var darkInterval = [120, 300];
+    var lightInterval = [300, 480];
+    
+    var cutOff = darkWeight/(darkWeight+lightWeight);
+    var darkSide = Math.random() < cutOff;
+
+    var random = Math.random();
+    var interval = darkSide ? darkInterval : lightInterval;
+    var hue = utils.scale(random, 0, 1, interval[0], interval[1]);
+    return `hue(${hue})`;
+}
+
+/*
+    intervals = [...[start, end, weight]]
+*/
+function randomWeightedInterval(intervals) {
+    var intervalSum = 0;
+    for (var interval of intervals) {
+        var angleDiff = utils.mod360(interval[1]-interval[0]);
+        var weight = interval[2];
+        // weight *= angleDiff/360;
+        intervalSum += weight;
+    }
+    return function(lightObj) {
+        var randomNumber = Math.random()*intervalSum;
+        var chooseInterval = [0, 0];
+        var total = 0;
+        for(var i = 0; i < intervals.length; i++) {
+            var [start, end, weight] = intervals[i];
+            console.assert(end-start > 0, "End angle - start angle <= 0");
+            var angleDiff = utils.mod360(end-start);
+            // weight *= angleDiff/360;
+            total += weight;
+            if (randomNumber < total) {
+                chooseInterval[0] = start;
+                chooseInterval[1] = end;
+                break;
+            }
+        }
+        var hue = utils.scale(Math.random(), 0, 1, chooseInterval[0], chooseInterval[1]);
+        return `hue(${hue})`;
+    }
+}
+
+module.exports = {shuffle, themerize, HSLInvert, hslSpectrum, hslCircle, randomDark, randomWeightedInterval};

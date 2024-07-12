@@ -100,4 +100,9 @@ function distance(x1, y1, x2, y2) {
     return Math.sqrt((x2-x1)**2+(y2-y1)**2);
 }
 
-module.exports = {distance, randBetween, scale, scaleBetweenColors, getPercentBetweenColors, colorsAreEqual, removeDuplicateColors, rotate, rotateFloorplanCoords, deg2rad, sinDeg, cosDeg};
+function mod360(n) {
+    if (n >= 0) return n % 360;
+    return n + Math.ceil(-n/360)*360;
+}
+
+module.exports = {mod360, distance, randBetween, scale, scaleBetweenColors, getPercentBetweenColors, colorsAreEqual, removeDuplicateColors, rotate, rotateFloorplanCoords, deg2rad, sinDeg, cosDeg};

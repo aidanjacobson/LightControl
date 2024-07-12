@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css" />
+        <script src="utils.js"></script>
+        <script src="render.js"></script>
+        <script src="control.js" defer></script>
+        <script src="apiutils.js"></script>
+    </head>
+    <body>
+        <canvas id="stage" width="350" height="350"></canvas><br><br>
+        <div id="editControls" hidden>
+            Weight: <input type="number" id="editWeightInput" onchange="editWeightChanged()" onkeypress="editWeightChanged()" />
+        </div>
+        <br>
+        <button onclick="sendGradient()">Set All</button>
+        <br><br>
+        <button onclick="copyClipboard(createWeightedRandomCode())">Copy Weighted Random Code</button>
+        <br><br>
+        <button onclick="copyClipboard(createWeightedRandomSetAllCommand())">Copy SetAll Command</button>
+    </body>
+</html>
