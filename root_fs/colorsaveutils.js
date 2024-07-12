@@ -2,6 +2,7 @@ var light = require("./lightcommand/light");
 var customColorsLoader = require("./colornames/colornames"), customColors = {};
 
 async function saveColor(color, nameInput) {
+    if (nameInput == null) return;
     await customColorsLoader.loadColors();
     customColors = customColorsLoader.getColors();
     var name = nameInput.toLowerCase().replace(/ /g, "").replace(/_/g, "");
