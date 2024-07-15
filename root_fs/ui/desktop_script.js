@@ -5,3 +5,8 @@ window.addEventListener("load", function() {
         window[funcName] = frame.contentWindow[funcName];
     }
 })
+
+window.addEventListener("message", function(e) {
+    console.log("desktop", e)
+    frame.contentWindow.handleRequest(e);
+})
