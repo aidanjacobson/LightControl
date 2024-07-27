@@ -16,6 +16,10 @@ if (!localoverride && (location.href.indexOf("localhost") > -1 || location.href.
     baseURL = "http://localhost:9168";
     pageTitle.innerText = "LightControl - Local";
 }
+if (!localoverride && (location.href.indexOf("192.168.0.8") > -1)) {
+    baseURL = "http://192.168.0.8:9168";
+    pageTitle.innerText = "LightControl - Local";
+}
 
 var color;
 async function setAll(colorValue, angle) {

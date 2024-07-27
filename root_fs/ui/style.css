@@ -84,8 +84,10 @@ body {
 
 #searchresults > p {
     color: white;
+    text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+
     font-size: 50px;
-    text-decoration: underline;
+    /* text-decoration: underline; */
     user-select: none;
 }
 
