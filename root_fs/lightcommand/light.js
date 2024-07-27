@@ -82,6 +82,7 @@ async function setAll(colorInput, noscene=false) {
 
     // let segment.js expand segmented lights from the floorplan into individual lights
     var lights = segment.expandLightList(floorplan);
+    color.colorList = [];
     for (var i = 0; i < lights.length; i++) {
         var light = lights[i];
         var colorToSet = Color.from(color);
@@ -93,14 +94,39 @@ async function setAll(colorInput, noscene=false) {
             colorToSet = Color.from(result);
         }
         setLight(light, colorToSet, noscene);
+        
+        // if (color.colorList.every(newColor=>! (newColor.r == colorToSet.r && newColor.g == colorToSet.g && newColor.b == colorToSet.b))) {
+        color.colorList.push(colorToSet);
+        // }
+
         lastLightsSet.push(light.entity);
         entityCachedColors[light.entity] = colorToSet;
     }
 
     if (!noscene) applyHomeAssistantScene();
-
+    
     await segment.turnOffUnusedSegments(lastLightsSet);
+    
+    const RGBToHSL = ({r, g, b}) => {
+        var nr = r/255;
+        var ng = g/255;
+        var nb = b/255;
+        var vmin = Math.min(nr, ng, nb),
+            vmax = Math.max(nr, ng, nb),
+            h, s, l = (vmax+vmin)/2;
+        if (vmax === vmin) return [0, 0, l];
+        const d = vmax - vmin;
+        s = l > 0.5 ? d / (2 - vmax - vmin) : d / (vmax + vmin);
+        if (vmax === nr) h = (ng - nb) / d + (ng < nb ? 6 : 0);
+        if (vmax === ng) h = (nb - nr) / d + 2;
+        if (vmax === nb) h = (nr - ng) / d + 4;
+        h /= 6;
+    
+        return {h: h*360, s: s*100, l: l*100};
+    }
 
+    color.colorList = color.colorList.sort((a,b)=>RGBToHSL(a).h - RGBToHSL(b).h);
+    // console.log(color.colorList.map(c=>c.toString()))
     return color;
 }
 

@@ -128,6 +128,9 @@ class Color {
                 return _this.toString();
             } else if (_this.type == "gradient") {
                 return _this.gradient.convertToCSSGradient();
+            } else if (def(this.colorList)) {
+                var gradient = Gradient.evenlySpaced(this.colorList, 0);
+                return gradient.convertToCSSGradient();
             } else {
                 return "";
             }

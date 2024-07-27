@@ -189,10 +189,10 @@ app.get("/testlogin", function(req, res) {
 
 
 async function doSetAll(value, res, noscene=false) {
-    cResponse = await light.setAll(value, noscene);
+    var cResponse = await light.setAll(value, noscene);
     try {
         // var cResponse = Color.from(value);
-        var cssValue = cResponse.toCSS();
+        var cssValue = cResponse.toCSS(true);
     } catch(E) {
         // debugger;
     }

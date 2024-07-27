@@ -83,12 +83,14 @@ function randomDark(lightObj) {
 /*
     intervals = [...[start, end, weight]]
 */
-function randomWeightedInterval(intervals) {
+function randomWeightedInterval(intervals, scaleByWeight=true) {
     var intervalSum = 0;
     for (var interval of intervals) {
         var angleDiff = utils.mod360(interval[1]-interval[0]);
         var weight = interval[2];
-        // weight *= angleDiff/360;
+        if (scaleByWeight) {
+            weight *= angleDiff/360;
+        }
         intervalSum += weight;
     }
     return function(lightObj) {
