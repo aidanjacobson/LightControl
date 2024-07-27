@@ -19,7 +19,7 @@ var settingsOptions = {
         name: "Always Browse Color",
         default: true
     },
-    renderBrowseColorPreview: {
+    renderColorBrowsePreview: {
         type: "toggle",
         name: "Render Browse Color Preview",
         default: false

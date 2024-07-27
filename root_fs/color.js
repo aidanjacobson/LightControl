@@ -128,11 +128,8 @@ class Color {
                 return _this.toString();
             } else if (_this.type == "gradient") {
                 return _this.gradient.convertToCSSGradient();
-            } else if (_this.type == "function") {
-                var colorList = floorplan.lights.map(light=>Color.from(_this.func(light)));
-                var colors = require("./utils").removeDuplicateColors(colorList);
-                var gradient = Gradient.evenlySpaced(colors, 0);
-                return gradient.convertToCSSGradient();
+            } else {
+                return "";
             }
         }
     }
