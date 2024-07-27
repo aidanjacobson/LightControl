@@ -25,6 +25,20 @@ function createWeightedRandomSetAllCommand() {
     return `eval(funky.randomWeightedInterval(${createWeightedRandomCode()}))`;
 }
 
+function readFromRandomCode() {
+    var inCode = prompt("enter code");
+    if (!inCode) return;
+
+    var intervalArrayArray = JSON.parse(inCode);
+    editingHandle = editingRegion = false;
+    editingHandleIndex = editingRegionIndex = -1;
+    var newAngleLineDegrees = [];
+    for (var [start, stop, weight] of intervalArrayArray) {
+        newAngleLineDegrees.push({degrees: start, weight: weight, id: generateID()});
+    }
+    angleLineDegrees = newAngleLineDegrees;
+}
+
 function apiPost(path, data) {
     return new Promise(function(resolve, reject) {
         var baseURL = location.origin;

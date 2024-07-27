@@ -88,7 +88,6 @@ function drawRegionData() {
 }
 
 function drawRegionSurroundingLine() {
-    if (editingRegionIndex != -1)
     var endDegreesIndex = editingRegionIndex+1;
     var startDegreesIndex = editingRegionIndex;
     if (endDegreesIndex >= angleLineDegrees.length) endDegreesIndex -= angleLineDegrees.length;

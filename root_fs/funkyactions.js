@@ -99,7 +99,7 @@ function randomWeightedInterval(intervals) {
             var [start, end, weight] = intervals[i];
             console.assert(end-start > 0, "End angle - start angle <= 0");
             var angleDiff = utils.mod360(end-start);
-            // weight *= angleDiff/360;
+            weight *= angleDiff/360;
             total += weight;
             if (randomNumber < total) {
                 chooseInterval[0] = start;
