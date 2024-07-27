@@ -9,7 +9,7 @@ window.addEventListener("load", function() {
     stage.addEventListener("mousedown", canvasMouseDown);
     stage.addEventListener("mouseup", canvasMouseUp);
     stage.addEventListener("mousemove", canvasMouseMove);
-    document.body.addEventListener("contextmenu", (e)=>{e.preventDefault()});
+    stage.addEventListener("contextmenu", (e)=>{e.preventDefault();});
 })
 
 

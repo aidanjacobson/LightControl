@@ -85,9 +85,10 @@ async function setAll(colorInput, noscene=false) {
     for (var i = 0; i < lights.length; i++) {
         var light = lights[i];
         var colorToSet = Color.from(color);
-        if (color.type == "function") {
+        // if (color.type == "function") {
+        while (colorToSet.type == "function") {
             // if (light.entity == "lamp") debugger;
-            var result = color.func(light, floorplan);
+            var result = colorToSet.func(light, floorplan);
             //if (typeof result == "undefined") debugger;
             colorToSet = Color.from(result);
         }

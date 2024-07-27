@@ -5,19 +5,62 @@
         <script src="render.js"></script>
         <script src="control.js" defer></script>
         <script src="apiutils.js"></script>
+        <script src="pagecontrol.js"></script>
+        <script src="staticrandom.js"></script>
+        <script src="lightcontrol_selectcolor.js"></script>
     </head>
     <body>
-        <canvas id="stage" width="350" height="350"></canvas><br><br>
-        <div id="editControls" hidden>
-            Weight: <input type="number" id="editWeightInput" onchange="editWeightChanged()" onkeypress="editWeightChanged()" />
+        <div id="modeselectcontainer">
+            <select id="modeSelect" onchange="doModeChange()"></select>
         </div>
-        <br>
-        <button onclick="sendGradient()">Set All</button>
-        <br><br>
-        <button onclick="copyClipboard(createWeightedRandomCode())">Copy Weighted Random Code</button>
-        <br><br>
-        <button onclick="readFromRandomCode()">Read from Weighted Random Code</button>
-        <br><br>
-        <button onclick="copyClipboard(createWeightedRandomSetAllCommand())">Copy SetAll Command</button>
+        <div id="randomInterval" class="page" page-name="Interval Mode">
+            <canvas id="stage" width="350" height="350"></canvas><br><br>
+            <div id="editControls" hidden>
+                Weight: <input type="number" id="editWeightInput" onchange="editWeightChanged()" onkeypress="editWeightChanged()" />
+            </div>
+            <br>
+            <button onclick="sendGradient()">Set All</button>
+            <br><br>
+            <button onclick="copyClipboard(createWeightedRandomCode())">Copy Weighted Random Code</button>
+            <br><br>
+            <button onclick="readFromRandomCode()">Read from Weighted Random Code</button>
+            <br><br>
+            <button onclick="copyClipboard(createWeightedRandomSetAllCommand())">Copy SetAll Command</button>
+        </div>
+        <div id="randomStatic" class="page" page-name="Static Mode">
+            <table id="staticTable">
+                <thead>
+                    <tr>
+                        <td>Color</td>
+                        <td>Weight</td>
+                        <td>Browse Colors</td>
+                        <td>Delete</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr data-index="0">
+                        <td><input type="text" placeholder="Enter Color" /></td>
+                        <td><input type="number" class="weightInput" /></td>
+                        <td><button>Browse</button></td>
+                        <td><button>Delete</button></td>
+                    </tr> -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td><button onclick="newStaticRow()" style="width: 100%">Add Row</button></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <!-- <br>
+            <button onclick="newStaticRow()" class="staticActionBtn">Add Row</button> -->
+            <br><br>
+            <button onclick="submitStaticRandom()" class="staticActionBtn">Set All</button>
+            <br><br>
+            <button onclick="copyClipboard(createStaticRandomCode())" class="staticActionBtn">Copy Static Random Code</button>
+            <br><br>
+            <button onclick="readFromRandomStaticCode()" class="staticActionBtn">Read from Static Random Code</button>
+            <br><br>
+            <button onclick="copyClipboard(createStaticRandomSetAllCode())" class="staticActionBtn">Copy SetAll Command</button>
+        </div>
     </body>
 </html>

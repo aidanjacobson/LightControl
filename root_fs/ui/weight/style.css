@@ -1,3 +1,44 @@
 #stage {
     border: 1px solid;
 }
+
+#modeselectcontainer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+#staticTable thead td {
+    border: 2px solid;
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+#staticTable td, #staticTable tr {
+    border: 1px solid;
+}
+
+#staticTable tfoot td {
+    border: none;
+}
+
+#staticTable td {
+    padding: 3px 10px;
+    text-align: center;
+}
+
+#staticTable input {
+    text-align: center;
+}
+
+#staticTable {
+    border-collapse: collapse;
+}
+
+.weightInput {
+    width: 50px;
+}
+
+.staticActionBtn {
+    width: 200px;
+}

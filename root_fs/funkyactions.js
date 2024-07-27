@@ -112,4 +112,29 @@ function randomWeightedInterval(intervals) {
     }
 }
 
-module.exports = {shuffle, themerize, HSLInvert, hslSpectrum, hslCircle, randomDark, randomWeightedInterval};
+/*
+    colorWeightData = [
+        {
+            color: String,
+            weight: Number
+        }
+    ]
+*/
+function randomWeightedStatic(colorWeightData=[]) {
+    var weightSum = 0;
+    for (var {color, weight} of colorWeightData) {
+        weightSum += weight;
+    }
+    return function() {
+        var randomNumber = Math.random()*weightSum;
+        var total = 0;
+        for (var {color, weight} of colorWeightData) {
+            total += weight;
+            if (randomNumber < total) {
+                return color;
+            }
+        }
+    }
+}
+
+module.exports = {shuffle, themerize, HSLInvert, hslSpectrum, hslCircle, randomDark, randomWeightedInterval, randomWeightedStatic};
