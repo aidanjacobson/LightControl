@@ -18,6 +18,10 @@ function historyForward() {
     return true;
 }
 
+function createHistoryCurrentFunction() {
+    return historyEntries[historyEntries.length-1];
+}
+
 function createHistoryBackFunction() {
     var success = historyBack();
     if (!success) return "none";
@@ -30,4 +34,4 @@ function createHistoryForwardFunction() {
     return historyEntries[historyEntries.length-1];
 }
 
-module.exports = {addToHistory, back: createHistoryBackFunction, forward: createHistoryForwardFunction};
+module.exports = {addToHistory, back: createHistoryBackFunction, forward: createHistoryForwardFunction, current: createHistoryCurrentFunction};
