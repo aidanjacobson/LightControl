@@ -65,7 +65,7 @@ async function setAll(colorInput, noscene=false) {
     }
     if (color.type == "colorMapping") {
         var previousModes = await segment.getAllSegmentedModes();
-        segment.setModesFromDeviceList(color.mapping.getLightNames());
+        await segment.setModesFromDeviceList(color.mapping.getLightNames());
         var outValue = await setAll(color.mapping.createRenderFunction());
         await segment.setAllSegmentedModes(previousModes);
         return outValue;

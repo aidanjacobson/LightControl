@@ -11,11 +11,15 @@ const configOptions = {
 
 var strip_modes = {};
 
-var loader = new ConfigLoader(configOptions);
-loader.downloadConfig();
+var stripModeLoader = new ConfigLoader(configOptions);
+(async function() {
+    await stripModeLoader.downloadConfig();
+})()
 
 async function downloadStripModes() {
-    strip_modes = await loader.downloadConfig();
+    strip_modes = await stripModeLoader.downloadConfig();
+    // await stripModeLoader.downloadConfig();
+    strip_modes = stripModeLoader.config;
     var segmented = await getSegmentedLights();
     for (lightName of segmented) {
         if (! (lightName in strip_modes)) strip_modes[lightName] = "one_segment";
@@ -33,7 +37,7 @@ async function getSegmentedLights() {
 async function setSegmentedMode(lightName, mode) {
     await downloadStripModes();
     strip_modes[lightName] = mode;
-    await loader.uploadConfig();
+    await stripModeLoader.uploadConfig();
 }
 
 async function getSegmentedMode(lightName) {
@@ -52,7 +56,7 @@ async function getAllSegmentedModes() {
 async function setAllSegmentedModes(modes) {
     await downloadStripModes();
     Object.assign(strip_modes, modes);
-    await loader.uploadConfig();
+    await stripModeLoader.uploadConfig();
 }
 
 var groupRegex = /^segment\.([^\.]+)\.([^\.]+)$/;
@@ -243,7 +247,7 @@ function postAsync(options) {
     })
 }
 
-function setModesFromDeviceList(deviceList) {
+async function setModesFromDeviceList(deviceList) {
     var floorplan = fp.getFloorplan();
     var segmentDevices = deviceList.filter(device=>device.startsWith("segment."));
     var haveGroups = {};
@@ -268,7 +272,7 @@ function setModesFromDeviceList(deviceList) {
                 break;
             }
         }
-        if (!found) setSegmentedMode(deviceName, "one_segment");
+        if (!found) await setSegmentedMode(deviceName, "one_segment");
     }
 }
 

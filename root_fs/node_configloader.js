@@ -62,6 +62,7 @@ function ConfigLoader(options) {
         });
     }
     _this.downloadConfig = async function() {
+        // console.log(storageEndpoint, await xhrGet(storageEndpoint))
         _this.config = await xhrGet(storageEndpoint);
         return _this.config;
     }
