@@ -1,0 +1,30 @@
+#areaTable thead td {
+    border: 2px solid;
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+#areaTable td, #areaTable tr {
+    border: 1px solid;
+}
+
+#areaTable tfoot td {
+    border: none;
+}
+
+#areaTable td {
+    padding: 3px 10px;
+    text-align: center;
+}
+
+#areaTable input {
+    text-align: center;
+}
+
+#areaTable {
+    border-collapse: collapse;
+}
+
+.actionBtn {
+    width: 200px;
+}

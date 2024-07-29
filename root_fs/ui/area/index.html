@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <script src="script.js"></script>
+        <script src="../common/lightcontrol_selectcolor.js"></script>
+        <script src="../common/apiutils.js"></script>
+        <script src="utils.js"></script>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <table id="areaTable">
+            <thead>
+                <tr>
+                    <td>Entity</td>
+                    <td>Color</td>
+                    <td>Browse Colors</td>
+                    <td>Delete</td>
+                    <td>Controls</td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr data-index="0">
+                    <td><input type="text" placeholder="Enter Entity Name" /></td>
+                    <td><input type="text" placeholder="Enter Color" /></td>
+                    <td><button>Browse</button></td>
+                    <td><button>Delete</button></td>
+                </tr> -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><button onclick="newTableRow()" style="width: 100%">Add Row</button></td>
+                </tr>
+            </tfoot>
+        </table>
+        <br>
+        Default Color: <input type="text" placeholder="Enter Color" id="defaultColorInput" /> <button onclick="browseForDefault()">Browse</button>
+        <br><br>
+        <button onclick="submitAreaBuilder()" class="actionBtn">Set All</button>
+        <br><br>
+        <button onclick="copyClipboard(createAreaBuilderSetAllCode())" class="actionBtn">Copy SetAll Command</button>
+    </body>
+</html>
