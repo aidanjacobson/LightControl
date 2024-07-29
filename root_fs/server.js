@@ -78,19 +78,21 @@ app.post("/sendImage", upload.single("image"), async function(req, res) {
 })
 
 app.post("/sendImageNoScene", upload.single("image"), async function(req, res) {
-    await doSetAll(req.file, res, true);
+    await doSetAll(req.file, res, {noscene:true});
 })
 
 app.post("/setAllNoScene", async function(req, res) {
-    await doSetAll(req.body.color, res, true);
+    var options = {noscene:true}
+    Object.assign(options, req.body.options);
+    await doSetAll(req.body.color, res, options);
 })
 
 app.get("/setAllNoScene/:query", async function(req, res) {
-    await doSetAll(decodeURI(req.params.query), res, true);
+    await doSetAll(decodeURI(req.params.query), res, {noscene:true});
 })
 
 app.post("/setAll", async function(req, res) {
-    await doSetAll(req.body.color, res);
+    await doSetAll(req.body.color, res, req.body.options);
 });
 
 app.get("/setAll/:query", async function(req, res) {
@@ -188,8 +190,8 @@ app.get("/testlogin", function(req, res) {
 })
 
 
-async function doSetAll(value, res, noscene=false) {
-    var cResponse = await light.setAll(value, noscene);
+async function doSetAll(value, res, options={}) {
+    var cResponse = await light.setAll(value, options);
     try {
         // var cResponse = Color.from(value);
         var cssValue = cResponse.toCSS(true);

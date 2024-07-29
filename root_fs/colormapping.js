@@ -9,7 +9,11 @@ class ColorMapping {
         this.keys = Object.keys(this.colorMapping);
     }
 
-    findColorWithEntity(lightObj) {
+    findColorWithEntity(lightObj, assumeMissingColors=true) {
+        return this.findColorWithEntity_recursive(lightObj, assumeMissingColors, 4);
+    }
+
+    findColorWithEntity_recursive(lightObj, assumeMissingColors, maxTries=4) {
         var entity = lightObj.entity;
         if (!entity.startsWith("light.") && !entity.startsWith("segment.")) {
             entity = "light." + entity;
@@ -22,12 +26,17 @@ class ColorMapping {
         }
 
         // if not found, find the closest set light
-        return this.findColorWithEntity(this.getClosestPositionedLight(lightObj));
+        if (! assumeMissingColors) {
+            return "donotchange";
+        }
+        if (maxTries > 0) {
+            return this.findColorWithEntity_recursive(this.getClosestPositionedLight(lightObj), maxTries - 1);
+        }
     }
-    createRenderFunction() {
+    createRenderFunction(assumeMissingColors=true) {
         var _this = this;
         return function(lightObj) {
-            return _this.findColorWithEntity(lightObj);
+            return _this.findColorWithEntity(lightObj, assumeMissingColors);
         }
     }
 

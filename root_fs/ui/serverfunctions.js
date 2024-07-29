@@ -22,15 +22,15 @@ if (!localoverride && (location.href.indexOf("192.168.0.8") > -1)) {
 }
 
 var color;
-async function setAll(colorValue, angle) {
+async function setAll(colorValue, options={}) {
     color = colorValue;
-    if (typeof angle !== "undefined") {
-        color += ", " + angle;
-    }
+    // if (typeof angle !== "undefined") {
+    //     color += ", " + angle;
+    // }
     console.log(color);
     var setPath = "/setAll";
     if (!settings.useSene) setPath = "/setAllNoScene";
-    return (await apiPost(setPath, {color})).css;
+    return (await apiPost(setPath, {color, options})).css;
 }
 
 function apiGet(path) {

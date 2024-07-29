@@ -46,27 +46,34 @@ function setLight(light, color, noscene=false) {
  * @param {*} noscene 
  * @returns 
  */
-async function setAll(colorInput, noscene=false) {
+async function setAll(colorInput, options={}) {
+    var noscene = false;
+    if (def(options.noscene)) noscene = options.noscene;
     var color = Color.from(colorInput);
     if (color.type == "gradient") {
-        return await setAll(color.gradient.convertToColorCommandFunction())
+        return await setAll(color.gradient.convertToColorCommandFunction(), options)
     }
     if (color.type == "colorspace") {
-        return await setAll(color.colorSpace.convertToColorCommandFunction());
+        return await setAll(color.colorSpace.convertToColorCommandFunction(), options);
     }
     if (color.type == "url") {
-        return await setAll(await imageURL.fromURL(color));
+        return await setAll(await imageURL.fromURL(color), options);
+    }
+    if (color.type == "builder") {
+        return await setAll(color.builder.convertToColorFunction(), options);
     }
     if (color.type == "buffer") {
-        return await setAll(await imageURL.fromBuffer(color));
+        return await setAll(await imageURL.fromBuffer(color), options);
     }
     if (color.type == "radial") {
-        return await setAll(color.radial.convertToColorCommandFunction());
+        return await setAll(color.radial.convertToColorCommandFunction(), options);
     }
     if (color.type == "colorMapping") {
+        var assumeMissingColors = true;
+        if (def(options.assumeMissingColors)) assumeMissingColors = options.assumeMissingColors;
         var previousModes = await segment.getAllSegmentedModes();
         await segment.setModesFromDeviceList(color.mapping.getLightNames());
-        var outValue = await setAll(color.mapping.createRenderFunction());
+        var outValue = await setAll(color.mapping.createRenderFunction(assumeMissingColors), options);
         await segment.setAllSegmentedModes(previousModes);
         return outValue;
     }
@@ -81,7 +88,24 @@ async function setAll(colorInput, noscene=false) {
     lastLightsSet = [];
 
     // let segment.js expand segmented lights from the floorplan into individual lights
-    var lights = segment.expandLightList(floorplan);
+    // var lights = segment.expandLightList(floorplan);
+    var lights = [];
+    if (ndef(options.lights)) {
+        lights = segment.expandLightList(floorplan);
+    } else {
+        var lightList = [];
+        if (options.lights instanceof Array) {
+            lightList = options.lights.map(l=>"light."+l);
+        } else {
+            lightList = ["light."+options.lights];
+        }
+        for (var i = 0; i < lightList.length; i++) {
+            lightList[i] = await ha.getGroup(lightList[i]);
+            lightList[i] = lightList[i].map(name=>name.split(".")[1])
+        }
+        lightList = lightList.flat();
+        lights = segment.expandLightList(floorplan, lightList);
+    }
 
     // lights = lights.sort((a,b)=>b.x-a.x)
 
@@ -90,12 +114,18 @@ async function setAll(colorInput, noscene=false) {
         var light = lights[i];
         var colorToSet = Color.from(color);
         // if (color.type == "function") {
+        var skipThisLight = false;
         while (colorToSet.type == "function") {
             // if (light.entity == "lamp") debugger;
-            var result = colorToSet.func(light, floorplan);
+            var result = await colorToSet.func(light, floorplan);
+            if (result == "donotchange") {
+                skipThisLight = true;
+                break;
+            }
             //if (typeof result == "undefined") debugger;
             colorToSet = Color.from(result);
         }
+        if (skipThisLight) continue;
         setLight(light, colorToSet, noscene);
         
         // if (color.colorList.every(newColor=>! (newColor.r == colorToSet.r && newColor.g == colorToSet.g && newColor.b == colorToSet.b))) {

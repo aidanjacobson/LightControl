@@ -72,12 +72,13 @@ function getAvailableStripModes(lightName) {
 }
 
 var floorplan = fp.getFloorplan();
-function expandLightList(_floorplan) {
+function expandLightList(_floorplan, lightList=_floorplan.lights.map(l=>l.entity)) {
     floorplan = _floorplan;
 
     var lightListOut = [];
     for (var i = 0; i < floorplan.lights.length; i++) {
         var light = floorplan.lights[i];
+        if (lightList.indexOf(light.entity) == -1) continue;
 
         if (! lightHasModeBreakdown(light.entity)) {
             lightListOut.push(light);
@@ -159,6 +160,18 @@ function segmentIsUsed(segmentNumber, lightName, usedLights) {
 
 function isSegment(lightName) {
     return lightName.indexOf("segment.") == 0;
+}
+
+/**
+ * 
+ * @param {*} segmentEntityName ex. segment.bed_light_strip.quarter_1
+ * @param {*} mainEntityName ex. light.bed_light_strip
+ */
+function isSegmentOf(segmentEntityName, mainEntityName) {
+    if (!isSegment(segmentEntityName)) return false;
+    var segEntity = segmentEntityName.split(".")[1];
+    var mainEntity = mainEntityName.split(".")[1];
+    return segEntity == mainEntity;
 }
 
 async function setSegmentLight(light, color) {
@@ -293,4 +306,4 @@ function setRawHassLight(light, color) {
 }
 
 
-module.exports = {expandLightList, turnOffUnusedSegments, isSegment, setAllSegmentedModes, setModesFromDeviceList, getAllSegmentedModes, getSegmentedMode, setSegmentLight, getAvailableStripModes, getSegmentedLights, setSegmentedMode}
+module.exports = {expandLightList, turnOffUnusedSegments, isSegment, isSegmentOf, setAllSegmentedModes, setModesFromDeviceList, getAllSegmentedModes, getSegmentedMode, setSegmentLight, getAvailableStripModes, getSegmentedLights, setSegmentedMode}

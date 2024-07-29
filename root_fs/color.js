@@ -5,6 +5,7 @@ var fp = require("./lightcommand/floorplan"), floorplan = {};
 const { ndef, def } = require("./def_ndef");
 const random = require("./random");
 const ColorMapping = require("./colormapping");
+const AreaBuilder = require("./AreaBuilder");
 const history = require("./history")
 
 configLoaderColorNames.loadColors();
@@ -61,6 +62,9 @@ class Color {
         } else if (args[0] instanceof ColorMapping) {
             _this.type = "colorMapping";
             this.mapping = args[0];
+        } else if (args[0] instanceof AreaBuilder) {
+            _this.type = "builder";
+            this.builder = args[0];
         } else if (args[0] instanceof Function) {
             _this.func = args[0];
             _this.type = "function";

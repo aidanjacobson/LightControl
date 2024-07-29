@@ -6,3 +6,17 @@ const Color = require("./color");
 const Gradient = require("./gradient");
 
 const server = require("./server");
+
+const ha = require("./lightcommand/homeassistant");
+
+// cache group data
+async function cacheGroups() {
+    await ha.getGroup("light.house_lights");
+    console.log("Groups cached");
+}
+
+async function main() {
+    await cacheGroups();
+}
+
+main();

@@ -1,5 +1,6 @@
 const request = require("request");
 const urlJoin = require("./urljoin");
+const {def, ndef} = require("../def_ndef");
 require("dotenv").config();
 
 // obtain the url and access token for home assistant server
