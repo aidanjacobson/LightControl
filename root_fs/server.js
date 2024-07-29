@@ -196,7 +196,7 @@ async function doSetAll(value, res, noscene=false) {
     } catch(E) {
         // debugger;
     }
-    if (value.indexOf("back") == -1 && value.indexOf("forward") == -1) {
+    if (typeof value == "string" && value.indexOf("back") == -1 && value.indexOf("forward") == -1) {
         history.addToHistory(await light.generateSaveColorsString());
     }
     res.send({css:cssValue});
