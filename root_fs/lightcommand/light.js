@@ -82,6 +82,9 @@ async function setAll(colorInput, noscene=false) {
 
     // let segment.js expand segmented lights from the floorplan into individual lights
     var lights = segment.expandLightList(floorplan);
+
+    // lights = lights.sort((a,b)=>b.x-a.x)
+
     color.colorList = [];
     for (var i = 0; i < lights.length; i++) {
         var light = lights[i];
@@ -155,7 +158,7 @@ async function generateSaveColorsString(nocache=false) {
     }
     var colorMap = {};
     lastLightsSet.forEach(function(light) {
-        colorMap[light] = entityCachedColors[light];
+        colorMap[light] = entityCachedColors[light].toString();
     });
     return JSON.stringify(colorMap);
 }
