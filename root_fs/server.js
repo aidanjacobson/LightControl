@@ -189,8 +189,18 @@ app.get("/testlogin", function(req, res) {
     res.json({status:"success"});
 })
 
+var lastSetAllCache = {
+    value: "",
+    options: {}
+};
 
 async function doSetAll(value, res, options={}) {
+    if (value == "repeat") {
+        return await doSetAll(lastSetAllCache.value, res, lastSetAllCache.options);
+    } else {
+        lastSetAllCache.value = value;
+        lastSetAllCache.options = options;
+    }
     var cResponse = await light.setAll(value, options);
     try {
         // var cResponse = Color.from(value);
