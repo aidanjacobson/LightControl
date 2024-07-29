@@ -63,4 +63,41 @@ async function serviceCall(service, data={}) {
     return await post(apiPath, data);
 }
 
-module.exports = {get, post, serviceCall};
+var groupCache = {};
+async function getGroup(entityName) {
+    var someMembersAreGroups = true;
+    var groupMembers = [entityName];
+    while (someMembersAreGroups) {
+        var groupMembersCopy = [];
+        someMembersAreGroups = false;
+        for (var i = 0; i < groupMembers.length; i++) {
+            var currentEntity = groupMembers[i];
+            if (ndef(groupCache[currentEntity])) await downloadGroupInfo(currentEntity);
+            if (groupCache[currentEntity].isGroup) {
+                someMembersAreGroups = true;
+                groupMembersCopy.push(...groupCache[currentEntity].groupMembers);
+            } else {
+                groupMembersCopy.push(currentEntity);
+            }
+        }
+        groupMembers = groupMembersCopy;
+    }
+    return groupMembers;
+}
+
+async function downloadGroupInfo(entity_id) {
+    var stateObject = await get("/states/" + entity_id);
+    if (ndef(stateObject.attributes)) return;
+    if (def(stateObject.attributes.entity_id)) {
+        groupCache[entity_id] = {
+            isGroup: true,
+            groupMembers: stateObject.attributes.entity_id
+        }
+    } else {
+        groupCache[entity_id] = {
+            isGroup: false
+        }
+    }
+}
+
+module.exports = {get, post, serviceCall, getGroup};
