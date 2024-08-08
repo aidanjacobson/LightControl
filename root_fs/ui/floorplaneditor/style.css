@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+  }
+
+#lights {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: inline-block;
+}
+
+.lightbulb {
+    position: relative;
+    left: 500;
+    top: 10%;
+    display: inline-block;
+}
+
+.lightbulb > img {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background-color: rgb(37, 214, 37);
+    border: 2px solid black;
+    border-radius: 20px;
+    padding: 5px;
+    opacity: 75%;
+}
+
+.lightbulb.selected > img {
+    background-color: red;
+}

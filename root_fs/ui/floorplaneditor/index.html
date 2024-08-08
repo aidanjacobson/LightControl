@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <script src="../common/apiutils.js"></script>
+        <script src="../common/show_hide.js"></script>
+        <script src="../common/lightcontrol_selectcolor.js"></script>
+        <script src="script.js"></script>
+        <script src="lights.js"></script>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="mapContainer" class="menu">
+            <img id="mapImg" src="map.png" />
+            <div id="lights">
+                <!-- <div class="lightbulb">
+                    <img src="light-bulb.svg" />
+                </div> -->
+            </div>
+            <div id="selectedEditorContainer" hidden>
+                <h1 id="entityNameDisplay"></h1>
+            </div><br><br>
+            <input type="text" placeholder="Enter Color" id="colorSetInput" />
+            <button onclick="doSetAll()">SetAll</button>
+            <button onclick="doBrowse()">Browse</button>
+        </div>
+        <div id="segmentEditor" class="menu" hidden>
+
+        </div>
+    </body>
+</html>

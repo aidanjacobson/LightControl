@@ -54,4 +54,9 @@ function getFloorplan() {
 // pull floorplan on first load
 updateFloorplan();
 
-module.exports = {getFloorplan, updateFloorplan};
+async function setFloorplan(floorplan) {
+    lastFloorplan = server.config = floorplan;
+    await server.uploadConfig();
+}
+
+module.exports = {getFloorplan, updateFloorplan, setFloorplan};
