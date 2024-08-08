@@ -76,7 +76,7 @@ function lightMouseMoveFunction(e) {
     }
 }
 
-window.addEventListener("mouseup", lightMouseUpFunction);
+// window.addEventListener("mouseup", lightMouseUpFunction);
 window.addEventListener("mousemove", lightMouseMoveFunction);
 
 function renderSelectedEditor() {
