@@ -189,6 +189,17 @@ app.get("/testlogin", function(req, res) {
     res.json({status:"success"});
 })
 
+app.get("/getFloorplan", function(req, res) {
+    res.json(fp.getFloorplan());
+})
+
+app.post("/setFloorplan", async function(req, res) {
+    var newFloorplan = req.body;
+    await fp.setFloorplan(newFloorplan);
+    res.json({status: "success"});
+})
+
+
 var lastSetAllCache = {
     value: "",
     options: {}
