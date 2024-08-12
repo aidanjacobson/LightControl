@@ -12,6 +12,8 @@ window.addEventListener("load", async function() {
 
     await populateSegmentModeSettingsOptions();
     await renderAllLights();
+    await updateLightCachedColors();
+    await setPageLightColors();
 })
 
 function initDefaultSizes() {
@@ -55,8 +57,9 @@ HTMLElement.prototype.getStyleTop = function() {
     return Math.round(Number(this.style.top.substring(0, this.style.top.length-2)));
 }
 
-function doSetAll() {
-    setAll(colorSetInput.value)
+async function doSetAll() {
+    await setAll(colorSetInput.value);
+    await refreshLights();
 }
 
 async function doBrowse() {

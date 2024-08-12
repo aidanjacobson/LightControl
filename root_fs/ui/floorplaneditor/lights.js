@@ -1,7 +1,14 @@
 var lightList = [];
 var lastLightColors = {};
 function setLastLightColors(newLastLightColors) {
-    Object.assign(lastLightColors, newLastLightColors);
+    // Object.assign(lastLightColors, newLastLightColors);
+    for (var prop in newLastLightColors) {
+        var propValue = newLastLightColors[prop];
+        if (prop.indexOf("light.") == 0) {
+            prop = prop.replace("light.", "");
+        }
+        lastLightColors[prop] = propValue;
+    }
 }
 async function renderAllLights() {
     lightList = await apiPost("/expandLightListWithModes", {lightList: floorplan.lights.map(l=>l.entity), modes: getModesFromSelects()})
@@ -10,6 +17,38 @@ async function renderAllLights() {
         if (typeof lightObj.hidden !== "undefined" && lightObj.hidden) continue;
         lights.append(createLightElement(lightObj));
     }
+}
+
+async function updateLightCachedColors() {
+    var lightColorsData = await apiGet("/getLastLightData");
+    setLastLightColors(lightColorsData.cachedColors);
+}
+
+function updateLightElementColors() {
+    setSelectedLight(selectedLight);
+}
+
+async function refreshLights() {
+    await updateLightCachedColors();
+    await setPageLightColors();
+}
+
+var trueColor = false;
+
+async function setPageLightColors() {
+    for (var lightbulbElement of document.querySelectorAll(".lightbulb")) {
+        var img = lightbulbElement.children[0];
+        if (!trueColor) {
+            img.style.backgroundColor = "rgb(37, 214, 37)";
+            continue;
+        }
+        var img = lightbulbElement.children[0];
+        var colorObj = lastLightColors[lightbulbElement.getAttribute("entity-id")];
+        if (!colorObj) continue;
+        var color = `rgb(${Math.round(colorObj.r)}, ${Math.round(colorObj.g)}, ${Math.round(colorObj.b)})`;
+        img.style.backgroundColor = color;
+    }
+    setSelectedLight(selectedLight);
 }
 
 function createLightElement(lightObject) {
@@ -36,14 +75,22 @@ function setSelectedLight(lightElement) {
     selectedLight = lightElement;
     var allLights = document.querySelectorAll(".lightbulb");
     for (var light of allLights) {
-        light.classList.remove("selected");
-        light.children[0].style.boxShadow = "none"; 
+        if (light == lightElement) {
+            light.classList.add("selected");
+            var lightColor = getComputedStyle(light.children[0]).backgroundColor;
+            light.children[0].style.boxShadow = `0px 0px ${maxShadow}px ${maxShadow}px ${lightColor}`;
+            renderSelectedEditor();
+        } else {
+            light.classList.remove("selected");
+            var lightColor = getComputedStyle(light.children[0]).backgroundColor;
+            var shadowPercent = Math.pow(1 - (opacityRange.valueAsNumber/100), 4);
+            var maxShadow = 30;
+            var shadowLength = maxShadow * shadowPercent;
+            if (!trueColor) shadowLength = 0;
+            light.children[0].style.boxShadow = `0px 0px ${shadowLength}px ${shadowLength}px ${lightColor}`;
+        }
     }
-    lightElement.classList.add("selected");
-    var lightColor = getComputedStyle(lightElement.children[0]).backgroundColor;
-    lightElement.children[0].style.boxShadow = `0px 0px 30px 30px ${lightColor}`;
     selectedEditorContainer.show();
-    renderSelectedEditor();
 }
 
 var dragging = false;
@@ -86,7 +133,22 @@ function lightMouseMoveFunction(e) {
 }
 
 // window.addEventListener("mouseup", lightMouseUpFunction);
-window.addEventListener("mousemove", lightMouseMoveFunction);
+window.addEventListener("load", function() {
+    opacityRange.addEventListener("mousemove", opacityMouseMove);
+    opacityRange.addEventListener("mousedown", stopPropagation);
+    opacityRange.addEventListener("mouseup", stopPropagation);
+    window.addEventListener("mousemove", lightMouseMoveFunction);
+})
+
+function opacityMouseMove(e) {
+    e.stopPropagation();
+    mapImg.style.opacity = `${opacityRange.value}%`;
+    setSelectedLight(selectedLight);
+}
+
+function stopPropagation(e) {
+    e.stopPropagation();
+}
 
 function renderSelectedEditor() {
     entityNameDisplay.innerText = selectedLight.getAttribute("entity-id");
@@ -105,7 +167,13 @@ async function saveFloorplan() {
         [light.x, light.y] = floorCoords;
     }
     setAllSegmentPositions();
-    return await setFloorplan(floorplan);
+    var output = await setFloorplan(floorplan);
+
+    if (trueColor && colorSetInput.value != "") {
+        await doSetAll();
+    }
+
+    return output;
 }
 
 function getImageCoordsFromEntityID(id) {

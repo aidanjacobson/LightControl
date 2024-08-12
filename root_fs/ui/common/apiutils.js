@@ -40,8 +40,9 @@ function apiGet(path) {
     })
 }
 
-async function setAll(color) {
-    await apiPost("/setAll", {color});
+async function setAll(color, noscene=true) {
+    var endpoint = noscene ? "/setAllNoScene" : "/setAll"
+    await apiPost(endpoint, {color});
 }
 
 function copyClipboard(text) {

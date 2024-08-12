@@ -61,6 +61,7 @@ function createSelectOption(text, value) {
 
 function segmentedLightModeSelectorOnchangeFunction(e) {
     renderAllLights();
+    updateLightElementColors();
 }
 
 function setAllSegmentPositions() {

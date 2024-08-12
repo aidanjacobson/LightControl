@@ -10,16 +10,20 @@
     </head>
     <body>
         <div id="mapContainer" class="menu">
-            <img id="mapImg" src="map.png" />
+            <div id="mapImgContainer">
+                <img id="mapImg" src="map.png" />
+            </div>
             <div id="lights">
                 <!-- <div class="lightbulb">
                     <img src="light-bulb.svg" />
                 </div> -->
             </div>
+            <h2>Background Light: Off <input type="range" min="0" max="100" value="100" id="opacityRange" /> On</h2>
+            <h2><label for="trueColorInput">TrueColor: </label><input type="checkbox" name="trueColorInput" id="trueColorInput" onclick="trueColor = trueColorInput.checked; setPageLightColors()" /></h2>
             <div id="selectedEditorContainer" hidden>
                 <h1 id="entityNameDisplay"></h1>
             </div><br><br>
-            <input type="text" placeholder="Enter Color" id="colorSetInput" />
+            <input type="text" placeholder="Enter Color" id="colorSetInput" onchange="doSetAll()" />
             <button onclick="doSetAll()">SetAll</button>
             <button onclick="doBrowse()">Browse</button><br><br>
             <div id="segmentModeSettingsContainer">

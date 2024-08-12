@@ -2,7 +2,16 @@
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
-  }
+}
+
+#mapImgContainer {
+    display: inline-block;
+    background-color: black;
+}
+
+#opacityRange {
+    width: 50%;
+}
 
 #lights {
     position: absolute;

@@ -115,7 +115,7 @@ async function setAll(colorInput, options={}) {
         var light = lights[i];
         var colorToSet = Color.from(color);
         // if (color.type == "function") {
-        var skipThisLight = false;
+            var skipThisLight = false;
         while (colorToSet.type == "function") {
             // if (light.entity == "lamp") debugger;
             var result = await colorToSet.func(light, floorplan);
@@ -162,6 +162,14 @@ async function setAll(colorInput, options={}) {
     color.colorList = color.colorList.sort((a,b)=>RGBToHSL(a).h - RGBToHSL(b).h);
     // console.log(color.colorList.map(c=>c.toString()))
     return color;
+}
+
+async function getColorLightShouldBe(lightObj) {
+
+}
+
+async function evaluateColorOfLightAtPosition(lightObj, color) {
+
 }
 
 async function applyHomeAssistantScene() {
