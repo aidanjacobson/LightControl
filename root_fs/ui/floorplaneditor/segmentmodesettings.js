@@ -59,9 +59,10 @@ function createSelectOption(text, value) {
     return option;
 }
 
-function segmentedLightModeSelectorOnchangeFunction(e) {
-    renderAllLights();
-    updateLightElementColors();
+async function segmentedLightModeSelectorOnchangeFunction(e) {
+    await renderAllLights();
+    // await updateLightElementColors();
+    await refreshLights();
 }
 
 function setAllSegmentPositions() {

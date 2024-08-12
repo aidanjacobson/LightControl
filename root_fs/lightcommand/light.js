@@ -52,7 +52,6 @@ function setLight(light, color, noscene=false) {
  * @returns 
  */
 async function setAll(colorInput, options={}) {
-    console.log(options)
     var noscene = false;
     if (def(options.noscene)) noscene = options.noscene;
     var color = Color.from(colorInput);

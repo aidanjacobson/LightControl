@@ -46,8 +46,10 @@ async function setPageLightColors() {
         }
         var img = lightbulbElement.children[0];
         var colorObj = lastLightColors[lightbulbElement.getAttribute("entity-id")];
-        if (!colorObj) continue;
-        var color = `rgb(${Math.round(colorObj.r)}, ${Math.round(colorObj.g)}, ${Math.round(colorObj.b)})`;
+        var color = "rgba(0, 0, 0, 0)";
+        if (colorObj) {
+            color = `rgb(${Math.round(colorObj.r)}, ${Math.round(colorObj.g)}, ${Math.round(colorObj.b)})`;
+        }
         img.style.backgroundColor = color;
     }
     setSelectedLight(selectedLight);
@@ -77,14 +79,14 @@ function setSelectedLight(lightElement) {
     selectedLight = lightElement;
     var allLights = document.querySelectorAll(".lightbulb");
     for (var light of allLights) {
+        var lightColor = getComputedStyle(light.children[0]).backgroundColor;
+        if (lightColor == "rgba(0, 0, 0, 0)") lightColor = "white";
         if (light == lightElement) {
             light.classList.add("selected");
-            var lightColor = getComputedStyle(light.children[0]).backgroundColor;
             light.children[0].style.boxShadow = `0px 0px ${maxShadow}px ${maxShadow}px ${lightColor}`;
             renderSelectedEditor();
         } else {
             light.classList.remove("selected");
-            var lightColor = getComputedStyle(light.children[0]).backgroundColor;
             var shadowPercent = Math.pow(1 - (opacityRange.valueAsNumber/100), 4);
             var maxShadow = 30;
             var shadowLength = maxShadow * shadowPercent;
