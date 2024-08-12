@@ -28,6 +28,8 @@ function updateLightElementColors() {
     setSelectedLight(selectedLight);
 }
 
+setInterval(updateLightElementColors, 7000);
+
 async function refreshLights() {
     await updateLightCachedColors();
     await setPageLightColors();
@@ -111,9 +113,15 @@ function lightMouseDownFunction(e) {
 function lightMouseUpFunction(e) {
     e.preventDefault();
     e.stopPropagation();
+    var wasDragging = dragging;
     dragging = false;
     clicking = false;
-    saveFloorplan();
+    if (wasDragging) {
+        saveFloorplan();
+        if (colorSetInput.value != "" && trueColor) {
+            doSetAll();
+        }
+    }
 }
 
 function lightMouseMoveFunction(e) {
@@ -121,7 +129,7 @@ function lightMouseMoveFunction(e) {
     e.stopPropagation();
     if (!clicking) return;
     var currentMouseCoords = [e.clientX, e.clientY];
-    if (dist(currentMouseCoords, initalClickCoords) > 10) {
+    if (!dragging && dist(currentMouseCoords, initalClickCoords) > 10) {
         dragging = true;
     }
     if (dragging) {
@@ -168,10 +176,6 @@ async function saveFloorplan() {
     }
     setAllSegmentPositions();
     var output = await setFloorplan(floorplan);
-
-    if (trueColor && colorSetInput.value != "") {
-        await doSetAll();
-    }
 
     return output;
 }

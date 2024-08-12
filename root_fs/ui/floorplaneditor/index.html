@@ -23,7 +23,7 @@
             <div id="selectedEditorContainer" hidden>
                 <h1 id="entityNameDisplay"></h1>
             </div><br><br>
-            <input type="text" placeholder="Enter Color" id="colorSetInput" onchange="doSetAll()" />
+            <input type="text" placeholder="Enter Color" id="colorSetInput" onkeypress="if (event.key == 'Enter') {doSetAll()}" />
             <button onclick="doSetAll()">SetAll</button>
             <button onclick="doBrowse()">Browse</button><br><br>
             <div id="segmentModeSettingsContainer">
