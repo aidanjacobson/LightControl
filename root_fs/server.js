@@ -88,15 +88,21 @@ app.post("/setAllNoScene", async function(req, res) {
 })
 
 app.get("/setAllNoScene/:query", async function(req, res) {
-    await doSetAll(decodeURI(req.params.query), res, {noscene:true});
+    var options = {noscene: true};
+    Object.assign(options, req.body.options);
+    await doSetAll(decodeURI(req.params.query), res, options);
 })
 
 app.post("/setAll", async function(req, res) {
-    await doSetAll(req.body.color, res, req.body.options);
+    var options = {noscene: false};
+    Object.assign(options, req.body.options);
+    await doSetAll(req.body.color, res, options);
 });
 
 app.get("/setAll/:query", async function(req, res) {
-    await doSetAll(decodeURI(req.params.query), res);
+    var options = {noscene: false};
+    Object.assign(options, req.body.options);
+    await doSetAll(decodeURI(req.params.query), res, options);
 })
 
 app.get("/getAvailableStripModes/:lightName", function(req, res) {

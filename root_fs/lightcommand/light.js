@@ -37,17 +37,22 @@ function setLight(light, color, noscene=false) {
         }
         ha.serviceCall(service, data);
     }
-    entityCachedColors[lightEntity] = color;
+    // entityCachedColors[lightEntity] = color;
 }
 
 /**
  * Set all lights to a Color.
  * Functions, gradients, urls, mappings, etc. will be resolved to rgb colors at this stage based on reduction (e.g. gradient -> function -> rgb value)
  * @param {*} colorInput 
- * @param {*} noscene 
+ * @param {*} options {
+ *  noscene?: boolean,
+ *  assumeMissingColors?: boolean,
+ *  lights?: array
+ * } 
  * @returns 
  */
 async function setAll(colorInput, options={}) {
+    console.log(options)
     var noscene = false;
     if (def(options.noscene)) noscene = options.noscene;
     var color = Color.from(colorInput);
@@ -181,6 +186,7 @@ async function applyHomeAssistantScene() {
         if (!color) {
             continue;
         }
+        if (entityName.indexOf("light.") != 0) entityName = "light." + entityName;
         var rgbw_color = [color.r, color.g, color.b, 0];
         var entityState = {state:"on",rgbw_color};
         if (rgbw_color[0] == 0 && rgbw_color[1] == 0 && rgbw_color[2] == 0) {
