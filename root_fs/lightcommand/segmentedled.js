@@ -72,7 +72,7 @@ function getAvailableStripModes(lightName) {
 }
 
 var floorplan = fp.getFloorplan();
-function expandLightList(_floorplan, lightList=_floorplan.lights.map(l=>l.entity)) {
+function expandLightListWithModes(_floorplan, lightList=_floorplan.lights.map(l=>l.entity), modes=strip_modes) {
     floorplan = _floorplan;
 
     var lightListOut = [];
@@ -85,7 +85,7 @@ function expandLightList(_floorplan, lightList=_floorplan.lights.map(l=>l.entity
             continue;
         }
 
-        var groups = getBreakdownGroups(light.entity, strip_modes[light.entity]);
+        var groups = getBreakdownGroups(light.entity, modes[light.entity]);
         for (var j = 0; j < groups.length; j++) {
             var expandedLight = getExpandedLightForGroup(groups[j], light);
             lightListOut.push(expandedLight);
@@ -94,7 +94,14 @@ function expandLightList(_floorplan, lightList=_floorplan.lights.map(l=>l.entity
     return lightListOut;
 }
 
+function expandLightList(_floorplan, lightList=_floorplan.lights.map(l=>l.entity)) {
+    return expandLightListWithModes(_floorplan, lightList, strip_modes)
+}
+
 function getExpandedLightForGroup(groupName, masterLightInfo) {
+    if (groupName == "one_segment") {
+        return masterLightInfo;
+    }
     var groupInfo;
     if (isNaN(groupName)) {
         for (var i = 0; i < floorplan.segmented_led[masterLightInfo.entity].groups.length; i++) {
@@ -118,6 +125,9 @@ function getExpandedLightForGroup(groupName, masterLightInfo) {
 }
 
 function getBreakdownGroups(entityName, breakdownName) {
+    if (breakdownName == "one_segment") {
+        return ["one_segment"];
+    }
     for (var i = 0; i < floorplan.segmented_led[entityName].breakdowns.length; i++) {
         var breakdown = floorplan.segmented_led[entityName].breakdowns[i];
         if (breakdown.name == breakdownName) return breakdown.groups;
@@ -306,4 +316,4 @@ function setRawHassLight(light, color) {
 }
 
 
-module.exports = {expandLightList, turnOffUnusedSegments, isSegment, isSegmentOf, setAllSegmentedModes, setModesFromDeviceList, getAllSegmentedModes, getSegmentedMode, setSegmentLight, getAvailableStripModes, getSegmentedLights, setSegmentedMode}
+module.exports = {expandLightList, expandLightListWithModes, turnOffUnusedSegments, isSegment, isSegmentOf, setAllSegmentedModes, setModesFromDeviceList, getAllSegmentedModes, getSegmentedMode, setSegmentLight, getAvailableStripModes, getSegmentedLights, setSegmentedMode}

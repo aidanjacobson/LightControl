@@ -21,14 +21,15 @@ function setLight(light, color, noscene=false) {
     if (segment.isSegment(light.entity)) {
         segment.setSegmentLight(light, color);
     }
-    if (light.entity.indexOf("light.") != 0 && light.entity.indexOf("segment.") != 0) {
-        light.entity = `light.${light.entity}`;
+    var lightEntity = light.entity;
+    if (lightEntity.indexOf("light.") != 0 && lightEntity.indexOf("segment.") != 0) {
+        lightEntity = `light.${lightEntity}`;
     }
     // console.log(`setlight ${light.entity}`);
     if (noscene) {
         var service = "light.turn_off"
         var data = {
-            entity_id: light.entity
+            entity_id: lightEntity
         }
         if (color.r != 0 || color.g != 0 || color.b != 0) {
             service = "light.turn_on"
@@ -36,7 +37,7 @@ function setLight(light, color, noscene=false) {
         }
         ha.serviceCall(service, data);
     }
-    entityCachedColors[light.entity] = color;
+    entityCachedColors[lightEntity] = color;
 }
 
 /**
@@ -193,6 +194,13 @@ async function generateSaveColorsString(nocache=false) {
     return JSON.stringify(colorMap);
 }
 
+function getLastLightData() {
+    return {
+        lightsSet: lastLightsSet,
+        cachedColors: entityCachedColors
+    }
+}
+
 function getLightColor(entity) {
     // if (segment.isSegment(entity)) {
     //     if (entityCachedColors[entity]) return entityCachedColors[entity];
@@ -229,4 +237,4 @@ async function pullColor(light) {
     return rgb_color;
 }
 
-module.exports = {setLight, setAll, getLightColor, generateSaveColorsString, pullColor, pullCurrentColors};
+module.exports = {setLight, setAll, getLightColor, generateSaveColorsString, pullColor, pullCurrentColors, getLastLightData};

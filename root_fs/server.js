@@ -64,7 +64,7 @@ function authMiddleware(req, res, next) {
     }
 }
 
-var ignorePaths = ["/ui", "/getmanifest", "/getlog"]
+var ignorePaths = ["/ui", "/getmanifest", "/getlog", "/favicon.ico"]
 
 app.use(unless(authMiddleware, "/ui", ...ignorePaths))
 app.use(unless(accesslog.middleware, "/ui", ...ignorePaths));
@@ -197,6 +197,19 @@ app.post("/setFloorplan", async function(req, res) {
     var newFloorplan = req.body;
     await fp.setFloorplan(newFloorplan);
     res.json({status: "success"});
+})
+
+app.get("/getLastLightData", async function(req, res) {
+    res.json(light.getLastLightData());
+})
+
+app.get("/getLightEntityColor/:entity", async function(req, res) {
+    var lastLightData = light.getLastLightData();
+    res.json(lastLightData.cachedColors[req.params.entity]);
+})
+
+app.post("/expandLightListWithModes", async function(req, res) {
+    res.json(segment.expandLightListWithModes(fp.getFloorplan(), req.body.lightList, req.body.modes));
 })
 
 

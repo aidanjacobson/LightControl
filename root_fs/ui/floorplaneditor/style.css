@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
 #lights {
@@ -30,5 +31,31 @@
 }
 
 .lightbulb.selected > img {
-    background-color: red;
+    border: 2px solid black;
+    /* box-shadow: 0px 0px 30px 30px rgb(37, 214, 37); */
+    /* background-color: red; */
+}
+
+#segmentModeSettingsContainer {
+    border: 2px solid;
+    display: inline-block;
+    padding: 10px;
+}
+
+#segmentModeSettingsContainer > h2::after {
+    content: ' ▶';
+}
+
+#segmentModeSettingsContainer.expanded > h2::after {
+    content: ' ▼';
+}
+
+#segmentModeSettingsContainer > #segmentModeSettings {
+    visibility: hidden;
+    display: none;
+}
+
+#segmentModeSettingsContainer.expanded > #segmentModeSettings {
+    visibility: visible;
+    display: block;
 }

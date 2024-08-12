@@ -5,6 +5,7 @@
         <script src="../common/lightcontrol_selectcolor.js"></script>
         <script src="script.js"></script>
         <script src="lights.js"></script>
+        <script src="segmentmodesettings.js"></script>
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
@@ -20,7 +21,24 @@
             </div><br><br>
             <input type="text" placeholder="Enter Color" id="colorSetInput" />
             <button onclick="doSetAll()">SetAll</button>
-            <button onclick="doBrowse()">Browse</button>
+            <button onclick="doBrowse()">Browse</button><br><br>
+            <div id="segmentModeSettingsContainer">
+                <h2 onclick="segmentModeSettingsContainer.classList.toggle('expanded')">
+                    Segment Mode View Settings
+                </h2>
+                <div id="segmentModeSettings">
+                    <table id="segmentModeSettingsTable">
+                        <!-- <tr>
+                            <td>bed_light_strip</td>
+                            <td><select><option>one_segment</option></select></td>
+                        </tr>
+                        <tr>
+                            <td>aaa</td>
+                            <td><select><option>one_segment</option></select></td>
+                        </tr> -->
+                    </table>
+                </div>
+            </div>
         </div>
         <div id="segmentEditor" class="menu" hidden>
 
