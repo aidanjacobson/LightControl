@@ -33,7 +33,8 @@
             <button class="buttonOption half" onclick="mainmenu_choosebetween()">Choose Between</button>
             <button class="buttonOption half" onclick="mainmenu_colortheme()">Color Theme</button>
             <button class="buttonOption" id="colorOutput" onclick="mainmenu_preview()">(Preview)</button>
-            <button class="buttonOption" onclick="mainmenu_savecolor()">Save Current Command</button>
+            <button class="buttonOption half" onclick="mainmenu_savecolor()">Save Current Command</button>
+            <button class="buttonOption half" onclick="navigator.clipboard.writeText(lastColor)">Copy Current Command</button>
             <button class="buttonOption half" onclick="mainmenu_savecolorscene()">Save Current Scene</button>
             <button class="buttonOption half" onclick="mainmenu_savecolorscenenocache()">Pull Colors & Save Scene</button>
             <button class="buttonOption" onclick="attemptSetAll(lastColor)">Repeat Last Color</button>
