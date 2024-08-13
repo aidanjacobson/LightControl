@@ -109,7 +109,7 @@ post body {
     nocache: Boolean
 }
 ```
-If nocache is true, pull colors from the light APIs before saving. May conflict with segmented modes
+If nocache is true, pull colors from the light APIs before saving. Does not update segmented light colors. 
 
 
 ## Get access log
