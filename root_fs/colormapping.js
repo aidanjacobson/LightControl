@@ -1,6 +1,13 @@
 const fp = require("./lightcommand/floorplan");
 var floorplan = fp.getFloorplan();
 
+function ensureStartsWithLight(entity) { 
+    if (!entity.startsWith("light.") && !entity.startsWith("segment.")) {
+        entity = "light." + entity;
+    }
+    return entity;
+}
+
 class ColorMapping {
     colorMapping = {};
     keys=[];
@@ -20,7 +27,7 @@ class ColorMapping {
         }
         // console.log(entity);
         for (var i = 0; i < this.keys.length; i++) {
-            if (this.keys[i] == entity) {
+            if (ensureStartsWithLight(this.keys[i]) == entity) {
                 return this.colorMapping[this.keys[i]];
             }
         }
