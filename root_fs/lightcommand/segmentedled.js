@@ -280,7 +280,7 @@ async function setModesFromDeviceList(deviceList) {
         var found = false;
         for (var breakdown of breakdowns) {
             if (breakdown.groups.every(group=>haveGroups[deviceName].indexOf(group.toString())>-1)) {
-                setSegmentedMode(deviceName, breakdown.name);
+                await setSegmentedMode(deviceName, breakdown.name);
                 found = true;
                 break;
             }
