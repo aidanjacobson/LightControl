@@ -55,4 +55,8 @@ const setSetting = async function(settingName, value) {
     await settingsLoader.uploadConfig();
 }
 
-module.exports = {setSetting, getSetting};
+const uploadConfig = async function() {
+    return await settingsLoader.uploadConfig();
+}
+
+module.exports = {setSetting, getSetting, uploadConfig};
