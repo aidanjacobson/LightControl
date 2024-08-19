@@ -65,3 +65,12 @@ async function doSetAll() {
 async function doBrowse() {
     colorSetInput.value = await selectColor();
 }
+
+var lastBackgroundCSS = "black";
+async function backgroundCSS() {
+    if (colorSetInput.value != "") lastBackgroundCSS = colorSetInput.value;
+    var newColor = prompt("Enter new color", lastBackgroundCSS)
+    lastBackgroundCSS = newColor;
+    var css = (await apiPost("/getcss", {color: newColor})).css;
+    mapImgContainer.style.background = css;
+}

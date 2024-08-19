@@ -10,6 +10,7 @@
 var Color = require("./color");
 var fp = require("./lightcommand/floorplan"), floorplan = {};
 var utils = require("./utils");
+const settingsLoader = require("./settings");
 
 var Gradient = function(stops=[], angle=0) {
     function sortGradient(gradient) {
@@ -106,13 +107,43 @@ var Gradient = function(stops=[], angle=0) {
         return _this.stops.map(stop=>stop.color);
     }
 
-    _this.convertToColorCommandFunction = function() {
+    _this.convertToColorCommandFunction = async function() {
+        var gradientAngleMode = await settingsLoader.getSetting("gradientAngleMode")
         floorplan = fp.getFloorplan();
-        return function(light) {
+        /*
+            angleModes: rotateCoords, rotateAndScaleCoords, magicCorners
+        */
+        if (gradientAngleMode == "magicCorners") {
+            var degrees = utils.mod360(_this.angle);
+            var rads = degrees/180*Math.PI;
+            var m = Math.tan(rads);
+            var w = floorplan.width/2;
+            var h = floorplan.height/2;
+            var wf = (degrees >= 0 && degrees < 90) || (degrees >= 180 && degrees < 270) ? 1 : -1;
+            var pf = (degrees >= 0 && degrees < 90) || (degrees >= 270 && degrees < 360) ? 1 : -1;
+
+            var gradientLineEndX = (w + wf*h*m) / (m*m + 1);
+            var gradientLineEndY = m * gradientLineEndX;
+            var gradientLineVectorLength = utils.distance(gradientLineEndX, gradientLineEndY)
+            var gradientLineUnitX = gradientLineEndX / gradientLineVectorLength;
+            var gradientLineUnitY = gradientLineEndY / gradientLineVectorLength;
+            return function(light) {
+                var translatedX = light.x - w;
+                var translatedY = light.y - h;
+                var gradientLineDotProduct = translatedX * gradientLineUnitX + translatedY * gradientLineUnitY;
+                var fromNegativeOneToOne = gradientLineDotProduct / gradientLineVectorLength;
+                var percent = ((pf * fromNegativeOneToOne) + 1) / 2;
+                return _this.getColorAtPercent(percent);
+            }
+        } else {
+            return function(light) {
             var [x, _] = utils.rotateFloorplanCoords(light, _this.angle);
-            x = applyScaleFactorFromCenter(x, getScaleFactorFromAngle(_this.angle));
+            if (gradientAngleMode == "rotateAndScaleCoords") {
+                x = applyScaleFactorFromCenter(x, getScaleFactorFromAngle(_this.angle));
+            }
             var percent = utils.scale(x, 0, floorplan.width, 0, 1);
             return _this.getColorAtPercent(percent);
+        }
         }
     }
 }

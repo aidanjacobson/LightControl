@@ -18,6 +18,7 @@ const remote = require("./remote");
 const manifest = require("./manifest");
 const unless = require("./unless")
 const accesslog = require("./accesslog")
+const settingsLoader = require("./settings");
 
 var requestIp = require("request-ip");
 const storage = multer.memoryStorage();
@@ -216,6 +217,15 @@ app.get("/getLightEntityColor/:entity", async function(req, res) {
 
 app.post("/expandLightListWithModes", async function(req, res) {
     res.json(segment.expandLightListWithModes(fp.getFloorplan(), req.body.lightList, req.body.modes));
+})
+
+app.post("/getSetting", async function(req, res) {
+    res.json(await settingsLoader.getSetting(req.body.setting));
+})
+
+app.post("/setSetting", async function(req, res) {
+    await settingsLoader.setSetting(req.body.setting, req.body.value);
+    res.json({status: "success"});
 })
 
 
