@@ -1,25 +1,15 @@
 require("dotenv").config();
 const request = require("request");
 const ha = require("./homeassistant")
-const ConfigLoader = require("../node_configloader")
 const fp = require("./floorplan");
-
-const configOptions = {
-    securityKey: process.env.config_access_key,
-    store: "segment_modes"
-}
+const stripModeLoader = require("../settings");
 
 var strip_modes = {};
 
-var stripModeLoader = new ConfigLoader(configOptions);
-(async function() {
-    await stripModeLoader.downloadConfig();
-})()
-
 async function downloadStripModes() {
-    strip_modes = await stripModeLoader.downloadConfig();
+    // strip_modes = await stripModeLoader.downloadConfig();
     // await stripModeLoader.downloadConfig();
-    strip_modes = stripModeLoader.config;
+    strip_modes = await stripModeLoader.getSetting("strip_modes");
     var segmented = await getSegmentedLights();
     for (lightName of segmented) {
         if (! (lightName in strip_modes)) strip_modes[lightName] = "one_segment";

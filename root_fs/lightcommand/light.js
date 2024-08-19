@@ -56,7 +56,7 @@ async function setAll(colorInput, options={}) {
     if (def(options.noscene)) noscene = options.noscene;
     var color = Color.from(colorInput);
     if (color.type == "gradient") {
-        return await setAll(color.gradient.convertToColorCommandFunction(), options)
+        return await setAll(await color.gradient.convertToColorCommandFunction(), options)
     }
     if (color.type == "colorspace") {
         return await setAll(color.colorSpace.convertToColorCommandFunction(), options);

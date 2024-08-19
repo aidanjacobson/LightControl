@@ -96,7 +96,7 @@ function cosDeg(angle) {
     return Math.cos(deg2rad(angle));
 }
 
-function distance(x1, y1, x2, y2) {
+function distance(x1, y1, x2=0, y2=0) {
     return Math.sqrt((x2-x1)**2+(y2-y1)**2);
 }
 

@@ -90,7 +90,7 @@ function setSelectedLight(lightElement) {
             var shadowPercent = Math.pow(1 - (opacityRange.valueAsNumber/100), 4);
             var maxShadow = 30;
             var shadowLength = maxShadow * shadowPercent;
-            if (!trueColor) shadowLength = 0;
+            if (!trueColor || lastBackgroundCSS != "black") shadowLength = 0;
             light.children[0].style.boxShadow = `0px 0px ${shadowLength}px ${shadowLength}px ${lightColor}`;
         }
     }
