@@ -11,15 +11,14 @@
     <body>
         <div id="mapContainer" class="menu">
             <div id="mapImgContainer">
-                <img id="mapImg" src="map.png" />
+                <img id="mapImg" src="media/map.png" />
             </div>
-            <div id="lights">
-                <!-- <div class="lightbulb">
-                    <img src="light-bulb.svg" />
-                </div> -->
-            </div>
+            <div id="lights"></div>
             <h2>Background Light: Off <input type="range" min="0" max="100" value="100" id="opacityRange" /> On</h2>
-            <h2><label for="trueColorInput">TrueColor: </label><input type="checkbox" name="trueColorInput" id="trueColorInput" onclick="trueColor = trueColorInput.checked; setPageLightColors()" /></h2>
+            <h2>
+                <label for="trueColorInput">TrueColor: </label><input type="checkbox" name="trueColorInput" id="trueColorInput" onclick="trueColor = trueColorInput.checked; setPageLightColors()" />
+                <img src="media/refresh.png" width="30" height="30" class="refreshBtn" onclick="refreshLights()" />
+            </h2>
             <div id="selectedEditorContainer" hidden>
                 <h1 id="entityNameDisplay"></h1>
             </div><br><br>

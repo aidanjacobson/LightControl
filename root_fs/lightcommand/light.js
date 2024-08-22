@@ -208,9 +208,13 @@ async function generateSaveColorsString(nocache=false) {
 }
 
 function getLastLightData() {
+    var safeCachedColors = {};
+    for (var color in entityCachedColors) {
+        safeCachedColors[color] = entityCachedColors[color].toString();
+    }
     return {
         lightsSet: lastLightsSet,
-        cachedColors: entityCachedColors
+        cachedColors: safeCachedColors
     }
 }
 

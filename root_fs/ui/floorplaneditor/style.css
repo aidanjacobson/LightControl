@@ -68,3 +68,9 @@
     visibility: visible;
     display: block;
 }
+
+.refreshBtn {
+    cursor: pointer;
+    position: relative;
+    top: 8px;
+}

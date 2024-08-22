@@ -28,7 +28,7 @@ function updateLightElementColors() {
     setSelectedLight(selectedLight);
 }
 
-setInterval(updateLightElementColors, 7000);
+setInterval(refreshLights, 7000);
 
 async function refreshLights() {
     await updateLightCachedColors();
@@ -48,7 +48,8 @@ async function setPageLightColors() {
         var colorObj = lastLightColors[lightbulbElement.getAttribute("entity-id")];
         var color = "rgba(0, 0, 0, 0)";
         if (colorObj) {
-            color = `rgb(${Math.round(colorObj.r)}, ${Math.round(colorObj.g)}, ${Math.round(colorObj.b)})`;
+            // color = `rgb(${Math.round(colorObj.r)}, ${Math.round(colorObj.g)}, ${Math.round(colorObj.b)})`;
+            color = colorObj;
         }
         img.style.backgroundColor = color;
     }
@@ -59,7 +60,7 @@ function createLightElement(lightObject) {
     var lightDiv = document.createElement("div");
     lightDiv.classList.add("lightbulb");
     var lightBulbImage = document.createElement("img");
-    lightBulbImage.src = "light-bulb.svg";
+    lightBulbImage.src = "media/light-bulb.svg";
     lightDiv.append(lightBulbImage);
 
     lightDiv.setAttribute("draggable", true);
