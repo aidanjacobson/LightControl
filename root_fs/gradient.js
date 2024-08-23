@@ -148,6 +148,25 @@ var Gradient = function(stops=[], angle=0) {
     }
 }
 
+Gradient.concat = function(colorA, colorB) {
+    colorA = Color.from(colorA);
+    colorB = Color.from(colorB);
+    if (colorA.type != "gradient" && colorB.type != "gradient") return "black";
+    if (colorA.type == "graident" && colorB.type != "gradient") return colorA;
+    if (colorB.type == "graident" && colorA.type != "gradient") return colorB;
+    var stopsOut = [];
+    for (var stop of colorA.gradient.stops) {
+        var newPercent = stop.percent / 2;
+        stopsOut.push({color: stop.color, percent: newPercent});
+    }
+    for (var stop of colorB.gradient.stops) {
+        var newPercent = stop.percent / 2 + 0.5;
+        stopsOut.push({color: stop.color, percent: newPercent});
+    }
+    var newAngle = colorA.gradient.angle;
+    return new Gradient(stopsOut, newAngle);
+}
+
 
 function getScaleFactorFromAngle(angle) {
     var x = (utils.cosDeg(2*angle)+1)/2;
