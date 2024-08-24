@@ -152,8 +152,8 @@ Gradient.concat = function(colorA, colorB) {
     colorA = Color.from(colorA);
     colorB = Color.from(colorB);
     if (colorA.type != "gradient" && colorB.type != "gradient") return "black";
-    if (colorA.type == "graident" && colorB.type != "gradient") return colorA;
-    if (colorB.type == "graident" && colorA.type != "gradient") return colorB;
+    if (colorA.type == "gradient" && colorB.type != "gradient") return colorA;
+    if (colorB.type == "gradient" && colorA.type != "gradient") return colorB;
     var stopsOut = [];
     for (var stop of colorA.gradient.stops) {
         var newPercent = stop.percent / 2;
@@ -165,6 +165,10 @@ Gradient.concat = function(colorA, colorB) {
     }
     var newAngle = colorA.gradient.angle;
     return new Gradient(stopsOut, newAngle);
+}
+
+Gradient.reverse = function(gradient) {
+    return Color.from(gradient).gradient.reverse();
 }
 
 
