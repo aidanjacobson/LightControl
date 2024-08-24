@@ -116,3 +116,14 @@ If nocache is true, pull colors from the light APIs before saving. Does not upda
 ```
 GET /getlog
 ```
+
+# .env
+
+You must include a .env file with the following values:
+- configloader_url
+- config_access_key
+- host="aidanjacobson.duckdns.org"
+- homeassistant_url="https://aidanjacobson.duckdns.org:8123/"
+- govee_api_key
+- lightcontrol_access_token
+- hass_access_key
