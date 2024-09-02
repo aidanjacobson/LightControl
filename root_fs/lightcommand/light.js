@@ -4,6 +4,7 @@ const {def, ndef} = require("../def_ndef")
 const imageURL = require("../imageurl");
 const ha = require("./homeassistant");
 const segment = require("./segmentedled");
+const govee = require("./govee")
 
 // Keep track of what each light was last set to
 var entityCachedColors = {};
@@ -20,6 +21,9 @@ var lastLightsSet = [];
 function setLight(light, color, noscene=false) {
     if (segment.isSegment(light.entity)) {
         segment.setSegmentLight(light, color);
+    }
+    if (light.controller && light.controller == "govee") {
+        return govee.setLight(light, color);
     }
     var lightEntity = light.entity;
     if (lightEntity.indexOf("light.") != 0 && lightEntity.indexOf("segment.") != 0) {
