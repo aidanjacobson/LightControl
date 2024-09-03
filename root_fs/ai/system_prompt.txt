@@ -51,11 +51,7 @@ If mode is weightedrandom, reply in this format:
 ```eval(funky.randomWeightedStatic([{color: "color1", weight: 1}, {color: "color2", weight: 2}, {color: "color3", weight: 0.5}, ...]))```
 
 The following list of modes is sorted from most preferable to least preferable.
-choosebetween
-weightedrandom
-evenlyspaced
-gradient
-random
+weightedrandom/choosebetween
+evenlyspaced/gradient
 colortheme
-colorname
-rgb
+colorname/rgb

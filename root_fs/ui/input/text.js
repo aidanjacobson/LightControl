@@ -9,15 +9,15 @@ function promptForText(question="", defaultText="") {
         textinput.onchange = function() {
             if (resolved) return;
             resolved = true;
-            resolve(textinput.value);
             back();
+            resolve(textinput.value);
         }
-        textinput.onkeyup = function(e) {
-            if (resolved) return;
-            resolved = true;
+        textinput.onkeyup = textinput.onkeypress = function(e) {
             if (e.keyCode == 13) {
-                resolve(textinput.value);
+                if (resolved) return;
+                resolved = true;
                 back();
+                resolve(textinput.value);
             }
         }
     })
