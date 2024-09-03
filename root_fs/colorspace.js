@@ -1,6 +1,7 @@
 var Color = require("./color");
 var utils = require("./utils");
 var fp = require("./lightcommand/floorplan"), floorplan = {};
+const interpolation = require("./interpolation");
 
 (async function() {
     floorplan = await fp.getFloorplan();
@@ -61,12 +62,12 @@ class ColorSpace {
             // var x = compress(light.x, floorplan.width);
             // var y = compress(light.y, floorplan.height);
 
-            // var leftColor = utils.scaleBetweenColors(y, 0, floorplan.height, ne, se);
-            // var rightColor = utils.scaleBetweenColors(y, 0, floorplan.height, nw, sw);
-            // var centerColor1 = utils.scaleBetweenColors(x, 0, floorplan.width, leftColor, rightColor);
-            // var topColor = utils.scaleBetweenColors(x, 0, floorplan.width, ne, nw);
-            // var bottomColor = utils.scaleBetweenColors(x, 0, floorplan.width, se, sw);
-            // var centerColor2 = utils.scaleBetweenColors(y, 0, floorplan.height, topColor, bottomColor);
+            // var leftColor = interpolation.scaleBetweenColors(y, 0, floorplan.height, ne, se);
+            // var rightColor = interpolation.scaleBetweenColors(y, 0, floorplan.height, nw, sw);
+            // var centerColor1 = interpolation.scaleBetweenColors(x, 0, floorplan.width, leftColor, rightColor);
+            // var topColor = interpolation.scaleBetweenColors(x, 0, floorplan.width, ne, nw);
+            // var bottomColor = interpolation.scaleBetweenColors(x, 0, floorplan.width, se, sw);
+            // var centerColor2 = interpolation.scaleBetweenColors(y, 0, floorplan.height, topColor, bottomColor);
             // var centerColor = Color.average(centerColor1, centerColor2);
             // return centerColor;
             if (x < floorplan.width / 2 && y < floorplan.height / 2) {

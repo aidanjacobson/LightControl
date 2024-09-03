@@ -10,6 +10,7 @@
 var Color = require("./color");
 var fp = require("./lightcommand/floorplan"), floorplan = {};
 var utils = require("./utils");
+const interpolation = require("./interpolation")
 const settingsLoader = require("./settings");
 
 var Gradient = function(stops=[], angle=0) {
@@ -46,7 +47,7 @@ var Gradient = function(stops=[], angle=0) {
             var stop = _this.stops[i];
             var nextStop = _this.stops[i+1];
             if (percent >= stop.percent && percent <= nextStop.percent) {
-                return utils.scaleBetweenColors(percent, stop.percent, nextStop.percent, stop.color, nextStop.color);
+                return interpolation.scaleBetweenColors(percent, stop.percent, nextStop.percent, stop.color, nextStop.color);
             }
         }
     }

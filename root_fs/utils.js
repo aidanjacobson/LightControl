@@ -1,5 +1,7 @@
 const Color = require("./color");
 var fp = require("./lightcommand/floorplan"), floorplan = {};
+const settings = require("./settings");
+const interpolation = require("./interpolation");
 
 function randBetween(a, b) {
     var diff = b-a;
@@ -11,17 +13,18 @@ function scale(x, low, high, newLow, newHigh) {
     return newLow + (newHigh-newLow)*percent;
 }
 
-function scaleBetweenColors(x, low, high, color1, color2) {
-    var percent = (x-low)/(high-low);
-    return getPercentBetweenColors(percent, color1, color2);
-}
+// function scaleBetweenColors(x, low, high, color1, color2) {
+//     var percent = (x-low)/(high-low);
+//     return getColorInterpolation(percent, color1, color2);
+// }
 
-function getPercentBetweenColors(percent, color1, color2) {
-    var newR = scale(percent, 0, 1, color1.r, color2.r);
-    var newG = scale(percent, 0, 1, color1.g, color2.g);
-    var newB = scale(percent, 0, 1, color1.b, color2.b);
-    return new Color(newR, newG, newB);
-}
+// function getColorInterpolation(...args) {
+//     var mode = settings.getSettingSync("colorLinearInterpolationMode");
+//     if (mode == "linearScale") {
+//         return interpolation.getPercentBetweenColors(...args)
+//     }
+//     if (mode == "")
+// }
 
 function rotate(cx, cy, x, y, angle) {
     var radians = (Math.PI / 180) * angle,
@@ -105,4 +108,4 @@ function mod360(n) {
     return n + Math.ceil(-n/360)*360;
 }
 
-module.exports = {mod360, distance, randBetween, scale, scaleBetweenColors, getPercentBetweenColors, colorsAreEqual, removeDuplicateColors, rotate, rotateFloorplanCoords, deg2rad, sinDeg, cosDeg};
+module.exports = {interpolation: require("./interpolation"), mod360, distance, randBetween, scale, colorsAreEqual, removeDuplicateColors, rotate, rotateFloorplanCoords, deg2rad, sinDeg, cosDeg};

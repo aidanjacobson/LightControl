@@ -60,7 +60,7 @@ class RadialGradient {
             var stop = this.stops[i];
             var nextStop = this.stops[i+1];
             if (percent >= stop.percent * this.scaleFactor && percent <= nextStop.percent * this.scaleFactor) {
-                return utils.scaleBetweenColors(percent, stop.percent * this.scaleFactor, nextStop.percent * this.scaleFactor, stop.color, nextStop.color);
+                return utils.interpolation.scaleBetweenColors(percent, stop.percent * this.scaleFactor, nextStop.percent * this.scaleFactor, stop.color, nextStop.color);
             }
         }
     }
