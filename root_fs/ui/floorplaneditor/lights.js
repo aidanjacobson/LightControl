@@ -35,7 +35,7 @@ async function refreshLights() {
     await setPageLightColors();
 }
 
-var trueColor = false;
+var trueColor = true;
 
 async function setPageLightColors() {
     for (var lightbulbElement of document.querySelectorAll(".lightbulb")) {
