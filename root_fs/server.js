@@ -19,6 +19,7 @@ const manifest = require("./manifest");
 const unless = require("./unless")
 const accesslog = require("./accesslog")
 const settingsLoader = require("./settings");
+const ai_control = require("./ai/ai_control");
 
 var requestIp = require("request-ip");
 const storage = multer.memoryStorage();
@@ -226,6 +227,11 @@ app.post("/getSetting", async function(req, res) {
 app.post("/setSetting", async function(req, res) {
     await settingsLoader.setSetting(req.body.setting, req.body.value);
     res.json({status: "success"});
+})
+
+app.post("/promptAI", async function(req, res) {
+    var response = await ai_control.generateColorFromUserPrompt(req.body.prompt);
+    res.json(response);
 })
 
 
