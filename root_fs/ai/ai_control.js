@@ -2,9 +2,17 @@ require("dotenv").config();
 const OpenAI = require("openai");
 const fs = require("fs");
 
-const client = new OpenAI();
+var client;
+started = false;
+if (process.env['OPENAI_API_KEY']) {
+    client = new OpenAI();
+    started = true;
+}
 
 async function generateColorFromUserPrompt(userPrompt) {
+    if (!started) {
+        return {status: "failed", reason: "No API Key"}
+    }
     // console.log("Prompt: " + userPrompt);
     const systemMessage = {role: "system", content: fs.readFileSync(__dirname + "/system_prompt.txt", { encoding: 'utf8', flag: 'r' })};
     const userMessage = {role: "user", content: userPrompt};
