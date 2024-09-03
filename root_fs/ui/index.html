@@ -9,14 +9,16 @@
         <script src="menus.js"></script>
         <script src="mainmenu.js"></script>
         <script src="input/colorselect.js"></script>
+        <script src="input/colorlist.js"></script>
+        <script src="input/numberinput.js"></script>
+        <script src="input/text.js"></script>
+        <script src="ai_utils.js"></script>
         <script src="serverfunctions.js"></script>
         <script src="gradient/gradient.js"></script>
-        <script src="input/numberinput.js"></script>
         <script src="gradient/quickgradient.js"></script>
         <script src="gradient/evenlyspaced.js"></script>
         <script src="gradient/colorspace.js"></script>
         <script src="choosebetween.js"></script>
-        <script src="input/colorlist.js"></script>
         <script src="colortheme.js"></script>
         <script src="swregister.js"></script>
         <script src="common_functions.js"></script>
@@ -39,6 +41,7 @@
             <button class="buttonOption half" onclick="mainmenu_savecolorscene()">Save Current Scene</button>
             <button class="buttonOption half" onclick="mainmenu_savecolorscenenocache()">Pull Colors & Save Scene</button>
             <button class="buttonOption" onclick="attemptSetAll(lastColor)">Repeat Last Color</button>
+            <button class="buttonOption" onclick="doAIPrompt()">Ask AI</button>
             <div class="advert">
                 <img id="advert" width="830" height="628" src="https://aidanjacobson.duckdns.org:7777/advertisement/random" onclick="advert.src='https://aidanjacobson.duckdns.org:7777/advertisement/random?' + Math.random()" />
             </div>
@@ -59,9 +62,14 @@
         </div>
         <div class="menu" id="colortypemenu">
             <h1 class="header">Type a color</h1>
-            <input type="text" id="colornameinput" placeholder="Start typing to search..." autocomplete="off" />
+            <input type="text" id="colornameinput" class="textinput" placeholder="Start typing to search..." autocomplete="off" />
             <div id="searchResults"></div>
             <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="textinputmenu">
+            <h1 class="header" id="textInputPrompt"></h1>
+            <input type="text" id="textinput" class="textinput" autocomplete="off" />
+            <button class="backbtn" onclick="textinput_back(event)">Back</button>
         </div>
         <div class="menu" id="gradientmenu">
             <h1 class="header" onclick="loadGradientStopsFromColor(prompt('Enter color to load from'))">Gradient Maker</h1>
