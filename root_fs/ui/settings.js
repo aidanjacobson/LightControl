@@ -110,6 +110,11 @@ window.addEventListener("load", async function() {
         name: "Gradient Angle Mode",
         options: ["magicCorners", "rotateCoords", "rotateAndScaleCoords"]
     }
+    settingsOptions["colorLinearInterpolationMode"] = {
+        type: "selection",
+        name: "Color Interpolation Mode",
+        options: ["linearScale", "square"]
+    }
     settings = new SavedSettings(settingsOptions);
     
     // segmentedLights.forEach(async function(lightName) {
@@ -120,6 +125,7 @@ window.addEventListener("load", async function() {
         settings[`mode_${lightName}`] = await apiGet(`/getSegmentedMode/${lightName}`);
     }
     settings["gradient_angle_mode"] = await apiPost("/getSetting", {setting:"gradientAngleMode"});
+    settings["colorLinearInterpolationMode"] = await apiPost("/getSetting", {setting:"colorLinearInterpolationMode"});
     settings.save()
 })
 
@@ -189,6 +195,8 @@ function createSettingsSelectOnchangeFunction(element) {
         settings.save();
         if (name == "gradient_angle_mode") {
             apiPost("/setSetting", {setting: "gradientAngleMode", value: value});
+        } else if (name == "colorLinearInterpolationMode") {
+            apiPost("/setSetting", {setting: "colorLinearInterpolationMode", value: value});
         } else if (name.startsWith("mode_")) {
             var lightName = name.substring(5, name.length);
             apiGet(`/setSegmentedMode/${lightName}/${value}`);

@@ -55,8 +55,54 @@ const setSetting = async function(settingName, value) {
     await settingsLoader.uploadConfig();
 }
 
+
+const getSettingSync = function(settingName) {
+    var fieldParts = settingName.split(".");
+    var currentScope = settingsLoader.config;
+    for (var i = 0; i < fieldParts.length; i++) {
+        var currentField = fieldParts[i];
+        if (currentField.indexOf("[") == -1) {
+            currentScope = currentScope[currentField];
+        } else {
+            var fieldName = currentField.substring(0, currentField.indexOf("["));
+            var indexPart = currentField.substring(currentField.indexOf("[")+1, currentField.length-1);
+            var index = eval(indexPart);
+            currentScope = currentScope[fieldName][index];
+        }
+    }
+    settingsLoader.downloadConfig();
+    return currentScope;
+}
+
+const setSettingSync = function(settingName, value) {
+    var fieldParts = settingName.split(".");
+    var currentScope = settingsLoader.config;
+    for (var i = 0; i < fieldParts.length - 1; i++) {
+        var currentField = fieldParts[i];
+        if (currentField.indexOf("[") == -1) {
+            currentScope = currentScope[currentField];
+        } else {
+            var fieldName = currentField.substring(0, currentField.indexOf("["));
+            var indexPart = currentField.substring(currentField.indexOf("[")+1, currentField.length-1);
+            var index = eval(indexPart);
+            currentScope = currentScope[fieldName][index];
+        }
+    }
+    var currentField = fieldParts[fieldParts.length-1];
+    if (currentField.indexOf("[") == -1) {
+        currentScope[currentField] = value;
+    } else {
+        var fieldName = currentField.substring(0, currentField.indexOf("["));
+        var indexPart = currentField.substring(currentField.indexOf("[")+1, currentField.length-1);
+        var index = eval(indexPart);
+        currentScope[fieldName][index] = value;
+    }
+    settingsLoader.uploadConfig();
+    setTimeout(settingsLoader.downloadConfig, 1000);
+}
+
 const uploadConfig = async function() {
     return await settingsLoader.uploadConfig();
 }
 
-module.exports = {setSetting, getSetting, uploadConfig};
+module.exports = {setSetting, getSetting, uploadConfig, setSettingSync, getSettingSync};
