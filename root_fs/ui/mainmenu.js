@@ -70,6 +70,18 @@ function updateBackground() {
     }
 }
 
+async function syncPreview() {
+    var lastCss = (await apiGet("/history/last/css")).css;
+    if (lastCss) {
+        preview = lastCss;
+        updateBackground();
+    }
+}
+
+window.addEventListener("load", syncPreview)
+
+setInterval(syncPreview, 3000);
+
 function mainmenu_choosebetween() {
     switchToMenu(choosebetweenmenu);
     renderCBDisplay();
