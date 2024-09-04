@@ -60,7 +60,8 @@ async function setAll(colorInput, options={}) {
     if (def(options.noscene)) noscene = options.noscene;
     var color = Color.from(colorInput);
     if (color.type == "gradient") {
-        return await setAll(await color.gradient.convertToColorCommandFunction(), options)
+        // return await setAll(await color.gradient.convertToColorCommandFunction(), options)
+        return color;
     }
     if (color.type == "colorspace") {
         return await setAll(color.colorSpace.convertToColorCommandFunction(), options);
@@ -166,7 +167,6 @@ async function setAll(colorInput, options={}) {
     
         return {h: h*360, s: s*100, l: l*100};
     }
-
     color.colorList = color.colorList.sort((a,b)=>RGBToHSL(a).h - RGBToHSL(b).h);
     // console.log(color.colorList.map(c=>c.toString()))
     return color;
