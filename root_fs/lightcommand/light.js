@@ -172,14 +172,6 @@ async function setAll(colorInput, options={}) {
     return color;
 }
 
-async function getColorLightShouldBe(lightObj) {
-
-}
-
-async function evaluateColorOfLightAtPosition(lightObj, color) {
-
-}
-
 async function applyHomeAssistantScene() {
     floorplan = fp.getFloorplan();
     var data = {entities:{}};
