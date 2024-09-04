@@ -167,18 +167,9 @@ async function setAll(colorInput, options={}) {
     
         return {h: h*360, s: s*100, l: l*100};
     }
-
     color.colorList = color.colorList.sort((a,b)=>RGBToHSL(a).h - RGBToHSL(b).h);
     // console.log(color.colorList.map(c=>c.toString()))
     return color;
-}
-
-async function getColorLightShouldBe(lightObj) {
-
-}
-
-async function evaluateColorOfLightAtPosition(lightObj, color) {
-
 }
 
 async function applyHomeAssistantScene() {

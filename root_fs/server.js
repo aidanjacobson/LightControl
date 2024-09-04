@@ -234,6 +234,8 @@ app.post("/promptAI", async function(req, res) {
     res.json(response);
 })
 
+app.use("/history/last", history.last.router);
+
 
 var lastSetAllCache = {
     value: "",
@@ -248,14 +250,18 @@ async function doSetAll(value, res, options={}) {
         lastSetAllCache.options = options;
     }
     var cResponse = await light.setAll(value, options);
+    history.last.command.set(value);
     try {
         // var cResponse = Color.from(value);
         var cssValue = cResponse.toCSS(true);
+        history.last.css.set(cssValue);
     } catch(E) {
         // debugger;
     }
     if (typeof value == "string" && value.indexOf("back") == -1 && value.indexOf("forward") == -1) {
-        history.addToHistory(await light.generateSaveColorsString());
+        var mapping = await light.generateSaveColorsString();
+        history.addToHistory(mapping);
+        history.last.mapping.set(mapping);
     }
     res.send({css:cssValue});
 }
