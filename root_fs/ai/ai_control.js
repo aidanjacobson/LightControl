@@ -2,6 +2,8 @@ require("dotenv").config();
 const OpenAI = require("openai");
 const fs = require("fs");
 
+const model = "gpt-4o-mini";
+
 var client;
 started = false;
 if (process.env['OPENAI_API_KEY']) {
@@ -19,7 +21,7 @@ async function generateColorFromUserPrompt(userPrompt) {
     try {
         const chatCompletion = await client.chat.completions.create({
             messages: [systemMessage, userMessage],
-            model: "gpt-4o"
+            model: model
         })
         var response = chatCompletion.choices[0].message.content;
         if (response.indexOf("```") > -1) {
