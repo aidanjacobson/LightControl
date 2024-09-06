@@ -55,6 +55,3 @@ weightedrandom/choosebetween
 evenlyspaced/gradient
 colortheme
 colorname/rgb
-
-The user has also created a JSON file with many saved scenes. This file is imported below.
-You can output these names directly as well if they would be a good fit for the current request. Here they are:
