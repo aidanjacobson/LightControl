@@ -48,6 +48,7 @@ If mode is weightedrandom, reply in this format:
 eval(funky.randomWeightedStatic([{color: "color1", weight: 1}, {color: "color2", weight: 2}, {color: "color3", weight: 0.5}, ...]))
 
 When generating colors, use colors that would have hsl saturation values close to 100%, and lightness values close to 50%.
+Prefer rgb format colors to named rgb colors. Use only named colors from the list of colornames provided.
 Prefer to make dynamic scenes, and avoid the use of setting all lights to one color unless specifically prompted.
 
 The following list of modes is sorted from most preferable to least preferable.
