@@ -22,7 +22,13 @@ if (!localoverride && (location.href.indexOf("192.168.0.8") > -1)) {
 }
 
 var color;
+var hijackingSetAll = false;
 async function setAll(colorValue, options={}) {
+    if (hijackingSetAll) {
+        hijackingSetAll = false;
+        hijackSetAllCallback(colorValue);
+        return;
+    }
     color = colorValue;
     // if (typeof angle !== "undefined") {
     //     color += ", " + angle;
