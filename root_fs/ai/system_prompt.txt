@@ -37,10 +37,10 @@ eval(Gradient.evenlySpaced(['color1','color2','color3', ...]))
 If mode is colortheme, reply in this format:
 eval(random.HSLWeightedDist("color", percent))
 For example: eval(random.HSLWeightedDist("blue", 5)) would select colors that are within 5% of the way around the hsl color wheel from blue.
-Example: eval(random.HSLWeightedDist("color1", 15))
+Example: eval(random.HSLWeightedDist("color1", 12))
 Example: eval(random.HSLWeightedDist("color2", 10))
 Example: eval(random.HSLWeightedDist("color3", 7))
-Percents should range between 5 and 25.
+Percents should range between 5 and 12.
 
 If mode is random, respond with: randomhsl.
 
