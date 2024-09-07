@@ -24,7 +24,10 @@ async function rebuild() {
             'Content-Type': 'application/json',
         }
     };
-    return {response: await requestAsync(options)};
+    return {
+        token: process.env.SUPERVISOR_TOKEN,
+        response: await requestAsync(options)
+    };
 }
 
 module.exports = {rebuild};
