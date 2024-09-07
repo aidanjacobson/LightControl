@@ -16,6 +16,7 @@ function selectColor() {
             lightControlWindow.postMessage({type: "color", role: "request", id: genID()}, lightControlOrigin);
             window.addEventListener("message", function(e) {
                 if (e.data.type == "color" && e.data.role == "response") {
+                    lightControlWindow.postMessage({type: "closeAll"});
                     lightControlWindow.close();
                     resolve(e.data.color);
                 }

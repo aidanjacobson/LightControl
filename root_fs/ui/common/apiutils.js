@@ -41,6 +41,11 @@ function apiGet(path) {
 }
 
 async function setAll(color, noscene=true) {
+    if (window.opener && window.opener.setAll) {
+        console.log("setall through opener")
+        window.opener.setAll(color);
+        return;
+    }
     var endpoint = noscene ? "/setAllNoScene" : "/setAll"
     await apiPost(endpoint, {color});
 }
