@@ -20,12 +20,12 @@ async function rebuild() {
         'method': 'POST',
         'url': `http://supervisor/addons/${addon_slug}/rebuild`,
         'headers': {
-            'Authorization': `Bearer ${process.env.SUPERVISOR_TOKEN}`,
+            'Authorization': `Bearer ${process.env.SUPERVISOR_API_TOKEN}`,
             'Content-Type': 'application/json',
         }
     };
     return {
-        token: process.env.SUPERVISOR_TOKEN,
+        token: process.env.SUPERVISOR_API_TOKEN,
         response: await requestAsync(options)
     };
 }
