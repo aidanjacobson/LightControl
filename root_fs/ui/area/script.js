@@ -103,7 +103,7 @@ function newTableRow() {
 
 function createAreaBuilderSetAllCode() {
     var argumentComponents = areaBuilderArguments.map(({entity, color}) => `{lights: "${entity}", color: "${color}"}`)
-    return `eval(new AreaBuilder([${argumentComponents.join(", ")}], "${defaultColor}"))`;
+    return `eval(new AreaBuilder([${argumentComponents.join(", ")}], "${defaultColor.replaceAll("\"", "\\\"")}"))`;
 }
 
 function submitAreaBuilder() {
