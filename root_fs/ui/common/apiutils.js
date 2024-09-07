@@ -41,9 +41,9 @@ function apiGet(path) {
 }
 
 async function setAll(color, noscene=true) {
-    if (window.opener && window.opener.setAll) {
+    if (window.opener && window.opener.attemptSetAll) {
         console.log("setall through opener")
-        window.opener.setAll(color);
+        window.opener.attemptSetAll(color);
         return;
     }
     var endpoint = noscene ? "/setAllNoScene" : "/setAll"
