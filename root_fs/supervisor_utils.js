@@ -5,8 +5,8 @@ const addon_slug = "local_lightcontrol";
 
 function requestAsync(options) {
     return new Promise((resolve, reject) => {
-        request.post(options, ()=>{
-            resolve()
+        request.post(options, (e, res, body)=>{
+            resolve(body)
         });
     })
 }
