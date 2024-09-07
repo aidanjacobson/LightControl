@@ -20,6 +20,7 @@ const unless = require("./unless")
 const accesslog = require("./accesslog")
 const settingsLoader = require("./settings");
 const ai_control = require("./ai/ai_control");
+const addon = require("./supervisor_utils")
 
 var requestIp = require("request-ip");
 const storage = multer.memoryStorage();
@@ -235,6 +236,11 @@ app.post("/promptAI", async function(req, res) {
 })
 
 app.use("/history/last", history.last.router);
+
+app.post("/rebuild", async function(req, res) {
+    var response = await addon.rebuild();
+    res.json(response);
+})
 
 
 var lastSetAllCache = {
