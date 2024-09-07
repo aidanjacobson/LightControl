@@ -224,3 +224,9 @@ HTMLElement.prototype.setHTML = function(html) {
     this.innerHTML = html;
     return this;
 }
+
+async function attemptRebuild() {
+    if (confirm("Are you sure you want to rebuild the addon?")) {
+        await apiPost("/rebuild");
+    }
+}
