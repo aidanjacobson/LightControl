@@ -36,9 +36,9 @@ async function updateFloorplan() {
  */
 function sortFloorplanLights(floorplan) {
     var out = floorplan.lights.sort((a,b)=>a.x-b.x);
-    var unmoved = out.filter(light=>floorplan.slowest.indexOf(light.entity) == -1);
-    var moved = out.filter(light=>floorplan.slowest.indexOf(light.entity) > -1);
-    out = unmoved.concat(moved);
+    // var unmoved = out.filter(light=>floorplan.slowest.indexOf(light.entity) == -1);
+    // var moved = out.filter(light=>floorplan.slowest.indexOf(light.entity) > -1);
+    // out = unmoved.concat(moved);
     return out;
 }
 
