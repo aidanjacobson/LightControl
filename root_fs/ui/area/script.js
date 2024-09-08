@@ -20,10 +20,13 @@ function createTableRow(entity, color, index) {
     var entityInput = el("input").setType("text").val(entity).prop("placeholder", "Enter Entity Name").change(pullDataFromTable);
     tr.append(makeTD(entityInput));
 
+    var browseEntityBtn = el("button").text("Browse Entities").click(browseEntityButtonClicked);
+    tr.append(makeTD(browseEntityBtn));
+
     var colorInput = el("input").setType("text").val(color).prop("placeholder", "Enter Color").change(pullDataFromTable);
     tr.append(makeTD(colorInput));
 
-    var browseBtn = el("button").text("Browse").click(browseButtonClicked);
+    var browseBtn = el("button").text("Browse Colors").click(browseButtonClicked);
     tr.append(makeTD(browseBtn));
 
     var deleteBtn = el("button").text("Delete").click(deleteButtonClicked);
@@ -40,7 +43,7 @@ function pullDataFromTable() {
     areaBuilderArguments = [];
     for (var tr of document.querySelectorAll("#areaTable tbody tr")) {
         var entity = tr.children[0].children[0].value;
-        var color = tr.children[1].children[0].value;
+        var color = tr.children[2].children[0].value;
         areaBuilderArguments.push({entity, color});
     }
     defaultColor = defaultColorInput.value;
@@ -95,6 +98,22 @@ function deleteButtonClicked(e) {
     renderTable();
 }
 
+async function browseEntityButtonClicked(e) {
+    pullDataFromTable();
+    var browseBtn = e.currentTarget;
+    var parentTR = browseBtn.parentElement.parentElement;
+    var index = Number(parentTR.getAttribute("data-index"));
+    var selectedEntities = await selectEntity();
+    var entityName = "";
+    if (typeof selectedEntities == "string") {
+        entityName = selectedEntities;
+    } else {
+        entityName = selectedEntities.join(",");
+    }
+    areaBuilderArguments[index].entity = entityName;
+    renderTable();
+}
+
 function newTableRow() {
     pullDataFromTable();
     areaBuilderArguments.push({entity: "", color: ""});
@@ -102,6 +121,7 @@ function newTableRow() {
 }
 
 function createAreaBuilderSetAllCode() {
+    pullDataFromTable();
     var argumentComponents = areaBuilderArguments.map(({entity, color}) => `{lights: "${entity}", color: "${color}"}`)
     return `eval(new AreaBuilder([${argumentComponents.join(", ")}], "${defaultColor.replaceAll("\"", "\\\"")}"))`;
 }
