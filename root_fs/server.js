@@ -242,6 +242,10 @@ app.post("/rebuild", async function(req, res) {
     res.json(response);
 })
 
+app.get("/getAllEntities", async function(req, res) {
+    res.json(await fp.getAllEntityOptions());
+})
+
 
 var lastSetAllCache = {
     value: "",

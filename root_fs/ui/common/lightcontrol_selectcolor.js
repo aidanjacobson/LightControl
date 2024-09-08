@@ -1,6 +1,6 @@
 // const lightControlOrigin = "http://localhost:9168";
 // const lightControlOrigin = "https://aidanjacobson.duckdns.org:9168";
-const lightControlOrigin = `${location.protocol}//${location.host}`;
+var lightControlOrigin = `${location.protocol}//${location.host}`;
 
 var lightControlURL = lightControlOrigin + "/ui"
 

@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <script src="../common/apiutils.js"></script>
+        <script src="script.js"></script>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="expandable" title-content="Entities">
+            <table class="lightTable">
+                <thead>
+                    <tr>
+                        <td>Entity ID</td>
+                        <td>Friendly Name</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody id="entitiesTable">
+                    <!-- <tr entity-id="plant_light_2">
+                        <td>plant_light_2</td>
+                        <td>Plant Light</td>
+                        <td>
+                            <button>Select Only This</button>
+                            <button>Add To Group</button>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+        <div class="expandable" title-content="Segments">
+            <table class="lightTable">
+                <thead>
+                    <tr>
+                        <td>Entity ID</td>
+                        <td>Friendly Name</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody id="segmentsTable"></tbody>
+            </table>
+        </div>
+        <div class="expandable" title-content="Groups">
+            <table class="lightTable">
+                <thead>
+                    <tr>
+                        <td>Entity ID</td>
+                        <td>Friendly Name</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody id="groupsTable"></tbody>
+            </table>
+        </div>
+        <div id="currentGroupContainer" hidden>
+            <table class="lightTable">
+                <thead>
+                    <tr>
+                        <td>Entity ID</td>
+                        <td>Friendly Name</td>
+                        <td>Actions</td>
+                    </tr>
+                </thead>
+                <tbody id="groupOutput"></tbody>
+            </table>
+            <button onclick="submitCurrentGroup()">Submit Group</button>
+        </div>
+    </body>
+</html>

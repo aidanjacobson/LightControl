@@ -59,4 +59,53 @@ async function setFloorplan(floorplan) {
     await server.uploadConfig();
 }
 
-module.exports = {getFloorplan, updateFloorplan, setFloorplan};
+async function getAllEntityOptions() {
+    await updateFloorplan();
+    var entities = getAllEntities();
+    var segments = getAllSegments();
+    var groups = getAllGroups();
+    var allEntityOptions = {
+        all: [...entities, ...segments, ...groups],
+        entities,
+        segments,
+        groups
+    }
+    return allEntityOptions;
+}
+
+function getAllEntities() {
+    return lastFloorplan.lights.map(light=>({entity: light.entity, friendlyName: light.friendlyName}));
+}
+
+function getLightFriendlyName(id) {
+    var light = lastFloorplan.lights.find(light=>light.entity==id);
+    if (!light || !light.friendlyName) return "";
+    return light.friendlyName;
+}
+
+function getAllSegments() {
+    var out = [];
+    for (var entityID in lastFloorplan.segmented_led) {
+        var friendlyName = getLightFriendlyName(entityID);
+        var segmentData = lastFloorplan.segmented_led[entityID];
+        for (var group of segmentData.groups) {
+            out.push({
+                entity: `segment.${entityID}.${group.name}`,
+                friendlyName: `Segment group ${group.name} of ${friendlyName}`
+            })
+        }
+        for (var i = 0; i < segmentData.segments; i++) {
+            out.push({
+                entity: `segment.${entityID}.${i}`,
+                friendlyName: `Segment number ${i} of ${friendlyName}`
+            })
+        }
+    }
+    return out;
+}
+
+function getAllGroups() {
+    return lastFloorplan.groups.slice();
+}
+
+module.exports = {getFloorplan, updateFloorplan, setFloorplan, getAllEntityOptions};
