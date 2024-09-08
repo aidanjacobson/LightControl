@@ -1,6 +1,6 @@
 var lightControlOrigin = `${location.protocol}//${location.host}`;
 
-var lightControlSelectorURL = lightControlOrigin + "/ui/entitySelector";
+var lightControlSelectorURL = lightControlOrigin + "/ui/entityselector";
 
 function selectEntity() {
     return new Promise((resolve, reject) => {
