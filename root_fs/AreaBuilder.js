@@ -14,7 +14,8 @@ class AreaBuilder {
     layers=[]
     defaultColor = "donotchange"
     constructor(layers=[], defaultColor="donotchange") {
-        this.layers = layers;
+        this.layers = processLayers(layers);
+        // this.layers = layers;
         this.defaultColor = defaultColor;
     }
 
@@ -70,6 +71,23 @@ class AreaBuilder {
             }
         }
     }
+}
+
+function processLayers(layers) {
+    var layersOut = [];
+
+    for (var layer of layers) {
+        if (layer.lights.indexOf(",") == -1) {
+            layersOut.push(layer);
+        } else {
+            layerEntities = layer.lights.replaceAll(" ", "").split(",");
+            for (var newEntity of layerEntities) {
+                layersOut.push({lights: newEntity, color: layer.color});
+            }
+        }
+    }
+
+    return layersOut;
 }
 
 module.exports = AreaBuilder;
