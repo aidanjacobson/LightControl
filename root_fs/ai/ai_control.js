@@ -4,6 +4,7 @@ const fs = require("fs");
 const colorNames = require("../colornames/colornames");
 
 const model = "gpt-4o-mini";
+const model_temp = 1.5;
 
 var client;
 started = false;
@@ -36,7 +37,8 @@ async function generateColorFromUserPrompt(userPrompt) {
     try {
         const chatCompletion = await client.chat.completions.create({
             messages: [...systemMessages, userMessage],
-            model: model
+            model: model,
+            temperature: model_temp
         })
         var response = chatCompletion.choices[0].message.content;
         if (response.indexOf("```") > -1) {
