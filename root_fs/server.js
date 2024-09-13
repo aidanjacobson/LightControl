@@ -259,7 +259,12 @@ async function doSetAll(value, res, options={}) {
         lastSetAllCache.value = value;
         lastSetAllCache.options = options;
     }
-    var cResponse = await light.setAll(value, options);
+    try {
+        var cResponse = await light.setAll(value, options);
+    } catch(e) {
+        res.status(404).json({status: "failure", error: e.toString()})
+        return;
+    }
     history.last.command.set(value);
     try {
         // var cResponse = Color.from(value);
