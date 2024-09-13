@@ -92,7 +92,7 @@ async function submitStaticRandom() {
 
 function createStaticRandomCode() {
     updateColorWeightData();
-    var colorWeightComponents = colorWeightData.map(({color, weight})=>`{"color":"${color}", "weight":${weight}}`);
+    var colorWeightComponents = colorWeightData.map(({color, weight})=>`{"color":"${color.replaceAll("\"", "\\\"")}", "weight":${weight}}`);
     return "[" + colorWeightComponents.join(",") + "]";
 }
 
