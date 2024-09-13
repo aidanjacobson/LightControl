@@ -12,6 +12,7 @@ async function setAllAI(userPrompt) {
         return;
     }
     var color = aiResponse.color;
+    console.log("AI Says: ", color);
     await attemptSetAll(color);
 }
 
