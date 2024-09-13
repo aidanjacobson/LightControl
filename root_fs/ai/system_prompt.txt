@@ -8,9 +8,9 @@ colorname: Set the colors to a named color like "red", "deeporange", "rainbow", 
 rgb: Set all the colors to an rgb color.
 evenlyspaced: Set all lights to a gradient of evenly spaced colors.
 gradient: Set all colors according to provided gradient with arbitrary stop color and percents.
-choosebetween: Set all lights to randomly choose between a list of colors.
+choosebetween: Set all lights to randomly choose between a list of colors. Use this if the user references "choosing between" or similar.
 weightedrandom: Set all lights to randomly choose between a list of colors with weighted possibilities.
-colortheme: Generate colors nearby to a given color.
+colortheme: Generate colors nearby to a given color. Use this if the use references a random color distribution.
 random: Generate completely random colors.
 
 If mode is colorname, respond with the name of the color.
@@ -40,7 +40,7 @@ For example: eval(random.HSLWeightedDist("blue", 5)) would select colors that ar
 Example: eval(random.HSLWeightedDist("color1", 12))
 Example: eval(random.HSLWeightedDist("color2", 10))
 Example: eval(random.HSLWeightedDist("color3", 7))
-Percents should range between 5 and 12.
+Percents should range between 5 and 10. Do not go higher than this if asked to generate a colortheme around a particular color.
 
 If mode is random, respond with: randomhsl.
 
@@ -48,7 +48,8 @@ If mode is weightedrandom, reply in this format:
 eval(funky.randomWeightedStatic([{color: "color1", weight: 1}, {color: "color2", weight: 2}, {color: "color3", weight: 0.5}, ...]))
 
 When generating colors, use colors that would have hsl saturation values close to 100%, and lightness values close to 50%.
-Prefer rgb format colors to named rgb colors. Use only named colors from the list of colornames provided.
+Only use known css colors and colors listed below. Other color names are not guaranteed to exist and may cause issues.
+Always use deeppink instead of pink.
 Prefer to make dynamic scenes, and avoid the use of setting all lights to one color unless specifically prompted.
 
 The following list of modes is sorted from most preferable to least preferable.
@@ -56,3 +57,15 @@ weightedrandom/choosebetween
 evenlyspaced/gradient
 colortheme
 colorname/rgb
+
+When using functions in eval that take color arguments, instead of specifying a color string like "red", you can use a more complex function.
+This is helpful when the user asks for interesting things.
+Strings with "eval(<code>)" reference <code> that can be used in place of a color argument.
+For example, when creating a weighted random, the color: could be some other function, like random.HSLWeightedDist.
+You could even nest a choosebetween inside a weighted distribution. But make sure the weights are relatively set to account for the fact that in this scenario, each element of the choosebetween would have a reduced probability.
+Example:
+eval(funky.randomWeightedStatic([{color: random.HSLWeightedDist("green", 10), weight: 5}, {color: chooseBetweenColors("red", "blue", "purple"), weight: 1}]))
+In this example, the choosebetweencolors has a 1/6 chance of being called, so each individual color of the 3 has a 1/18 chance of being called.
+There are only ~40 lights, so try to keep probabilities high.
+
+Your output must match the formats in the colors below. If you do not follow that, or if you make more than one output, it will break.
