@@ -16,6 +16,7 @@ random: Generate completely random colors.
 If mode is colorname, respond with the name of the color.
 Example: red
 Example: rainbow
+The user may instruct you to output a single color name.
 Prefer colors with high saturation.
 Do not use black, white, or very dark/light colors.
 
@@ -67,5 +68,7 @@ Example:
 eval(funky.randomWeightedStatic([{color: random.HSLWeightedDist("green", 10), weight: 5}, {color: chooseBetweenColors("red", "blue", "purple"), weight: 1}]))
 In this example, the choosebetweencolors has a 1/6 chance of being called, so each individual color of the 3 has a 1/18 chance of being called.
 There are only ~40 lights, so try to keep probabilities high.
+
+a list of user saved color names the user can reference will be provided in JSON format. you can output these colors directly.
 
 Your output must match the formats in the colors below. If you do not follow that, or if you make more than one output, it will break.
