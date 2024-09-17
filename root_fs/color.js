@@ -63,8 +63,9 @@ class Color {
             _this.type = "colorMapping";
             this.mapping = args[0];
         } else if (args[0] instanceof AreaBuilder) {
-            _this.type = "builder";
-            this.builder = args[0];
+            // _this.type = "builder";
+            // _this.builder = args[0];
+            _this.from(args[0].convertToColorFunction())
         } else if (args[0] instanceof Function) {
             _this.func = args[0];
             _this.type = "function";
@@ -117,29 +118,31 @@ class Color {
                 }
             }
         }
+    }
 
-        _this.toString = function () {
-            if (_this.type == "rgb")
-                return `rgb(${_this.r}, ${_this.g}, ${_this.b})`;
-            if (_this.type == "function")
-                return `Color Function`;
-            if (_this.type == "gradient")
-                return `Color Gradient ${_this.stops.join(", ")}`;
-        };
+    toString() {
+        if (this.type == "rgb")
+            return `rgb(${this.r}, ${this.g}, ${this.b})`;
+        if (this.type == "function")
+            return `Color Function`;
+        if (this.type == "gradient")
+            return `Color Gradient ${this.stops.join(", ")}`;
+    };
 
-        _this.toCSS = function() {
-            if (_this.type == "rgb") {
-                return _this.toString();
-            } else if (_this.type == "gradient") {
-                return _this.gradient.convertToCSSGradient();
-            } else if (def(this.colorList)) {
-                var gradient = Gradient.evenlySpaced(this.colorList, 0);
-                return gradient.convertToCSSGradient();
-            } else {
-                return "";
-            }
+    toCSS() {
+        if (this.type == "rgb") {
+            return this.toString();
+        } else if (this.type == "gradient") {
+            return this.gradient.convertToCSSGradient();
+        } else if (def(this.colorList)) {
+            var Gradient = require("./gradient");
+            var gradient = Gradient.evenlySpaced(this.colorList, 0);
+            return gradient.convertToCSSGradient();
+        } else {
+            return "";
         }
     }
+
     static from(color) {
         if (isColor(color)) return color;
         var out = new Color();

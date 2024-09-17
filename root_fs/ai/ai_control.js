@@ -22,9 +22,19 @@ async function createSystemMessages() {
         content: `The user has also created a JSON file with many saved scenes. This file is imported below.
         These are many examples of what you can produce.
         You can output these names directly as well if they would be a good fit for the current request. Here they are:
-        ${JSON.stringify(await colorNames.getColors())}`
+        ${JSON.stringify(await getNonMappingColors())}`
     }];
 
+}
+
+async function getNonMappingColors() {
+    var colors = await colorNames.getColors();
+    var colorsOut = {};
+    for (const colorName in colors) {
+        if (colors[colorName][0] == "{") continue;
+        colorsOut[colorName] = colors[colorName];
+    }
+    return colorsOut;
 }
 
 async function generateColorFromUserPrompt(userPrompt) {
