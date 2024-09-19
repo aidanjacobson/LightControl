@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    display: inline-block;
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.menusection {
+    margin-bottom: 20px;
+}
+
+.btn {
+    width: 99%;
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+    height: 30px;
+}
+
+.half {
+    width: 49%;
+}
+
+#entityList td {
+    margin: 3px;
+}
+
+#entityList {
+    margin: 10px;
+}
+
+#progressCompleted {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.container > p {
+    margin: 0px;
+    text-align: center;
+}
