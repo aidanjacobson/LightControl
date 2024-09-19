@@ -74,7 +74,7 @@ async function getGroup(entityName) {
         for (var i = 0; i < groupMembers.length; i++) {
             var currentEntity = groupMembers[i];
             if (ndef(groupCache[currentEntity])) await downloadGroupInfo(currentEntity);
-            if (groupCache[currentEntity].isGroup) {
+            if (groupCache[currentEntity] && groupCache[currentEntity].isGroup) {
                 someMembersAreGroups = true;
                 groupMembersCopy.push(...groupCache[currentEntity].groupMembers);
             } else {

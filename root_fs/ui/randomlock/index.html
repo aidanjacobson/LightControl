@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <script src="script.js"></script>
+        <script src="../common/apiutils.js"></script>
+        <script src="../common/lightcontrol_selectcolor.js"></script>
+        <script src="../common/show_hide.js"></script>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <h1>Random Lock</h1>
+        <div class="menusection">
+            <div class="container">
+                <p>Color to set: <input type="text" id="colorInput" value="randomhsl" /><button onclick="browseForColor()">Browse</button></p>
+                <button class="btn" onclick="doSetAll()">Set All</button><br>
+                <button class="btn half" onclick="copyAreaBuilderCommand()">Copy SetAll Command</button>
+                <button class="btn half" onclick="copyColorMapping()">Copy Color Mapping</button>
+                <button class="btn half" onclick="loadAreaBuilderFromPrompt()">Load AreaBuilder String</button>
+                <button class="btn half" onclick="loadColorMappingFromPrompt()">Load ColorMapping String</button>
+            </div>
+        </div>
+        <div class="menusection">
+            <div class="container">
+                <p><span id="progressDisplay">0</span>% Complete</p>
+                <progress id="progressCompleted" value="0" min="0" max="100"></progress>
+                <input type="text" id="filterInput" placeholder="Type to filter" onkeypress="updateFilter()" onkeydown="updateFilter()" onchange="updateFilter()" /><button onclick="clearFilter()">Clear</button><br>
+                <table id="entityList">
+                    <!-- <tr entity-id="plant-light-2">
+                        <td>
+                            Plant light
+                        </td>
+                        <td>
+                            <button>Lock</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr entity-id="lamp"></tr>
+                        <td>
+                            Lamp
+                        </td>
+                        <td>
+                            <button>Unlock</button>
+                        </td>
+                        <td style="background-color: rgb(255,0,255);">rgb(255,0,255)</td>
+                    </tr> -->
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

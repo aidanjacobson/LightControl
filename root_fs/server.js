@@ -246,6 +246,14 @@ app.get("/getAllEntities", async function(req, res) {
     res.json(await fp.getAllEntityOptions());
 })
 
+app.get("/getAllActiveEntities", async function(req, res) {
+    var allEntitiesInfo = await fp.getAllEntityOptions();
+    var allEntities = [...allEntitiesInfo.entities, ...allEntitiesInfo.segments];
+    var activeEntityIds = light.getLastLightData().lightsSet;
+    var activeEntities = allEntities.filter(entity=>activeEntityIds.includes(entity.entity));
+    res.json(activeEntities);
+})
+
 
 var lastSetAllCache = {
     value: "",
@@ -263,6 +271,7 @@ async function doSetAll(value, res, options={}) {
         var cResponse = await light.setAll(value, options);
     } catch(e) {
         res.status(404).json({status: "failure", error: e.toString()})
+        console.log(e);
         return;
     }
     history.last.command.set(value);
