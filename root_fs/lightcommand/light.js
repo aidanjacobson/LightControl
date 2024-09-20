@@ -69,9 +69,11 @@ async function setAll(colorInput, options={}) {
     if (color.type == "url") {
         return await setAll(await imageURL.fromURL(color), options);
     }
+/*
     if (color.type == "builder") {
         return await setAll(color.builder.convertToColorFunction(), options);
     }
+*/
     if (color.type == "buffer") {
         return await setAll(await imageURL.fromBuffer(color), options);
     }
