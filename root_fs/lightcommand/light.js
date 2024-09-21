@@ -265,7 +265,7 @@ async function entityIsInGroup(entity, group) {
     if (entity.indexOf("light.") == -1 && entity.indexOf("segment.") == -1) entity = "light." + entity;
     // return groupMembers.some(member=>member==entity || segment.isSegmentOf(entity, member));
     for (var member of groupMembers) {
-        if (member==entity || segment.isSegmentOf(entity, member) || (entity.indexOf("segment.desk_light_strip") != -1 && member.indexOf("desk_") == -1)) return true;
+        if (member==entity || segment.isSegmentOf(entity, member) || (entity.indexOf("segment.desk_light_strip") != -1 && member.indexOf("desk_") != -1)) return true;
     }
     return false;
 }
