@@ -14,7 +14,8 @@ body {
 }
 
 .btn {
-    width: 99%;
+    /* width: 99%; */
+    width: 500px;
     background-color: red;
     color: white;
     border-radius: 10px;
@@ -22,7 +23,11 @@ body {
 }
 
 .half {
-    width: 49%;
+    width: 248px;
+}
+
+#btnContainer {
+    width: 501px;
 }
 
 #entityList td {
@@ -39,6 +44,6 @@ body {
 }
 
 .container > p {
-    margin: 0px;
+    margin: 5px;
     text-align: center;
 }

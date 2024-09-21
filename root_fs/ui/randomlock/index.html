@@ -9,13 +9,15 @@
     <body>
         <h1>Random Lock</h1>
         <div class="menusection">
-            <div class="container">
+            <div class="container" id="btnContainer">
                 <p>Color to set: <input type="text" id="colorInput" value="randomhsl" /><button onclick="browseForColor()">Browse</button></p>
                 <button class="btn" onclick="doSetAll()">Set All</button><br>
                 <button class="btn half" onclick="copyAreaBuilderCommand()">Copy SetAll Command</button>
                 <button class="btn half" onclick="copyColorMapping()">Copy Color Mapping</button>
                 <button class="btn half" onclick="loadAreaBuilderFromPrompt()">Load AreaBuilder String</button>
                 <button class="btn half" onclick="loadColorMappingFromPrompt()">Load ColorMapping String</button>
+                <button class="btn half" onclick="lockAll()">Lock All</button>
+                <button class="btn half" onclick="unlockAll()">Unlock All</button>
             </div>
         </div>
         <div class="menusection">

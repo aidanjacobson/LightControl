@@ -175,3 +175,19 @@ function loadColorMappingFromPrompt() {
     }
     syncAllColorsToSavedData();
 }
+
+async function lockAll() {
+    var promises = [];
+    for (var entityInfo of entities) {
+        if (! (entityInfo.entity in lockedColorData)) {
+            promises.push(syncColor(entityInfo.entity));
+        }
+    }
+    await Promise.allSettled(promises);
+    syncAllColorsToSavedData();
+}
+
+async function unlockAll() {
+    lockedColorData = {};
+    syncAllColorsToSavedData();
+}
