@@ -248,7 +248,7 @@ app.get("/getAllEntities", async function(req, res) {
 
 app.get("/getAllActiveEntities", async function(req, res) {
     var allEntitiesInfo = await fp.getAllEntityOptions();
-    var allEntities = [...allEntitiesInfo.entities, ...allEntitiesInfo.segments];
+    var allEntities = [...allEntitiesInfo.nonsegmented, ...allEntitiesInfo.segments];
     var activeEntityIds = light.getLastLightData().lightsSet;
     var activeEntities = allEntities.filter(entity=>activeEntityIds.includes(entity.entity));
     res.json(activeEntities);

@@ -63,14 +63,21 @@ async function getAllEntityOptions() {
     await updateFloorplan();
     var entities = getAllEntities();
     var segments = getAllSegments();
+    var nonsegmented = getAllNonSegmented();
     var groups = getAllGroups();
     var allEntityOptions = {
         all: [...entities, ...segments, ...groups],
         entities,
+        nonsegmented,
         segments,
         groups
     }
     return allEntityOptions;
+}
+
+function getAllNonSegmented() {
+    var entities = getAllEntities();
+    return entities.filter(entityInfo=>! (entityInfo.entity in lastFloorplan.segmented_led));
 }
 
 function getAllEntities() {
