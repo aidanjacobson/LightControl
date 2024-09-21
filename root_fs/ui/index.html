@@ -29,18 +29,10 @@
     <body>
         <div class="menu" id="main">
             <button class="buttonOption" onclick="mainmenu_colorselect()">Color</button>
-            <button class="buttonOption half" onclick="mainmenu_gradientselect()">Gradient</button>
-            <button class="buttonOption half" onclick="mainmenu_colorspaceselect()">Color Space</button>
-            <button class="buttonOption half" onclick="mainmenu_quickgradient()">QuickGradient</button>
-            <button class="buttonOption half" onclick="mainmenu_evenlyspaced()">Evenly Spaced</button>
-            <button class="buttonOption half" onclick="mainmenu_choosebetween()">Choose Between</button>
-            <button class="buttonOption half" onclick="mainmenu_colortheme()">Color Theme</button>
+            <button class="buttonOption half" onclick="switchToMenu(colorCreatorOptions)">Color Creators</button>
+            <button class="buttonOption half" onclick="switchToMenu(copySaveOptions)">Copy/Save</button>
             <button class="buttonOption" id="colorOutput" onclick="mainmenu_preview()">(Preview)</button>
             <button class="buttonOption" onclick="attemptSetAll(lastColor)">Repeat Last Color</button>
-            <button class="buttonOption half" onclick="mainmenu_savecolor()">Save Current Command</button>
-            <button class="buttonOption half" onclick="navigator.clipboard.writeText(lastColor)">Copy Current Command</button>
-            <button class="buttonOption half" onclick="mainmenu_savecolorscene()">Save Current Scene</button>
-            <button class="buttonOption half" onclick="mainmenu_savecolorscenenocache()">Pull Colors & Save Scene</button>
             <button class="buttonOption" onclick="doAIPrompt()">Ask AI</button>
             <div class="advert">
                 <img id="advert" width="830" height="628" src="https://aidanjacobson.duckdns.org:7777/advertisement/random" onclick="advert.src='https://aidanjacobson.duckdns.org:7777/advertisement/random?' + Math.random()" />
@@ -49,6 +41,22 @@
             <div id="settingsBtnContainer">
                 <img width="150" height="150" src="https://cdn-icons-png.flaticon.com/512/6704/6704985.png" onclick="settingsClick()" />
             </div>
+        </div>
+        <div class="menu" id="colorCreatorOptions">
+            <button class="buttonOption half" onclick="mainmenu_gradientselect()">Gradient</button>
+            <button class="buttonOption half" onclick="mainmenu_colorspaceselect()">Color Space</button>
+            <button class="buttonOption half" onclick="mainmenu_quickgradient()">QuickGradient</button>
+            <button class="buttonOption half" onclick="mainmenu_evenlyspaced()">Evenly Spaced</button>
+            <button class="buttonOption half" onclick="mainmenu_choosebetween()">Choose Between</button>
+            <button class="buttonOption half" onclick="mainmenu_colortheme()">Color Theme</button>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="copySaveOptions">
+            <button class="buttonOption half" onclick="mainmenu_savecolor()">Save Current Command</button>
+            <button class="buttonOption half" onclick="navigator.clipboard.writeText(lastColor)">Copy Current Command</button>
+            <button class="buttonOption half" onclick="mainmenu_savecolorscene()">Save Current Scene</button>
+            <button class="buttonOption half" onclick="mainmenu_savecolorscenenocache()">Pull Colors & Save Scene</button>
+            <button class="backbtn" onclick="back()">Back</button>
         </div>
         <div class="menu" id="colorselectmenu">
             <h1 class="header">Use the color picker or manually type a color</h1>
