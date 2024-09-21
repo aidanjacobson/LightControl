@@ -263,6 +263,10 @@ app.get("/getAllActiveEntitiesInGroup/:group", async function(req, res) {
     res.json(groupEntities);
 })
 
+app.get("/getAllGroups", async function(req, res) {
+    res.json(fp.getFloorplan().groups);
+});
+
 
 var lastSetAllCache = {
     value: "",
