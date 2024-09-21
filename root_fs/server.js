@@ -172,6 +172,8 @@ app.get("/", function(req, res) {
     res.redirect("ui/")
 });
 
+app.use("/savedColorGroups", require("./colornames/savedcolorgroups").groupRouter);
+
 
 app.post("/saveColor", async function(req, res) {
     await colorsaveutils.saveColor(req.body.color, req.body.name);
