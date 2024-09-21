@@ -25,12 +25,15 @@
         <script src="log.js"></script>
         <script src="externalmessages.js"></script>
         <script src="keybardShortcuts.js"></script>
+        <script src="colorgroups.js"></script>
     </head>
     <body>
         <div class="menu" id="main">
             <button class="buttonOption" onclick="mainmenu_colorselect()">Color</button>
             <button class="buttonOption half" onclick="switchToMenu(colorCreatorOptions)">Color Creators</button>
             <button class="buttonOption half" onclick="switchToMenu(copySaveOptions)">Copy/Save</button>
+            <button class="buttonOption half" onclick="colorGroupsClick()">Saved Color Groups</button>
+            <button class="buttonOption half" onclick="navigator.clipboard.writeText(lastColor)">Copy Current Command</button>
             <button class="buttonOption" id="colorOutput" onclick="mainmenu_preview()">(Preview)</button>
             <button class="buttonOption" onclick="attemptSetAll(lastColor)">Repeat Last Color</button>
             <button class="buttonOption" onclick="doAIPrompt()">Ask AI</button>
@@ -195,6 +198,14 @@
             <h1 class="header2"><a class="menulink" target="_blank" href="/ui/randomlock">Random Lock</a></h1>
             <h1 class="header2"><a class="menulink" target="_blank" href="https://platform.openai.com/usage">AI Token Usage</a></h1>
             <h1 class="header2"><a class="menulink" onclick="attemptRebuild()">Rebuild Addon</a></h1>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="colorgroupslanding">
+            <div id="colorgroupcontainer"></div>
+            <button class="backbtn" onclick="back()">Back</button>
+        </div>
+        <div class="menu" id="colorgroupdisplay">
+            <div id="groupdisplaycontainer"></div>
             <button class="backbtn" onclick="back()">Back</button>
         </div>
         <div class="largespacer"></div>
