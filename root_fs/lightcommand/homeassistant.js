@@ -66,6 +66,7 @@ async function serviceCall(service, data={}) {
 
 var groupCache = {};
 async function getGroup(entityName) {
+    if (entityName.indexOf("segment.") == 0) return [entityName];
     if (entityName.indexOf("light.") == -1 && entityName.indexOf("segment.") == -1) {
         entityName = "light." + entityName;
     }

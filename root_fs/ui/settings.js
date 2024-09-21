@@ -135,8 +135,8 @@ window.addEventListener("load", async function() {
 })
 
 function settingsClick() {
-    switchToMenu(settingsmenu)
     renderSettingsBox();
+    switchToMenu(settingsmenu)
 }
 
 function renderSettingsBox() {
