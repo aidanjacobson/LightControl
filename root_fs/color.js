@@ -126,7 +126,7 @@ class Color {
         if (this.type == "function")
             return `Color Function`;
         if (this.type == "gradient")
-            return `Color Gradient ${this.stops.join(", ")}`;
+            return `Color Gradient ${this.gradient.stops.join(", ")}`;
     };
 
     toCSS() {
