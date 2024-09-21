@@ -169,6 +169,7 @@ function isSegment(lightName) {
  */
 function isSegmentOf(segmentEntityName, mainEntityName) {
     if (!isSegment(segmentEntityName)) return false;
+    if (isSegment(mainEntityName)) return false;
     var segEntity = segmentEntityName.split(".")[1];
     var mainEntity = mainEntityName.split(".")[1];
     return segEntity == mainEntity;
