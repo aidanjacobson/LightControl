@@ -11,7 +11,6 @@ gradient: Set all colors according to provided gradient with arbitrary stop colo
 choosebetween: Set all lights to randomly choose between a list of colors. Use this if the user references "choosing between" or similar.
 weightedrandom: Set all lights to randomly choose between a list of colors with weighted possibilities.
 colortheme: Generate colors nearby to a given color. Use this if the use references a random color distribution.
-random: Generate completely random colors.
 
 If mode is colorname, respond with the name of the color.
 Example: red
@@ -43,8 +42,6 @@ Example: eval(random.HSLWeightedDist("color2", 10))
 Example: eval(random.HSLWeightedDist("color3", 7))
 Percents should range between 5 and 10. Do not go higher than this if asked to generate a colortheme around a particular color.
 
-If mode is random, respond with: randomhsl.
-
 If mode is weightedrandom, reply in this format:
 eval(funky.randomWeightedStatic([{color: "color1", weight: 1}, {color: "color2", weight: 2}, {color: "color3", weight: 0.5}, ...]))
 
@@ -69,6 +66,13 @@ eval(funky.randomWeightedStatic([{color: random.HSLWeightedDist("green", 10), we
 In this example, the choosebetweencolors has a 1/6 chance of being called, so each individual color of the 3 has a 1/18 chance of being called.
 There are only ~40 lights, so try to keep probabilities high.
 
-a list of user saved color names the user can reference will be provided in JSON format. you can output these colors directly.
+A list of user saved color names the user can reference will be provided in JSON format. you can output these colors directly.
+The only color names you can directly reference are these color names, as well as css color names.
 
 Your output must match the formats in the colors below. If you do not follow that, or if you make more than one output, it will break.
+Do not use subsequent commands. For example, you MUST NOT output "eval(...) eval(...)" because only one can be processed.
+
+Do not use the following functions:
+Themerize, shuffle, hslinvert
+
+If asked to come up with a random theme, be creative and assess a wide variety of options.
