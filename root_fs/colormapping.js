@@ -69,6 +69,10 @@ class ColorMapping {
         var names = this.getLightNames();
         return names.indexOf(entityName) > -1 || names.indexOf("light."+entityName) > -1;
     }
+
+    getAllColorsInMapping() {
+        return this.keys.map(key=>this.colorMapping[key]);
+    }
 }
 
 function dist_light(light1, light2) {

@@ -108,6 +108,14 @@ var Gradient = function(stops=[], angle=0) {
         return _this.stops.map(stop=>stop.color);
     }
 
+    _this.orderByHue = function() {
+        convertColors()
+        var colors = _this.stops.map(stop=>stop.color);
+        colors = colors.sort((a,b)=>utils.RGBToHSL(a).h - utils.RGBToHSL(b).h);
+        _this.stops.forEach((stop,i)=>stop.color=colors[i]);
+        return _this;
+    }
+
     _this.convertToColorCommandFunction = async function() {
         var gradientAngleMode = await settingsLoader.getSetting("gradientAngleMode")
         floorplan = fp.getFloorplan();

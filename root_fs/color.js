@@ -134,6 +134,10 @@ class Color {
             return this.toString();
         } else if (this.type == "gradient") {
             return this.gradient.convertToCSSGradient();
+        } else if (this.type == "colorMapping") {
+            var Gradient = require("./gradient");
+            var gradient = Gradient.evenlySpaced(this.mapping.getAllColorsInMapping(), 0).orderByHue();
+            return gradient.convertToCSSGradient();
         } else if (def(this.colorList)) {
             var Gradient = require("./gradient");
             var gradient = Gradient.evenlySpaced(this.colorList, 0);
