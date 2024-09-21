@@ -13,6 +13,9 @@ async function setAllAI(userPrompt) {
     }
     var color = aiResponse.color;
     console.log("AI Says: ", color);
+    if (settings.alertAIResponse) {
+        alert(color);
+    }
     await attemptSetAll(color);
 }
 

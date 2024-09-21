@@ -28,6 +28,11 @@ var settingsOptions = {
         type: "toggle",
         name: "Use Localhost Segment Data",
         default: true
+    },
+    alertAIResponse: {
+        type: "toggle",
+        name: "Alert AI Response",
+        default: false
     }
 };
 
