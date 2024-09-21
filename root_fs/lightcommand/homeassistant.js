@@ -66,6 +66,9 @@ async function serviceCall(service, data={}) {
 
 var groupCache = {};
 async function getGroup(entityName) {
+    if (entityName.indexOf("light.") == -1 && entityName.indexOf("segment.") == -1) {
+        entityName = "light." + entityName;
+    }
     var someMembersAreGroups = true;
     var groupMembers = [entityName];
     while (someMembersAreGroups) {
@@ -87,12 +90,19 @@ async function getGroup(entityName) {
 }
 
 async function downloadGroupInfo(entity_id) {
+    if (entity_id.indexOf("segment.") == 0) {
+        groupCache[entity_id] = {
+            isGroup: false
+        }
+        return;
+    }
     var stateObject = await get("/states/" + entity_id);
     if (ndef(stateObject.attributes)) return;
     if (def(stateObject.attributes.entity_id)) {
+        var members = stateObject.attributes.entity_id;
         groupCache[entity_id] = {
             isGroup: true,
-            groupMembers: stateObject.attributes.entity_id
+            groupMembers: members
         }
     } else {
         groupCache[entity_id] = {

@@ -247,12 +247,25 @@ app.get("/getAllEntities", async function(req, res) {
 })
 
 app.get("/getAllActiveEntities", async function(req, res) {
-    var allEntitiesInfo = await fp.getAllEntityOptions();
-    var allEntities = [...allEntitiesInfo.nonsegmented, ...allEntitiesInfo.segments];
-    var activeEntityIds = light.getLastLightData().lightsSet;
-    var activeEntities = allEntities.filter(entity=>activeEntityIds.includes(entity.entity));
+    var activeEntities = await light.getAllActiveEntities();
     res.json(activeEntities);
 })
+
+app.get("/getAllActiveEntitiesInGroup/:group", async function(req, res) {
+    var activeEntities = await light.getAllActiveEntities();
+    // var groupEntities = activeEntities.filter(entity=>light.entityIsInGroup(entity, req.params.group));
+    var groupEntities = [];
+    for (var entity of activeEntities) {
+        if (await light.entityIsInGroup(entity.entity, req.params.group)) {
+            groupEntities.push(entity);
+        }
+    }
+    res.json(groupEntities);
+})
+
+app.get("/getAllGroups", async function(req, res) {
+    res.json(fp.getFloorplan().groups);
+});
 
 
 var lastSetAllCache = {

@@ -1,5 +1,6 @@
 window.addEventListener("load", async function() {
     await updateEntityListFromServer();
+    await updateGroupList();
 })
 
 entities = [];

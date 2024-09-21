@@ -252,4 +252,22 @@ async function pullColor(light) {
     return rgb_color;
 }
 
-module.exports = {setLight, setAll, getLightColor, generateSaveColorsString, pullColor, pullCurrentColors, getLastLightData};
+async function getAllActiveEntities() {
+    var allEntitiesInfo = await fp.getAllEntityOptions();
+    var allEntities = [...allEntitiesInfo.nonsegmented, ...allEntitiesInfo.segments];
+    var activeEntityIds = segment.expandLightList(fp.getFloorplan()).map(entity=>entity.entity);
+    var activeEntities = allEntities.filter(entity=>activeEntityIds.includes(entity.entity));
+    return activeEntities;
+}
+
+async function entityIsInGroup(entity, group) {
+    var groupMembers = await ha.getGroup(group);
+    if (entity.indexOf("light.") == -1 && entity.indexOf("segment.") == -1) entity = "light." + entity;
+    // return groupMembers.some(member=>member==entity || segment.isSegmentOf(entity, member));
+    for (var member of groupMembers) {
+        if (member==entity || segment.isSegmentOf(entity, member) || (entity.indexOf("segment.desk_light_strip") != -1 && member.indexOf("desk_") != -1)) return true;
+    }
+    return false;
+}
+
+module.exports = {setLight, setAll, getLightColor, generateSaveColorsString, pullColor, pullCurrentColors, getLastLightData, entityIsInGroup, getAllActiveEntities};

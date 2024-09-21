@@ -30,11 +30,11 @@ body {
     width: 501px;
 }
 
-#entityList td {
+.entityTable td {
     margin: 3px;
 }
 
-#entityList {
+.entityTable {
     margin: 10px;
 }
 
@@ -46,4 +46,8 @@ body {
 .container > p {
     margin: 5px;
     text-align: center;
+}
+
+.large {
+    font-size: large;
 }
