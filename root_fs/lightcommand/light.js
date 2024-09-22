@@ -113,7 +113,11 @@ async function setAll(colorInput, options={}) {
         }
         for (var i = 0; i < lightList.length; i++) {
             lightList[i] = await ha.getGroup(lightList[i]);
-            lightList[i] = lightList[i].map(name=>name.split(".")[1])
+            // lightList[i] = lightList[i].map(name=>name.split(".")[1])
+            lightList[i] = lightList[i].map(function(name) {
+                if (name.indexOf("segment.") == 0) return name;
+                return name.split(".")[1];
+            })
         }
         lightList = lightList.flat();
         lights = segment.expandLightList(floorplan, lightList);
@@ -150,7 +154,7 @@ async function setAll(colorInput, options={}) {
 
     if (!noscene) applyHomeAssistantScene();
     
-    await segment.turnOffUnusedSegments(lastLightsSet);
+    if (ndef(options.lights)) await segment.turnOffUnusedSegments(lastLightsSet);
     
     const RGBToHSL = ({r, g, b}) => {
         var nr = r/255;

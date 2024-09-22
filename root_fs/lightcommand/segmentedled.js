@@ -66,6 +66,14 @@ function expandLightListWithModes(_floorplan, lightList=_floorplan.lights.map(l=
     floorplan = _floorplan;
 
     var lightListOut = [];
+    for (var i = 0; i < lightList.length; i++) {
+        if (lightList[i].indexOf("segment.") == 0) {
+            var [_, entityName, segmentName] = lightList[i].split(".");
+            var light = floorplan.lights.find(lightInfo=>lightInfo.entity==entityName);
+            var expandedLight = getExpandedLightForGroup(segmentName, light);
+            lightListOut.push(expandedLight);
+        }
+    }
     for (var i = 0; i < floorplan.lights.length; i++) {
         var light = floorplan.lights[i];
         if (lightList.indexOf(light.entity) == -1) continue;
