@@ -58,7 +58,11 @@ HTMLElement.prototype.getStyleTop = function() {
 }
 
 async function doSetAll() {
-    await setAll(colorSetInput.value);
+    if (selectedLights.length == 0) {
+        await setAll(colorSetInput.value);
+    } else {
+        await setAll(colorSetInput.value, {lights: selectedLights.map(element=>element.getAttribute("entity-id"))});
+    }
     await refreshLights();
 }
 

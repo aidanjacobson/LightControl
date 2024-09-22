@@ -191,6 +191,10 @@ app.post("/saveColorScene", async function(req, res) {
     res.json({status:"success"});
 })
 
+app.get("/getColorMapping", async function(req, res) {
+    res.json(await light.generateSaveColorsString());
+})
+
 app.get("/updateColors", async function(req, res) {
     await fp.updateFloorplan();
     res.json({status: "success"});

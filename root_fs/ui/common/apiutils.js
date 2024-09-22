@@ -40,14 +40,14 @@ function apiGet(path) {
     })
 }
 
-async function setAll(color, noscene=true) {
+async function setAll(color, options={}) {
     if (window.opener && window.opener.attemptSetAll) {
         console.log("setall through opener")
         window.opener.attemptSetAll(color);
         return;
     }
-    var endpoint = noscene ? "/setAllNoScene" : "/setAll"
-    await apiPost(endpoint, {color});
+    var endpoint = "/setAll"
+    await apiPost(endpoint, {color, options});
 }
 
 function copyClipboard(text) {

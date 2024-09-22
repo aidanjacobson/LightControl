@@ -6,14 +6,20 @@
         <script src="script.js"></script>
         <script src="lights.js"></script>
         <script src="segmentmodesettings.js"></script>
+        <script src="dragselect.js"></script>
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
         <div id="mapContainer" class="menu">
-            <div id="mapImgContainer">
-                <img id="mapImg" src="media/map.png" />
+            <div id="clickContainer" draggable>
+                <div id="selectbox" hidden></div>
+                <div id="mapLightContainer">
+                    <div id="mapImgContainer">
+                        <img id="mapImg" src="media/map.png" />
+                    </div>
+                    <div id="lights"></div>
+                </div>
             </div>
-            <div id="lights"></div>
             <h2>Background Light: Off <input type="range" min="0" max="100" value="100" id="opacityRange" /> On</h2>
             <h2>
                 <label for="trueColorInput">TrueColor: </label><input type="checkbox" name="trueColorInput" id="trueColorInput" checked onclick="trueColor = trueColorInput.checked; setPageLightColors()" />

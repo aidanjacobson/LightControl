@@ -107,7 +107,7 @@ async function setAll(colorInput, options={}) {
     } else {
         var lightList = [];
         if (options.lights instanceof Array) {
-            lightList = options.lights.map(l=>"light."+l);
+            lightList = options.lights.map(l=>l.indexOf("light.") == -1 && l.indexOf("segment.") == -1 ? "light."+l : l);
         } else {
             lightList = ["light."+options.lights];
         }
@@ -199,8 +199,11 @@ async function generateSaveColorsString(nocache=false) {
         await pullCurrentColors();
     }
     var colorMap = {};
-    lastLightsSet.forEach(function(light) {
-        colorMap[light] = entityCachedColors[light].toString();
+    var lights = await getAllActiveEntities();
+    lights.forEach(function({entity}) {
+        var col = entityCachedColors[entity];
+        if (!col) return "";
+        colorMap[entity] = col.toString();
     });
     return JSON.stringify(colorMap);
 }

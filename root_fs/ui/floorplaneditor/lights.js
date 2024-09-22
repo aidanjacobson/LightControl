@@ -1,3 +1,4 @@
+const maxShadow = 30;
 var lightList = [];
 var lastLightColors = {};
 function setLastLightColors(newLastLightColors) {
@@ -25,7 +26,7 @@ async function updateLightCachedColors() {
 }
 
 function updateLightElementColors() {
-    setSelectedLight(selectedLight);
+    setSelectedLights();
 }
 
 setInterval(refreshLights, 7000);
@@ -53,7 +54,7 @@ async function setPageLightColors() {
         }
         img.style.backgroundColor = color;
     }
-    setSelectedLight(selectedLight);
+    setSelectedLights();
 }
 
 function createLightElement(lightObject) {
@@ -68,54 +69,48 @@ function createLightElement(lightObject) {
     lightDiv.setAttribute("entity-id", lightObject.entity);
     [lightDiv.style.left, lightDiv.style.top] = convertFloorCoordsToImageCoords([lightObject.x, lightObject.y])
 
-    lightDiv.addEventListener("mousedown", lightMouseDownFunction);
-    lightDiv.addEventListener("mouseup", lightMouseUpFunction);
-    lightDiv.addEventListener("mousemove", lightMouseMoveFunction);
+    // lightDiv.addEventListener("mousedown", lightMouseDownFunction);
+    // lightDiv.addEventListener("mouseup", lightMouseUpFunction);
+    // lightDiv.addEventListener("mousemove", lightMouseMoveFunction);
 
     return lightDiv;
 }
 
-var selectedLight;
-function setSelectedLight(lightElement) {
-    selectedLight = lightElement;
+function setSelectedLights() {
     var allLights = document.querySelectorAll(".lightbulb");
     for (var light of allLights) {
         var lightColor = getComputedStyle(light.children[0]).backgroundColor;
         if (lightColor == "rgba(0, 0, 0, 0)") lightColor = "white";
-        if (light == lightElement) {
+        if (selectedLights.indexOf(light) > -1) {
             light.classList.add("selected");
             light.children[0].style.boxShadow = `0px 0px ${maxShadow}px ${maxShadow}px ${lightColor}`;
-            renderSelectedEditor();
         } else {
             light.classList.remove("selected");
             var shadowPercent = Math.pow(1 - (opacityRange.valueAsNumber/100), 4);
-            var maxShadow = 30;
             var shadowLength = maxShadow * shadowPercent;
             if (!trueColor || lastBackgroundCSS != "black") shadowLength = 0;
             light.children[0].style.boxShadow = `0px 0px ${shadowLength}px ${shadowLength}px ${lightColor}`;
         }
     }
-    selectedEditorContainer.show();
+    renderSelectedEditor();
 }
 
 var dragging = false;
 var clicking = false;
 var initalClickCoords = [0, 0];
 var initialElementCoords = [0, 0];
-function lightMouseDownFunction(e) {
-    e.preventDefault();
-    e.stopPropagation();
+function lightMouseDownFunction(element, e) {
     clicking = true;
-    if (e.currentTarget != selectedLight) {
-        setSelectedLight(e.currentTarget);
-    }
-    initalClickCoords = [e.clientX, e.clientY];
-    initialElementCoords = [selectedLight.getStyleLeft(), selectedLight.getStyleTop()];
+    dragging = true;
+    selectedLights = [element];
+    draggingElement = element;
+    // setSelectedLights();
+    // console.log(draggingElement)
+    initalClickCoords = [e.pageX, e.pageY];
+    initialElementCoords = [draggingElement.getStyleLeft(), draggingElement.getStyleTop()];
 }
 
-function lightMouseUpFunction(e) {
-    e.preventDefault();
-    e.stopPropagation();
+function lightMouseUpFunction() {
     var wasDragging = dragging;
     dragging = false;
     clicking = false;
@@ -128,33 +123,31 @@ function lightMouseUpFunction(e) {
 }
 
 function lightMouseMoveFunction(e) {
-    e.preventDefault();
-    e.stopPropagation();
     if (!clicking) return;
-    var currentMouseCoords = [e.clientX, e.clientY];
+    var currentMouseCoords = [e.pageX, e.pageY];
     if (!dragging && dist(currentMouseCoords, initalClickCoords) > 10) {
         dragging = true;
     }
     if (dragging) {
         var newX = currentMouseCoords[0] - initalClickCoords[0] + initialElementCoords[0];
         var newY = currentMouseCoords[1] - initalClickCoords[1] + initialElementCoords[1];
-        selectedLight.style.left = newX;
-        selectedLight.style.top = newY;
+        draggingElement.style.left = newX;
+        draggingElement.style.top = newY;
     }
 }
 
 // window.addEventListener("mouseup", lightMouseUpFunction);
 window.addEventListener("load", function() {
     opacityRange.addEventListener("mousemove", opacityMouseMove);
-    opacityRange.addEventListener("mousedown", stopPropagation);
-    opacityRange.addEventListener("mouseup", stopPropagation);
-    window.addEventListener("mousemove", lightMouseMoveFunction);
+    // opacityRange.addEventListener("mousedown", stopPropagation);
+    // opacityRange.addEventListener("mouseup", stopPropagation);
+    // window.addEventListener("mousemove", lightMouseMoveFunction);
 })
 
 function opacityMouseMove(e) {
     e.stopPropagation();
     mapImg.style.opacity = `${opacityRange.value}%`;
-    setSelectedLight(selectedLight);
+    setSelectedLights();
 }
 
 function stopPropagation(e) {
@@ -162,10 +155,16 @@ function stopPropagation(e) {
 }
 
 function renderSelectedEditor() {
-    entityNameDisplay.innerText = selectedLight.getAttribute("entity-id");
-    var lightObject = lightList.find(light=>light.entity==selectedLight.getAttribute("entity-id"));
-    if (typeof lightObject.friendlyName !== "undefined") {
-        entityNameDisplay.innerText = lightObject.friendlyName;
+    if (selectedLights.length == 1) {
+        var draggingElement = selectedLights[0];
+        entityNameDisplay.innerText = draggingElement.getAttribute("entity-id");
+        var lightObject = lightList.find(light=>light.entity==draggingElement.getAttribute("entity-id"));
+        if (typeof lightObject.friendlyName !== "undefined") {
+            entityNameDisplay.innerText = lightObject.friendlyName;
+        }
+        selectedEditorContainer.show();
+    } else {
+        selectedEditorContainer.hide();
     }
 }
 
@@ -190,10 +189,4 @@ function getImageCoordsFromEntityID(id) {
         return null;
     }
     return [lightElement.getStyleLeft(), lightElement.getStyleTop()];
-}
-
-function selectEntity(id) {
-    var lightElement = document.querySelector(`.lightbulb[entity-id='${id}']`);
-    if (!lightElement) console.error("no light", id);
-    setSelectedLight(lightElement)
 }
