@@ -243,7 +243,7 @@ app.post("/promptAI", async function(req, res) {
 
 app.post("/executeAI", async function(req, res) {
     var response = await ai_control.generateColorFromUserPrompt(req.body.prompt);
-    await doSetAll(response, res);
+    await doSetAll(response.color, res);
 })
 
 app.use("/history/last", history.last.router);
