@@ -43,6 +43,10 @@ Tool call response: <long wild function>
 Assistant <tool call> describeScene color="<long wild function>" prompt="Name this scene in 5 words or less."
 Tool call response: "Wild Colors"
 Assistant: Here is a wild scene for you: ###<long wild function>####Wild Colors###
+User: Make the plant light green. Make all other lights red.
+Assistant <tool call> generateScene with prompt="Make the plant light green. Make all other lights red."
+Tool call response: eval(new AreaBuilder([{lights: "plant_light_2", color: "green"}], "red"))
+Assistant: Here is your scene: ###eval(new AreaBuilder([{lights: "plant_light_2", color: "green"}], "red"))###Green plant with red###
 
 Vary your response phrasing. For example, do not say "Here is your scene" every time - change it up as the situation requires.
 
