@@ -13,7 +13,7 @@
 }
 
 #selectbox {
-    position: fixed;
+    position: absolute;
     border: 3px dashed red;
     z-index: 1000;
     /* width: 500px;
