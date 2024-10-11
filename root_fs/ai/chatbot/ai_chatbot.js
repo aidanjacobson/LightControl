@@ -70,6 +70,7 @@ async function generateNextResponse() {
         });
     } catch (error) {
         console.error(error);
+        console.log(allMessages);
         return;
     }
 

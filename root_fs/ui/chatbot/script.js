@@ -113,6 +113,26 @@ async function sendMessage() {
     messageDiv.appendChild(messageContentDiv);
     mainMessages.appendChild(messageDiv);
 
+    // if text is /analyze, analyze the messages
+    if (text === '/analyze') {
+        localMessages.push({
+            role: 'user',
+            content: '/analyze',
+            time: Date.now()
+        });
+        var messagesOut = analyzeMessages();
+        for (let messageOut of messagesOut) {
+            // add the message to the local messages as an assistant message
+            localMessages.push({
+                role: 'assistant',
+                content: messageOut,
+                time: Date.now()
+            });
+        }
+        renderMessages();
+        return;
+    }
+
     // show the typing indicator and disable sending messages
     typingMessage.style.display = 'flex';
     canSendMessage = false;
@@ -164,3 +184,18 @@ function analyzeMessages() {
     }
     return messagesOut;
 }
+
+window.addEventListener('load', function() {
+    const textInput = document.getElementById('chatbot-input-text');
+    textInput.focus();
+
+    textInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    window.addEventListener('keydown', function() {
+        textInput.focus();
+    });
+});
