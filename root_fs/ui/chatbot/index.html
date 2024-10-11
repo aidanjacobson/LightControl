@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>Chatbot</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="script.js"></script>
+        <script src="../common/apiutils.js"></script>
+        <script src="../common/show_hide.js"></script>
+    </head>
+    <body>
+        <div id="chatbot">
+            <div id="chatbot-header">
+                <h1>LightControl AI</h1>
+            </div>
+            <div id="chatbot-body">
+                <div id="chatbot-messages">
+                    <div class="chatbot-message assistant-message">
+                        <div class="chatbot-message-content">
+                            <span>Welcome to the LightControl AI Chat interface.</span>
+                        </div>
+                    </div>
+                    <div class="chatbot-message assistant-message">
+                        <div class="chatbot-message-content">
+                            <span>You can use this tool to create, modify, and describe light scenes.</span>
+                        </div>
+                    </div>
+                    <div id="mainMessages">
+                        <div class="chatbot-message user-message">
+                                <div class="chatbot-message-content">
+                                    <span>Hi! I need some assistance.</span>
+                                </div>
+                            </div>
+                            <div class="chatbot-message assistant-message">
+                                <div class="chatbot-message-content">
+                                    <span>Here's a color that matches your request:</span>
+                                    <div class="color-executable">eval(chooseBetweenColors("red", "blue"))</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="typingMessage" class="chatbot-message" style="display: none;">
+                            <div class="chatbot-message-content typing-indicator">
+                                <img src="bubble.gif" alt="Typing..." class="typing-gif">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="chatbot-input">
+                    <input type="text" id="chatbot-input-text" placeholder="Type a message...">
+                    <button id="chatbot-input-send" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

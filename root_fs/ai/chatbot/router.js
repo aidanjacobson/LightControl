@@ -9,4 +9,8 @@ apiRouter.post("/submitPrompt", async (req, res) => {
     res.json(response);
 });
 
+apiRouter.get("/getMessages", async (req, res) => {
+    res.json(ai_chatbot.getAllMessages());
+});
+
 module.exports = apiRouter;

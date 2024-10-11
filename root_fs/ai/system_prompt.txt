@@ -80,7 +80,8 @@ AreaBuilder command syntax:
 eval(new AreaBuilder([{lights: "entity_id_goes_here", color: "color_string_here"}, ...], "default_color_string_here"))
 Replace entity_id_goes_here, color_string_here, default_color_string_here every time.
 You can use "donotchange" to not change an entity/default. You can use "turnoff" to turn off lights.
-If all light should be one scene, do not use an AreaBuilder.
+Unless the user specifically says different areas, do not use AreaBuilder.
+Only use AreaBuilder if specifically asked to differentiate between areas, such as bathroom, or living room.
 
 For example to make the living room red/blue and everything else random:
 eval(new AreaBuilder([{lights: "living_room_lights", color: "eval(chooseBetweenColors("red", "blue"))"}], "randomhsl"))

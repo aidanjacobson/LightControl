@@ -59,13 +59,19 @@ async function generateNextResponse() {
     // create a new list of messages, concatenating the system message and the user messages
     var allMessages = [systemMessage, ...messageHistory];
 
-    // submit the messages to the OpenAI API
-    const chatCompletion = await client.chat.completions.create({
-        messages: allMessages,
-        model: model,
-        temperature: model_temp,
-        tools: rag.tools
-    });
+    var chatCompletion;
+    try {
+        // submit the messages to the OpenAI API
+        chatCompletion = await client.chat.completions.create({
+            messages: allMessages,
+            model: model,
+            temperature: model_temp,
+            tools: rag.tools
+        });
+    } catch (error) {
+        console.error(error);
+        return;
+    }
 
     const completion_reason = chatCompletion.choices[0].finish_reason;
     const completion_message = chatCompletion.choices[0].message;
@@ -73,19 +79,21 @@ async function generateNextResponse() {
     
     // if the ai used a tool call, get the response to the tool call, append all messages, and generate the next response
     if (completion_reason == "tool_calls") {
-        const tool_call = completion_message.tool_calls[0];
-        const response_message = await rag.generateToolCallResponse(tool_call);
         messageHistory.push(completion_message);
-        messageHistory.push(response_message);
+        // const tool_call = completion_message.tool_calls[0];
+        for (const tool_call of completion_message.tool_calls) {
+            const response_message = await rag.generateToolCallResponse(tool_call);
+            messageHistory.push(response_message);
+        }
         await generateNextResponse();
     } else {
         messageHistory.push(completion_message);
     }
 }
 
-function convertMessagesToResponse(messages) {
+function convertMessagesToResponse() {
     // return messages.filter(message => message.role == "user" || (message.role == "assistant" && ndef(message.tool_calls))).map(({content, role})=>({content, role}));
-    return messages;
+    return messageHistory;
 }
 
 module.exports = {submitUserPrompt, getAllMessages: convertMessagesToResponse};

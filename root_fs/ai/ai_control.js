@@ -4,7 +4,7 @@ const fs = require("fs");
 const colorNames = require("../colornames/colornames");
 
 const model = "gpt-4o-mini";
-const model_temp = 1.5;
+const model_temp = 1.2;
 
 const fp = require("../lightcommand/floorplan");
 
