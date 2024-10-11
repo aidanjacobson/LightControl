@@ -36,7 +36,8 @@
             <button class="buttonOption half" onclick="navigator.clipboard.writeText(lastColor)">Copy Current Command</button>
             <button class="buttonOption" id="colorOutput" onclick="mainmenu_preview()">(Preview)</button>
             <button class="buttonOption" onclick="attemptSetAll(lastColor)">Repeat Last Color</button>
-            <button class="buttonOption" onclick="doAIPrompt()">Ask AI</button>
+            <button class="buttonOption half" onclick="doAIPrompt()">Ask AI</button>
+            <button class="buttonOption half" onclick="window.open('/ui/chatbot', '_blank')">AI Chat</button>
             <div class="advert">
                 <img id="advert" width="830" height="628" src="https://aidanjacobson.duckdns.org:7777/advertisement/random" onclick="advert.src='https://aidanjacobson.duckdns.org:7777/advertisement/random?' + Math.random()" />
             </div>
