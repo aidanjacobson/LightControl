@@ -50,6 +50,11 @@ async function setAll(color, options={}) {
     await apiPost(endpoint, {color, options});
 }
 
+async function apiSetAll(color, options={}) {
+    var endpoint = "/setAll"
+    await apiPost(endpoint, {color, options});
+}
+
 function copyClipboard(text) {
     navigator.clipboard.writeText(text);
 }
