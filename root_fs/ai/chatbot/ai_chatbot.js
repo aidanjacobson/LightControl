@@ -29,12 +29,23 @@ function pruneMessages() {
     const now = Date.now();
     messageHistory = messageHistory.filter(message => now - message.time < max_message_age_minutes * 60 * 1000);
 
-    if (messageHistory[0].role == "tool") {
-        messageHistory.splice(0, 1);
+    // if (messageHistory[0].role == "tool") {
+    //     messageHistory.splice(0, 1);
+    // }
+    while (true) {
+        if (messageHistory.length > 0 && (messageHistory[0].role == "tool" || messageHistory[0].tool_calls)) {
+            console.log("Pruning tool call");
+            messageHistory.splice(0, 1);
+        } else {
+            break;
+        }
     }
 }
 
 async function submitUserPrompt(prompt) {
+    // prune old messages
+    pruneMessages();
+
     // create a new user message
     var userMessage = {
         role: "user",
@@ -50,8 +61,6 @@ async function submitUserPrompt(prompt) {
 }
 
 async function generateNextResponse() {
-    // prune old messages
-    pruneMessages();
 
     // create a new system message
     var systemMessage = createSystemMessage();
