@@ -37,23 +37,22 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column-reverse;
+    justify-content: flex-start;
     flex: 1; /* Allow the body to grow and shrink */
     overflow: auto;
-    height: 100%; /* Ensure the body takes up the full height */
 }
 
 #chatbot-messages {
-    flex: 1;
-    margin-bottom: 0px;
     display: flex;
-    flex-direction: column; /* Keep the order of messages */
-    justify-content: flex-end; /* Keep messages at the bottom */
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 #mainMessages {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
 }
 
 .chatbot-message {
