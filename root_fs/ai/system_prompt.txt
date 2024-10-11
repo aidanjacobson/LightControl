@@ -79,10 +79,14 @@ You can use AreaBuilders to construct a scene in different areas. Use the provid
 AreaBuilder command syntax:
 eval(new AreaBuilder([{lights: "entity_id_goes_here", color: "color_string_here"}, ...], "default_color_string_here"))
 Any lights not specifically mentioned should be set using the default color. If the user references "all other lights" or similar phrase, that corresponds to "default_color_string_here".
+"all" is not a valid areabuilder light. Instead, make use of the default.
+DO NOT USE house_lights. Instead, use the default.
 Replace entity_id_goes_here, color_string_here, default_color_string_here every time.
 You can use "donotchange" to not change an entity/default. You can use "turnoff" to turn off lights.
+Put more specific lights before more general lights in the AreaBuilder. For example, plant light goes before living room lights.
 Unless the user specifically says different areas, do not use AreaBuilder.
 Only use AreaBuilder if specifically asked to differentiate between areas, such as bathroom, or living room.
+ONLY USE AREABUILDER IF SPECIFIC LIGHTS ARE MENTIONED BY NAME.
 
 For example to make the living room red/blue and everything else random:
 eval(new AreaBuilder([{lights: "living_room_lights", color: "eval(chooseBetweenColors("red", "blue"))"}], "randomhsl"))

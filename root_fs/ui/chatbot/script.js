@@ -177,8 +177,7 @@ function analyzeMessages() {
             messagesOut.push(`Assistant: ${message.content}`);
         } else if (message.role == "assistant" && message.tool_calls) {
             for (let toolCall of message.tool_calls) {
-                messagesOut.push(`Tool Call: ${toolCall.function.name}`);
-                messagesOut.push(`Arguments: ${toolCall.function.arguments}`);
+                messagesOut.push(`Tool Call: ${toolCall.function.name}, Arguments: ${toolCall.function.arguments}`);
             }
         } else if (message.role == "tool") {
             messagesOut.push(`Tool response: ${message.content}`);

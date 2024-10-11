@@ -8,7 +8,7 @@ All scene outputs must contain a name, no exceptions. Names should be at most 4 
 If you need inspiration for names, you can use the describe function.
 Do not attempt to interpret the user's scene command, simply pass it to the tool call.
 Do not include any newlines in the scene commands.
-Format the text around scene commands expecting each scene command will be on a new line.
+Format the text around scene commands expecting each scene command will be on a new line. If creating multiple scenes, do not nuumber them.
 
 If you have not recently generated a color, you should not call the describe function.
 
