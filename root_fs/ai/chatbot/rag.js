@@ -47,7 +47,7 @@ const describe_function_format = {
 const tools = [generate_function_format, describe_function_format];
 
 async function generateScene(prompt, scene) {
-    if (scene) {
+    if (scene && scene != "") {
         return (await ai_control.generateColorFromUserPrompt(prompt + "\nThe user has provided this scene to modify:\n" + scene)).color;
     } else {
         return (await ai_control.generateColorFromUserPrompt(prompt)).color;
@@ -55,7 +55,7 @@ async function generateScene(prompt, scene) {
 }
 
 async function describeScene(scene, prompt) {
-    if (prompt) {
+    if (prompt && prompt != "") {
         return (await ai_control.generateColorFromUserPrompt("Describe the following scene:\n" + scene + "\nThe user has requested specific information:\n" + prompt)).color;
     } else {
         return (await ai_control.generateColorFromUserPrompt("Describe the following scene:\n" + scene)).color;
