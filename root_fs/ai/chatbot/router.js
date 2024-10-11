@@ -13,4 +13,9 @@ apiRouter.get("/getMessages", async (req, res) => {
     res.json(ai_chatbot.getAllMessages());
 });
 
+apiRouter.post("/clearMessages", async (req, res) => {
+    ai_chatbot.clearMessages();
+    res.json({status: "success"});
+});
+
 module.exports = apiRouter;

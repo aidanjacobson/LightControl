@@ -106,4 +106,8 @@ function convertMessagesToResponse() {
     return messageHistory;
 }
 
-module.exports = {submitUserPrompt, getAllMessages: convertMessagesToResponse};
+function clearMessages() {
+    messageHistory = [];
+}
+
+module.exports = {submitUserPrompt, getAllMessages: convertMessagesToResponse, clearMessages};

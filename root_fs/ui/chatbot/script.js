@@ -135,6 +135,12 @@ async function sendMessage() {
         return;
     }
 
+    if (text === '/clear') {
+        await apiPost('/ai/clearMessages');
+        location.reload();
+        return;
+    }
+
     // show the typing indicator and disable sending messages
     typingMessage.style.display = 'flex';
     canSendMessage = false;

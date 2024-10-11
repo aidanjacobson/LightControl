@@ -67,3 +67,5 @@ The user saying choose between is not a reason to generate multiple scenes.
 If the user wants to modify a scene, that scene must be passed to the tool call as scene in addition to prompt.
 
 Avoid requesting multiple generate calls unless the user specifically asks to do so.
+
+The tool call goes to an AI with no context, so makensure to provide any necessary context in the tool calls.
