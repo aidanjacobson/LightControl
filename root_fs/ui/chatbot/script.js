@@ -87,7 +87,7 @@ function createContentElements(content) {
 
 async function colorExecutableClick(event) {
     const scene = event.target.getAttribute('data-scene');
-    await setAll(scene);
+    await apiSetAll(scene);
 }
 
 var canSendMessage = true;
