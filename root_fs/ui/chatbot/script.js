@@ -76,6 +76,8 @@ function createContentElements(content) {
             executableSpan.title = scene;
 
             executableSpan.addEventListener('click', colorExecutableClick);
+            executableSpan.addEventListener('touchstart', executeTouchStart);
+            executableSpan.addEventListener('touchend', executeTouchEnd);
 
             outElements.push(executableSpan);
         }
@@ -199,3 +201,32 @@ window.addEventListener('load', function() {
         textInput.focus();
     });
 });
+
+let touchStartTime;
+const longTouchDuration = 500; // 1 second
+
+let touchFinished = false;
+
+function executeTouchStart(event) {
+    if (event.target.classList.contains('color-executable')) {
+        touchStartTime = Date.now();
+        touchFinished = false;
+        setTimeout(() => {
+            if (!touchFinished) {
+                const dataScene = event.target.getAttribute('data-scene');
+                alert(dataScene);
+            }
+        }, longTouchDuration);
+    }
+}
+
+function executeTouchEnd(event) {
+    if (event.target.classList.contains('color-executable')) {
+        touchFinished = true;
+        const touchDuration = Date.now() - touchStartTime;
+        if (touchDuration >= longTouchDuration) {
+            const dataScene = event.target.getAttribute('data-scene');
+            alert(dataScene);
+        }
+    }
+}
