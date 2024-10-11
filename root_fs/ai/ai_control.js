@@ -6,6 +6,8 @@ const colorNames = require("../colornames/colornames");
 const model = "gpt-4o-mini";
 const model_temp = 1.5;
 
+const fp = require("../lightcommand/floorplan");
+
 var client;
 started = false;
 if (process.env['OPENAI_API_KEY']) {
@@ -23,8 +25,12 @@ async function createSystemMessages() {
         These are many examples of what you can produce.
         You can output these names directly as well if they would be a good fit for the current request. Here they are:
         ${JSON.stringify(await getNonMappingColors())}`
+    }, {
+        role: "system",
+        content: `When working with areabuilders, here is a list of available entities.
+        Use the friendly name to determine the entity you want to work with, but reference the entity ID when actually setting the color.
+        ${JSON.stringify(await fp.getAllEntityOptions())}`
     }];
-
 }
 
 async function getNonMappingColors() {

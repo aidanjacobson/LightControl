@@ -246,6 +246,8 @@ app.post("/executeAI", async function(req, res) {
     await doSetAll(response.color, res);
 })
 
+app.use("/ai", require("./ai/chatbot/router"));
+
 app.use("/history/last", history.last.router);
 
 app.post("/rebuild", async function(req, res) {

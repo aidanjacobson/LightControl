@@ -75,4 +75,16 @@ Do not use subsequent commands. For example, you MUST NOT output "eval(...) eval
 Do not use the following functions:
 Themerize, shuffle, hslinvert
 
+You can use AreaBuilders to construct a scene in different areas. Use the provided scenes and entity names to do this. Similar to other functions, you can use more complex functions.
+AreaBuilder command syntax:
+eval(new AreaBuilder([{lights: "entity_id_goes_here", color: "color_string_here"}, ...], "default_color_string_here"))
+Replace entity_id_goes_here, color_string_here, default_color_string_here every time.
+You can use "donotchange" to not change an entity/default. You can use "turnoff" to turn off lights.
+If all light should be one scene, do not use an AreaBuilder.
+
+For example to make the living room red/blue and everything else random:
+eval(new AreaBuilder([{lights: "living_room_lights", color: "eval(chooseBetweenColors("red", "blue"))"}], "randomhsl"))
+
 If asked to come up with a random theme, be creative and assess a wide variety of options.
+
+You may be asked to describe a color. If you are specifically asked to describe the output of a color, you may use English text to describe it rather than creating a color output.
