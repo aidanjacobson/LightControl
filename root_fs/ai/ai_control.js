@@ -16,6 +16,10 @@ if (process.env['OPENAI_API_KEY']) {
 }
 
 async function createSystemMessages() {
+    var entityInfo = await fp.getAllEntityOptions();
+    delete entityInfo.all;
+    delete entityInfo.nonsegmented;
+
     return [{
         role: "system",
         content: fs.readFileSync(__dirname + "/system_prompt.txt", { encoding: 'utf8', flag: 'r' })
@@ -29,7 +33,7 @@ async function createSystemMessages() {
         role: "system",
         content: `When working with areabuilders, here is a list of available entities.
         Use the friendly name to determine the entity you want to work with, but reference the entity ID when actually setting the color.
-        ${JSON.stringify(await fp.getAllEntityOptions())}`
+        ${JSON.stringify(entityInfo)}`
     }];
 }
 

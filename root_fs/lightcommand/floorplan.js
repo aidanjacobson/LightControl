@@ -75,13 +75,31 @@ async function getAllEntityOptions() {
     return allEntityOptions;
 }
 
+
+function getLightPosition(entity) {
+    if (entity.startsWith("segment.")) {
+        var [_, entityId, segment] = entity.split(".");
+        var segmentData = lastFloorplan.segmented_led[entityId];
+        var group = segmentData.groups.find(group=>group.name==segment);
+        var offset = [0, 0];
+        if (group.offset) {
+            offset = group.offset;
+        }
+        var mainLight = lastFloorplan.lights.find(light=>light.entity==entityId);
+        return [mainLight.x + offset[0], mainLight.y + offset[1]];
+    } else {
+        var light = lastFloorplan.lights.find(light=>light.entity==entity);
+        return [light.x, light.y];
+    }
+}
+
 function getAllNonSegmented() {
     var entities = getAllEntities();
     return entities.filter(entityInfo=>! (entityInfo.entity in lastFloorplan.segmented_led));
 }
 
 function getAllEntities() {
-    return lastFloorplan.lights.map(light=>({entity: light.entity, friendlyName: light.friendlyName}));
+    return lastFloorplan.lights.map(light=>({entity: light.entity, friendlyName: light.friendlyName, position: [getLightPosition(light.entity)]}));
 }
 
 function getLightFriendlyName(id) {
@@ -98,7 +116,8 @@ function getAllSegments() {
         for (var group of segmentData.groups) {
             out.push({
                 entity: `segment.${entityID}.${group.name}`,
-                friendlyName: `Segment group ${group.name} of ${friendlyName}`
+                friendlyName: `Segment group ${group.name} of ${friendlyName}`,
+                position: getLightPosition(`segment.${entityID}.${group.name}`)
             })
         }
         for (var i = 0; i < segmentData.segments; i++) {

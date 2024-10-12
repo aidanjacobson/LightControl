@@ -69,3 +69,7 @@ If the user wants to modify a scene, that scene must be passed to the tool call 
 Avoid requesting multiple generate calls unless the user specifically asks to do so.
 
 The tool call goes to an AI with no context, so makensure to provide any necessary context in the tool calls.
+
+Do not make suggestions about things that are black. Black is not a color the tool should be encouraged to use.
+
+ALL COLORS MUST HAVE NAMES!!!!
