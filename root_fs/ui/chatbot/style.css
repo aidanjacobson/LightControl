@@ -7,7 +7,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
 #chatbot {
@@ -62,7 +61,7 @@ body {
 
 .chatbot-message-content:not(.typing-indicator) {
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
     max-width: 80%;
 }
 
@@ -140,10 +139,10 @@ body {
 /* Mobile Styles */
 @media (max-width: 1000px) {
     #chatbot {
-        width: calc(100% - 200px); /* Adjust width to account for margin */
-        height: calc(100% - 500px); /* Adjust height to be smaller */
+        width: 100%;
+        height: 100%;
         border-radius: 0;
-        margin: 100px; /* Added padding for mobile mode */
+        /* margin: 100px; */
     }
 
     #chatbot-header {
@@ -151,31 +150,59 @@ body {
     }
 
     #chatbot-header h1 {
-        font-size: 30px;
+        font-size: 80px;
     }
 
     #chatbot-body {
-        padding: 15px;
+        padding: 20px;
     }
 
     .chatbot-message-content {
-        padding: 25px;
+        padding: 30px;
         max-width: 90%;
-        font-size: 25px;
+        font-size: 40px;
     }
 
     #chatbot-input-text {
         padding: 15px;
-        font-size: 30px;
+        font-size: 40px;
     }
 
     #chatbot-input-send {
         padding: 15px 20px;
-        font-size: 30px;
+        font-size: 40px;
     }
 
     .typing-gif {
         width: 120px; /* Adjust size as needed */
         height: auto;
+    }
+}
+
+@media screen and (max-width: 800px) and (max-height: 600px) {
+    #chatbot-input-send {
+        padding: 10px 15px; /* Adjust padding for smaller screen */
+        font-size: 30px; /* Adjust font size for smaller screen */
+    }
+
+    .typing-gif {
+        width: 100px; /* Adjust size for smaller screen */
+        height: auto;
+    }
+
+    #chatbot-header h1 {
+        font-size: 18px; /* Smaller font size */
+    }
+
+    .chatbot-message-content {
+        font-size: 14px; /* Smaller font size */
+    }
+
+    #chatbot-input-text {
+        font-size: 14px; /* Smaller font size */
+    }
+
+    #chatbot-input-send {
+        font-size: 14px; /* Smaller font size */
     }
 }
