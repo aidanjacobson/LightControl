@@ -29,21 +29,43 @@ function renderMessages() {
     mainMessages.innerHTML = '';
 
     for (let message of localMessages) {
-        if (message.role === 'tool' || message.tool_calls) {
-            continue;
-        }
-
         const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chatbot-message', message.role === 'assistant' ? 'assistant-message' : 'user-message');
+        messageDiv.classList.add('chatbot-message');
+        var contentElements = [];
+
+        if (message.role === 'user') {
+            messageDiv.classList.add('user-message');
+            
+            const messageSpan = document.createElement('span');
+            messageSpan.textContent = message.content;
+            contentElements.push(messageSpan);
+        } else if (message.role === 'assistant' && !message.tool_calls) {
+            messageDiv.classList.add('assistant-message');
+            contentElements = createContentElements(message.content);
+        } else if (message.role === 'assistant' && message.tool_calls) {
+            if (!verboseMode) {
+                continue;
+            }
+            messageDiv.classList.add('tool-call');
+            for (let toolCall of message.tool_calls) {
+                const contentSpan = document.createElement('span');
+                contentSpan.textContent = `Tool Call: ${toolCall.function.name}, Arguments: ${toolCall.function.arguments}, id: ${toolCall.id}`;
+                contentElements.push(contentSpan);
+            }
+        } else if (message.role === 'tool') {
+            if (!verboseMode) {
+                continue;
+            }
+            messageDiv.classList.add('tool-response');
+            const contentSpan = document.createElement('span');
+            contentSpan.textContent = `Tool response (id: ${message.tool_call_id}):\n${message.content}`;
+            contentElements.push(contentSpan);
+        }
 
         const messageContentDiv = document.createElement('div');
         messageContentDiv.classList.add('chatbot-message-content');
 
-        
-        // const messageSpan = document.createElement('span');
-        // messageSpan.textContent = message.content;
-
-        const contentElements = createContentElements(message.content);
+        // const contentElements = createContentElements(message.content);
 
         messageContentDiv.append(...contentElements);
         
@@ -78,6 +100,7 @@ function createContentElements(content) {
             executableSpan.addEventListener('click', colorExecutableClick);
             executableSpan.addEventListener('touchstart', executeTouchStart);
             executableSpan.addEventListener('touchend', executeTouchEnd);
+            executableSpan.addEventListener('touchmove', trackTouchMove);
 
             outElements.push(executableSpan);
         }
@@ -114,26 +137,6 @@ async function sendMessage() {
     messageContentDiv.appendChild(messageSpan);
     messageDiv.appendChild(messageContentDiv);
     mainMessages.appendChild(messageDiv);
-
-    // if text is /analyze, analyze the messages
-    if (text === '/analyze') {
-        localMessages.push({
-            role: 'user',
-            content: '/analyze',
-            time: Date.now()
-        });
-        var messagesOut = analyzeMessages();
-        for (let messageOut of messagesOut) {
-            // add the message to the local messages as an assistant message
-            localMessages.push({
-                role: 'assistant',
-                content: messageOut,
-                time: Date.now()
-            });
-        }
-        renderMessages();
-        return;
-    }
 
     if (text === '/clear') {
         await apiPost('/ai/clearMessages');
@@ -213,25 +216,52 @@ const longTouchDuration = 500; // 1 second
 let touchFinished = false;
 
 function executeTouchStart(event) {
+    if (event.touches && event.touches.length > 0) {
+        lastTouchMovePosition.x = event.touches[0].clientX;
+        lastTouchMovePosition.y = event.touches[0].clientY;
+    }
+
     if (event.target.classList.contains('color-executable')) {
         touchStartTime = Date.now();
         touchFinished = false;
-        setTimeout(() => {
+
+        const touchTimeout = setTimeout(() => {
             if (!touchFinished) {
-                const dataScene = event.target.getAttribute('data-scene');
-                alert(dataScene);
+                const targetRect = event.target.getBoundingClientRect();
+                if (
+                    lastTouchMovePosition.x >= targetRect.left &&
+                    lastTouchMovePosition.x <= targetRect.right &&
+                    lastTouchMovePosition.y >= targetRect.top &&
+                    lastTouchMovePosition.y <= targetRect.bottom
+                ) {
+                    const dataScene = event.target.getAttribute('data-scene');
+                    // alert(dataScene);
+                    navigator.clipboard.writeText(dataScene);
+                }
             }
         }, longTouchDuration);
+    }
+}
+
+let lastTouchMovePosition = { x: 0, y: 0 };
+
+function trackTouchMove(event) {
+    if (event.touches && event.touches.length > 0) {
+        lastTouchMovePosition.x = event.touches[0].clientX;
+        lastTouchMovePosition.y = event.touches[0].clientY;
     }
 }
 
 function executeTouchEnd(event) {
     if (event.target.classList.contains('color-executable')) {
         touchFinished = true;
-        const touchDuration = Date.now() - touchStartTime;
-        if (touchDuration >= longTouchDuration) {
-            const dataScene = event.target.getAttribute('data-scene');
-            alert(dataScene);
-        }
     }
+}
+
+var verboseMode = false
+function toggleVerboseMode() {
+    const button = document.getElementById('toggle-verbose-button');
+    button.classList.toggle('verbose');
+    verboseMode = !verboseMode;
+    renderMessages();
 }

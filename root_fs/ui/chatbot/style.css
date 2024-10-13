@@ -25,6 +25,7 @@ body {
     color: #fff;
     padding: 20px;
     text-align: center;
+    position: relative; /* Ensure the button is positioned relative to the header */
 }
 
 #chatbot-header h1 {
@@ -75,6 +76,18 @@ body {
 
 .assistant-message .chatbot-message-content {
     background-color: #e6e6e6;
+    color: #000;
+    align-self: flex-start;
+}
+
+.tool-call .chatbot-message-content {
+    background-color: #ffe57d;
+    color: #000;
+    align-self: flex-start;
+}
+
+.tool-response .chatbot-message-content {
+    background-color: #ff9090;
     color: #000;
     align-self: flex-start;
 }
@@ -134,6 +147,36 @@ body {
 .typing-gif {
     width: 70px; /* Adjust size as needed */
     height: auto;
+}
+
+#toggle-verbose-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: #28a745; /* Green color */
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    transition: background-color 0.3s;
+}
+
+#toggle-verbose-button.verbose {
+    background-color: #dc3545; /* Red color when verbose mode is active */
+}
+
+#toggle-verbose-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+#toggle-verbose-button.verbose:hover {
+    background-color: #c82333; /* Darker red on hover when verbose mode is active */
 }
 
 /* Mobile Styles */
@@ -204,5 +247,9 @@ body {
 
     #chatbot-input-send {
         font-size: 14px; /* Smaller font size */
+    }
+
+    #toggle-verbose-button {
+        min-width: 1;
     }
 }

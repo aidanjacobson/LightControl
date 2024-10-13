@@ -10,6 +10,7 @@
         <div id="chatbot">
             <div id="chatbot-header">
                 <h1>LightControl AI</h1>
+                <button id="toggle-verbose-button" onclick="toggleVerboseMode()">V</button>
             </div>
             <div id="chatbot-body">
                 <div id="chatbot-messages">
@@ -23,19 +24,7 @@
                             <span>You can use this tool to create, modify, and describe light scenes.</span>
                         </div>
                     </div>
-                    <div id="mainMessages">
-                        <div class="chatbot-message user-message">
-                            <div class="chatbot-message-content">
-                                <span>Hi! I need some assistance.</span>
-                            </div>
-                        </div>
-                        <div class="chatbot-message assistant-message">
-                            <div class="chatbot-message-content">
-                                <span>Here's a color that matches your request:</span>
-                                <div class="color-executable">eval(chooseBetweenColors("red", "blue"))</div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="mainMessages"></div>
                     <div id="typingMessage" class="chatbot-message" style="display: none;">
                         <div class="chatbot-message-content typing-indicator">
                             <img src="bubble.gif" alt="Typing..." class="typing-gif">
