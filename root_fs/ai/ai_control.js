@@ -31,6 +31,14 @@ async function createSystemMessages() {
         ${JSON.stringify(await getNonMappingColors())}`
     }, {
         role: "system",
+        content: `The user has also saved specific lights in a format called colormapping.
+        The names of all colormappings are here.
+        You should only output these names if the user specifically asks for that saved mapping by name.
+        If using these, only directly output the name. for example \`\`\`darkmulticolor4\`\`\`. Do not ever eval in this case.
+        If the user specifies a number, make sure to output the correct color. For example halloween vs halloween2.
+        ${(await getMappingColors()).join(", ")}`  
+    }, {
+        role: "system",
         content: `When working with areabuilders, here is a list of available entities.
         Use the friendly name to determine the entity you want to work with, but reference the entity ID when actually setting the color.
         ${JSON.stringify(entityInfo)}`
@@ -43,6 +51,16 @@ async function getNonMappingColors() {
     for (const colorName in colors) {
         if (colors[colorName][0] == "{") continue;
         colorsOut[colorName] = colors[colorName];
+    }
+    return colorsOut;
+}
+
+async function getMappingColors() {
+    var colors = await colorNames.getColors();
+    var colorsOut = [];
+    for (const colorName in colors) {
+        if (colors[colorName][0] != "{") continue;
+        colorsOut.push(colorName);
     }
     return colorsOut;
 }

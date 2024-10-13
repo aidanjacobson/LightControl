@@ -18,7 +18,7 @@ function createSystemMessage() {
 var messageHistory = [];
 
 const max_message_age_minutes = 20;
-const max_allowed_messages = 15;
+const max_allowed_messages = 30;
 
 // function to remove messages that are more than 20 minutes or 15 messages old
 function pruneMessages() {
@@ -34,7 +34,6 @@ function pruneMessages() {
     // }
     while (true) {
         if (messageHistory.length > 0 && (messageHistory[0].role == "tool" || messageHistory[0].tool_calls)) {
-            console.log("Pruning tool call");
             messageHistory.splice(0, 1);
         } else {
             break;
@@ -93,6 +92,7 @@ async function generateNextResponse() {
         // const tool_call = completion_message.tool_calls[0];
         for (const tool_call of completion_message.tool_calls) {
             const response_message = await rag.generateToolCallResponse(tool_call);
+            response_message.time = Date.now();
             messageHistory.push(response_message);
         }
         await generateNextResponse();

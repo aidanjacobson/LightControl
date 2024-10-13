@@ -10,12 +10,14 @@ async function pullLocalMessages() {
     
     // compare the local and remote messages, add any new messages to the local messages
     // compare content and time to determine if the messages are the same
-    for (var remoteMessage of remoteMessages) {
-        var localMessage = localMessages.find(message => message.content == remoteMessage.content && message.time == remoteMessage.time);
-        if (!localMessage) {
-            localMessages.push(remoteMessage);
-        }
-    }
+    // for (var remoteMessage of remoteMessages) {
+    //     var localMessage = localMessages.find(message => message.content == remoteMessage.content && message.time == remoteMessage.time);
+    //     if (!localMessage) {
+    //         localMessages.push(remoteMessage);
+    //     }
+    // }
+
+    localMessages = remoteMessages;
 
     // sort the local messages by time
     localMessages.sort((a, b) => a.time - b.time);
@@ -49,7 +51,7 @@ function renderMessages() {
             messageDiv.classList.add('tool-call');
             for (let toolCall of message.tool_calls) {
                 const contentSpan = document.createElement('span');
-                contentSpan.textContent = `Tool Call: ${toolCall.function.name}, Arguments: ${toolCall.function.arguments}, id: ${toolCall.id}`;
+                contentSpan.textContent = `Tool Call: ${generateToolCallInfo(toolCall.function.name, JSON.parse(toolCall.function.arguments))}\n\n`;
                 contentElements.push(contentSpan);
             }
         } else if (message.role === 'tool') {
@@ -58,7 +60,7 @@ function renderMessages() {
             }
             messageDiv.classList.add('tool-response');
             const contentSpan = document.createElement('span');
-            contentSpan.textContent = `Tool response (id: ${message.tool_call_id}):\n${message.content}`;
+            contentSpan.textContent = `Tool response\n\n${message.content}`;
             contentElements.push(contentSpan);
         }
 
@@ -71,6 +73,22 @@ function renderMessages() {
         
         messageDiv.appendChild(messageContentDiv);
         mainMessages.appendChild(messageDiv);
+    }
+}
+
+function generateToolCallInfo(name, arguments) {
+    if (name == "generateScene") {
+        if (arguments.scene && arguments.scene != "") {
+            return `\nGenerate Scene\nPrompt: ${arguments.prompt}\nScene: ${arguments.scene}`;
+        } else {
+            return `\nGenerate Scene\nPrompt: ${arguments.prompt}`;
+        }   
+    } else if (name == "describeScene") {
+        if (arguments.prompt && arguments.prompt != "") {
+            return `\nDescribe Scene\nScene: ${arguments.scene}\nPrompt: ${arguments.prompt}`;
+        } else {
+            return `\nDescribe Scene\nScene: ${arguments.scene}`;
+        }
     }
 }
 
@@ -259,9 +277,20 @@ function executeTouchEnd(event) {
 }
 
 var verboseMode = false
-function toggleVerboseMode() {
+async function toggleVerboseMode() {
+    await pullLocalMessages();
     const button = document.getElementById('toggle-verbose-button');
     button.classList.toggle('verbose');
     verboseMode = !verboseMode;
     renderMessages();
 }
+
+// every 1 second, pull the messages from the server
+setInterval(async function() {
+    const previousMessages = JSON.stringify(localMessages);
+    await pullLocalMessages();
+    const currentMessages = JSON.stringify(localMessages);
+    if (previousMessages !== currentMessages) {
+        renderMessages();
+    }
+}, 1000);

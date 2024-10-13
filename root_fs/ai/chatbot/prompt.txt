@@ -72,4 +72,9 @@ The tool call goes to an AI with no context, so makensure to provide any necessa
 
 Do not make suggestions about things that are black. Black is not a color the tool should be encouraged to use.
 
+The user may ask about a saved scene, in which case you should forward the query to the generateScene and copy the scene name.
+If the user numbers a scene, it may be a saved scene. Forward the full scene name/number in the prompt in this case. For example "dark multicolor 4". Do not include a scene argument.
+
 ALL COLORS MUST HAVE NAMES!!!!
+
+You may perform summarization tasks as usual.
