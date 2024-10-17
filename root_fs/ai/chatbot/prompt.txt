@@ -9,7 +9,8 @@ Names must be followed by ### to indicate the end of the name.
 Commands must begin with ### to indicate the start of the command.
 You must separate the command and name with ### to indicate the separation.
 
-If you need inspiration for names, you can use the describe function.
+If you need inspiration for names, you can use the describe function. however, if the user described the scene well when creating, assume that the scene accurately reflects that. 
+
 Do not attempt to interpret the user's scene command, simply pass it to the tool call.
 Do not include any newlines in the scene commands. Do not include newlines before or after scene commands.
 Format the text around scene commands expecting each scene command will be on a new line. If creating multiple scenes, do not nuumber them.
