@@ -17,46 +17,36 @@ function createSystemMessage() {
 
 var messageHistory = [];
 
-const max_message_age_minutes = 20;
 const max_allowed_messages = 30;
 
 // function to remove messages that are more than 20 minutes or 15 messages old
 function pruneMessages() {
     // keep only the last max_allowed_messages
-    messageHistory = messageHistory.slice(-max_allowed_messages);
-
-    // of the remaining, keep only the ones that have message.time timestamp less than max_message_age_minutes old
-    const now = Date.now();
-    messageHistory = messageHistory.filter(message => now - message.time < max_message_age_minutes * 60 * 1000);
-
-    // if (messageHistory[0].role == "tool") {
-    //     messageHistory.splice(0, 1);
-    // }
+    // messageHistory = messageHistory.slice(-max_allowed_messages);
+    filteredMessages = messageHistory.slice(-max_allowed_messages);
+    
     while (true) {
-        if (messageHistory.length > 0 && (messageHistory[0].role == "tool" || messageHistory[0].tool_calls)) {
-            messageHistory.splice(0, 1);
+        if (filteredMessages.length > 0 && (filteredMessages[0].role == "tool" || filteredMessages[0].role == "assistant")) {
+            filteredMessages.splice(0, 1);
         } else {
             break;
         }
     }
+    return filteredMessages;
 }
 
 async function submitUserPrompt(prompt) {
-    // prune old messages
-    pruneMessages();
-
     // create a new user message
     var userMessage = {
         role: "user",
-        content: prompt,
-        time: Date.now()
+        content: prompt
     };
     
     // add the user message to the message history
     messageHistory.push(userMessage);
     await generateNextResponse();
     
-    return convertMessagesToResponse(messageHistory);
+    return filteredMessages;
 }
 
 async function generateNextResponse() {
@@ -65,7 +55,7 @@ async function generateNextResponse() {
     var systemMessage = createSystemMessage();
 
     // create a new list of messages, concatenating the system message and the user messages
-    var allMessages = [systemMessage, ...messageHistory];
+    var allMessages = [systemMessage, ...pruneMessages()];
 
     var chatCompletion;
     try {
@@ -84,7 +74,6 @@ async function generateNextResponse() {
 
     const completion_reason = chatCompletion.choices[0].finish_reason;
     const completion_message = chatCompletion.choices[0].message;
-    completion_message.time = Date.now();
     
     // if the ai used a tool call, get the response to the tool call, append all messages, and generate the next response
     if (completion_reason == "tool_calls") {
@@ -92,7 +81,6 @@ async function generateNextResponse() {
         // const tool_call = completion_message.tool_calls[0];
         for (const tool_call of completion_message.tool_calls) {
             const response_message = await rag.generateToolCallResponse(tool_call);
-            response_message.time = Date.now();
             messageHistory.push(response_message);
         }
         await generateNextResponse();

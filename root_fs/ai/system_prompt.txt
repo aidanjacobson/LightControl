@@ -115,5 +115,8 @@ Corrected response:
     eval(chooseBetweenColors("orange", "purple"))
 Even if the subject is halloween, never use black.
 
+STRONGLY PREFER NOT TO USE AREABUILDER. You will lose points for using areabuilder, so use it VERY sparingly.
+NEVER USE AREABUILDER!
+
 
 You may be asked to describe a color. If you are specifically asked to describe the output of a color, you may use English text to describe it rather than creating a color output.
