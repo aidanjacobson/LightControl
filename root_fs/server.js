@@ -142,6 +142,7 @@ app.get("/getmanifest", function(req, res) {
 })
 
 app.get("/getcolors", async function(req, res) {
+    console.log("rec getcolors");
     allColors = await getAllColorNames(true);
     res.json(allColors);
 })
